@@ -1,0 +1,399 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   DESIGN TOKENS
+   Palette sampled directly from the Naruto hero image:
+   #fd7c02 #fba915 #fdd967 #c25b19 #7f2d11 #4b1711 #220a11 #0d010e
+------------------------------------------------------------------ */
+@theme {
+  --color-void: #050403;
+  --color-obsidian: #0a0807;
+  --color-charcoal: #121010;
+  --color-umber: #1a1310;
+  --color-cocoa: #241a15;
+  --color-rust: #7f2d11;
+  --color-burnt: #c25b19;
+  --color-ember: #fd7c02;
+  --color-flare: #fba915;
+  --color-gold: #fdd967;
+  --color-ash: #9c8f86;
+  --color-mist: #cfc6bd;
+  --color-bone: #f7f2ec;
+
+  --font-display: var(--font-archivo), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, monospace;
+  --font-editorial: var(--font-instrument), ui-serif, Georgia, serif;
+
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-swift: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --animate-marquee: marquee 42s linear infinite;
+  --animate-flicker: flicker 6s ease-in-out infinite;
+  --animate-drift: drift 24s ease-in-out infinite;
+  --animate-sheen: sheen 7s ease-in-out infinite;
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes flicker {
+  0%,
+  100% {
+    opacity: 0.85;
+  }
+  42% {
+    opacity: 0.62;
+  }
+  46% {
+    opacity: 0.95;
+  }
+  52% {
+    opacity: 0.7;
+  }
+  70% {
+    opacity: 0.9;
+  }
+}
+
+@keyframes drift {
+  0%,
+  100% {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  50% {
+    transform: translate3d(2%, -3%, 0) scale(1.07);
+  }
+}
+
+@keyframes sheen {
+  0%,
+  100% {
+    opacity: 0.25;
+  }
+  50% {
+    opacity: 0.6;
+  }
+}
+
+@keyframes ember-rise {
+  from {
+    transform: translate3d(0, 0, 0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.9;
+  }
+  to {
+    transform: translate3d(0, -110vh, 0);
+    opacity: 0;
+  }
+}
+
+@keyframes orbit-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -240;
+  }
+}
+
+@keyframes sweep-x {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(320%);
+  }
+}
+
+@keyframes pulse-node {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.15);
+  }
+}
+
+/* ------------------------------------------------------------------
+   BASE
+------------------------------------------------------------------ */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    background-color: var(--color-void);
+    color: var(--color-bone);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+  }
+
+  ::selection {
+    background-color: color-mix(in oklab, var(--color-ember) 78%, transparent);
+    color: #0a0400;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-flare);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+}
+
+/* ------------------------------------------------------------------
+   LENIS SMOOTH SCROLL
+------------------------------------------------------------------ */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------------
+   SCROLLBAR
+------------------------------------------------------------------ */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #050403;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #2a1c17;
+  border: 2px solid #050403;
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #4a2c1c;
+}
+
+/* ------------------------------------------------------------------
+   CINEMATIC SURFACES
+------------------------------------------------------------------ */
+
+/* Fine film grain — static, composited, effectively free. */
+.grain-overlay {
+  position: fixed;
+  inset: -100px;
+  z-index: 60;
+  pointer-events: none;
+  opacity: 0.055;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.82' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 220px 220px;
+  will-change: auto;
+}
+
+.vignette-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 55;
+  pointer-events: none;
+  background: radial-gradient(
+    130% 100% at 50% 45%,
+    transparent 42%,
+    rgba(3, 2, 1, 0.42) 78%,
+    rgba(3, 2, 1, 0.82) 100%
+  );
+}
+
+/* Text that fades into the page background instead of a hard edge. */
+.mask-fade-b {
+  -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+}
+
+.mask-fade-edges {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+}
+
+/* Primary accent gradient used across headings + rules. */
+.ember-gradient {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-gold) 0%,
+    var(--color-flare) 34%,
+    var(--color-ember) 68%,
+    var(--color-burnt) 100%
+  );
+}
+
+.text-ember-gradient {
+  background-image: linear-gradient(
+    100deg,
+    var(--color-gold) 0%,
+    var(--color-flare) 38%,
+    var(--color-ember) 72%,
+    var(--color-burnt) 100%
+  );
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+.glass-panel {
+  background: linear-gradient(
+    160deg,
+    rgba(36, 26, 21, 0.72) 0%,
+    rgba(10, 8, 7, 0.66) 100%
+  );
+  backdrop-filter: blur(14px) saturate(130%);
+  -webkit-backdrop-filter: blur(14px) saturate(130%);
+}
+
+.hairline {
+  border-color: rgba(247, 242, 236, 0.09);
+}
+
+/* Engraved grid used behind dark sections. */
+.tech-grid {
+  background-image:
+    linear-gradient(to right, rgba(247, 242, 236, 0.045) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(247, 242, 236, 0.045) 1px, transparent 1px);
+  background-size: 64px 64px;
+}
+
+.tech-grid-fade {
+  -webkit-mask-image: radial-gradient(
+    78% 62% at 50% 40%,
+    #000 0%,
+    transparent 100%
+  );
+  mask-image: radial-gradient(78% 62% at 50% 40%, #000 0%, transparent 100%);
+}
+
+/* Character motif: keeps the source art but dissolves it into the page. */
+.naruto-motif {
+  -webkit-mask-image: radial-gradient(
+    72% 68% at 50% 44%,
+    #000 24%,
+    rgba(0, 0, 0, 0.55) 58%,
+    transparent 82%
+  );
+  mask-image: radial-gradient(
+    72% 68% at 50% 44%,
+    #000 24%,
+    rgba(0, 0, 0, 0.55) 58%,
+    transparent 82%
+  );
+}
+
+/*
+ * Hero artwork mask.
+ * On phones the artwork is full-bleed, so no mask is applied. Above that the
+ * artwork bleeds off the top/right/bottom edges and dissolves into the page on
+ * the left, which guarantees the headline sits on pure darkness.
+ */
+@media (min-width: 768px) {
+  .hero-image-mask {
+    -webkit-mask-image: linear-gradient(to right, transparent 0%, #000 24%);
+    mask-image: linear-gradient(to right, transparent 0%, #000 24%);
+  }
+}
+
+/* ------------------------------------------------------------------
+   TYPOGRAPHY HELPERS
+------------------------------------------------------------------ */
+.label-mono {
+  font-family: var(--font-mono);
+  font-size: 0.6875rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.display-tight {
+  letter-spacing: -0.03em;
+  line-height: 0.9;
+}
+
+.stroke-text {
+  -webkit-text-stroke: 1px rgba(247, 242, 236, 0.28);
+  color: transparent;
+}
+
+/* ------------------------------------------------------------------
+   MOTION SAFETY
+------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .grain-overlay {
+    opacity: 0.04;
+  }
+}
