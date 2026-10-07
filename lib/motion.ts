@@ -34,21 +34,5 @@ export const fadeIn: Variants = {
   visible: { opacity: 1, transition: { duration: 0.9, ease: EASE_CINEMATIC } },
 };
 
-export const staggerParent = (stagger = 0.08, delay = 0): Variants => ({
-  hidden: {},
-  visible: {
-    transition: { staggerChildren: stagger, delayChildren: delay },
-  },
-});
-
-export const scaleIn: Variants = {
-  hidden: { opacity: 0, scale: 0.94 },
-  visible: {
-    opacity: 1,
-    scale: 1,
-    transition: { duration: 1, ease: EASE_CINEMATIC },
-  },
-};
-
 /** Standard viewport config so sections reveal consistently. */
 export const viewportOnce = { once: true, margin: "-12% 0px -12% 0px" } as const;
