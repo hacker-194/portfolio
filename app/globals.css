@@ -1,0 +1,493 @@
+@import "tailwindcss";
+
+/* ------------------------------------------------------------------
+   DESIGN TOKENS
+   A deep navy ground under near-black, one muted electric blue carrying every
+   accent, platinum and pale steel as the only secondary notes, a warm
+   transitional serif for display (Spectral), a neutral sans for running text
+   (Inter), and a mono for figures, indices and labels (JetBrains Mono).
+
+   The token *names* are unchanged from the systems this replaced, so the whole
+   site re-themes from this one block; nothing else needed its class names
+   edited to pick up the palette.
+------------------------------------------------------------------ */
+@theme {
+  /* Ground scale: near-black navy through to raised panels. */
+  --color-void: #04060c;
+  --color-ink: #070b14;
+  --color-panel: #0a101c;
+  --color-panel2: #0e1524;
+  --color-panel3: #141d2e;
+  --color-edge: #1e2a40;
+
+  /*
+   * One committed ink leads: a muted electric blue, held below neon so it reads
+   * as an instrument light rather than a gaming accent. A paler blue answers
+   * it, and a platinum closes the trio. All three clear AA against the ground,
+   * so each can carry small labels as well as large shapes.
+   */
+  --color-indigo: #16224a;
+  --color-accent: #4d8dff;
+  --color-volt: #86b4ff;
+  --color-ice: #cbd8ec;
+
+  /* Text: near-white primary, with two greys beneath it. Both clear AA. */
+  --color-muted: #8792a6;
+  --color-soft: #c2cbda;
+  --color-bright: #f4f7fc;
+
+  --font-display: var(--font-spectral), ui-serif, Georgia, serif;
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, monospace;
+  --font-editorial: var(--font-spectral), ui-serif, Georgia, serif;
+
+  --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-swift: cubic-bezier(0.4, 0, 0.2, 1);
+
+  /*
+   * Depth. On a dark ground a shadow has to be deep and wide to read at all, so
+   * these are black with a large offset and a long blur, plus a hairline of
+   * light along the top edge: the suggestion of a lit edge on a solid material
+   * rather than a drop shadow on paper.
+   */
+  --shadow-lux: 0 1px 0 0 rgba(255, 255, 255, 0.07) inset,
+    0 48px 90px -60px rgba(0, 0, 0, 0.95);
+  --shadow-lux-sm: 0 1px 0 0 rgba(255, 255, 255, 0.055) inset,
+    0 24px 60px -46px rgba(0, 0, 0, 0.9);
+  /* A restrained bloom, used only where the blue is the subject. */
+  --shadow-bloom: 0 0 90px -40px rgba(77, 141, 255, 0.5);
+
+  --animate-marquee: marquee 54s linear infinite;
+  --animate-flicker: flicker 6s ease-in-out infinite;
+}
+
+/*
+ * Semantic aliases.
+ *
+ * The design brief specifies these names. They resolve to the token scale above
+ * rather than repeating hex values, so there is still exactly one place to
+ * change a colour.
+ */
+:root {
+  --bg-primary: var(--color-void);
+  --bg-secondary: var(--color-ink);
+  --accent-primary: var(--color-accent);
+  --accent-secondary: var(--color-volt);
+  --accent-glow: rgba(77, 141, 255, 0.22);
+  --text-primary: var(--color-bright);
+  --text-secondary: var(--color-soft);
+  --glass-bg: #0a101c;
+  --glass-border: rgba(255, 255, 255, 0.08);
+}
+
+/*
+ * The deep panels.
+ *
+ * The hero and the open-source section sit in a well deeper than the page: a
+ * ground pulled almost to black, with the blue lifted a step so it still reads
+ * against it. As before, the scope re-declares the same token names it
+ * inherits, so `text-bright`, `bg-void`, `border-*` and the rest flip for the
+ * whole subtree without any component knowing. `.on-deep` carries only the
+ * colours, for surfaces (like the fixed nav) that draw over that well without
+ * being inside it.
+ */
+.on-deep,
+.panel-deep {
+  --color-void: #000206;
+  --color-ink: #020409;
+  --color-panel: #05080f;
+  --color-panel2: #080d17;
+  --color-panel3: #0c1320;
+  --color-edge: #16233a;
+  --color-indigo: #060e28;
+  --color-accent: #6ba4ff;
+  --color-volt: #9cc2ff;
+  --color-ice: #dce5f2;
+  --color-muted: #8d9ab0;
+  --color-soft: #c6d0e0;
+  --color-bright: #fbfcff;
+  --glass-bg: #05080f;
+  --glass-border: rgba(255, 255, 255, 0.09);
+}
+
+.panel-deep {
+  background-color: var(--color-void);
+  color: var(--color-bright);
+}
+
+.on-deep .hairline,
+.panel-deep .hairline {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+.on-deep .accent-rule,
+.panel-deep .accent-rule {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.3) 22%,
+    rgba(255, 255, 255, 0.3) 78%,
+    transparent 100%
+  );
+}
+
+@keyframes marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@keyframes flicker {
+  0%,
+  100% {
+    opacity: 0.75;
+  }
+  42% {
+    opacity: 0.5;
+  }
+  46% {
+    opacity: 0.85;
+  }
+  52% {
+    opacity: 0.58;
+  }
+  70% {
+    opacity: 0.8;
+  }
+}
+
+@keyframes dash-flow {
+  to {
+    stroke-dashoffset: -240;
+  }
+}
+
+@keyframes pulse-node {
+  0%,
+  100% {
+    opacity: 0.35;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.15);
+  }
+}
+
+/* ------------------------------------------------------------------
+   BASE
+------------------------------------------------------------------ */
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    /* Native controls, scrollbars and form fields follow the dark ground. */
+    color-scheme: dark;
+  }
+
+  body {
+    background-color: var(--color-void);
+    color: var(--color-bright);
+    font-family: var(--font-sans);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    overflow-x: clip;
+    /* The page opens on a cool wash from above and settles into the ground. */
+    background-image: radial-gradient(
+      120% 62% at 50% -12%,
+      rgba(77, 141, 255, 0.09) 0%,
+      rgba(77, 141, 255, 0.02) 38%,
+      transparent 70%
+    );
+    background-repeat: no-repeat;
+  }
+
+  ::selection {
+    background-color: rgba(77, 141, 255, 0.3);
+    color: var(--color-bright);
+  }
+
+  h1,
+  h2,
+  h3,
+  h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    text-wrap: balance;
+  }
+
+  p {
+    text-wrap: pretty;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /*
+   * Tailwind's preflight leaves buttons on the default cursor, so a plain
+   * <button> reads as inert text. Give every control the pointer it earned.
+   */
+  button:not(:disabled),
+  [role="button"]:not([aria-disabled="true"]),
+  summary {
+    cursor: pointer;
+  }
+
+  button:disabled {
+    cursor: not-allowed;
+  }
+}
+
+/* ------------------------------------------------------------------
+   POINTER COMPANION
+
+   The ring and dot in `components/CursorCompanion.tsx` only take over once
+   that component is mounted and running, which is why the system cursor is
+   hidden through an attribute it sets itself: no script, no attribute, normal
+   cursor. Text fields and dead buttons are deliberately left out, so the
+   platform's own I-beam and `not-allowed` still work.
+------------------------------------------------------------------ */
+html[data-cursor="custom"],
+html[data-cursor="custom"] body,
+html[data-cursor="custom"] a,
+html[data-cursor="custom"] button:not(:disabled),
+html[data-cursor="custom"] [role="button"]:not([aria-disabled="true"]),
+html[data-cursor="custom"] summary {
+  cursor: none;
+}
+
+html[data-cursor="custom"] input,
+html[data-cursor="custom"] textarea,
+html[data-cursor="custom"] select,
+html[data-cursor="custom"] [contenteditable="true"] {
+  cursor: auto;
+}
+
+/* ------------------------------------------------------------------
+   LENIS SMOOTH SCROLL
+------------------------------------------------------------------ */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-smooth iframe {
+  pointer-events: none;
+}
+
+/* ------------------------------------------------------------------
+   SCROLLBAR
+------------------------------------------------------------------ */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+
+::-webkit-scrollbar-track {
+  background: #04060c;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #1a2436;
+  border: 2px solid #04060c;
+  border-radius: 99px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #26334c;
+}
+
+/* ------------------------------------------------------------------
+   SURFACES
+------------------------------------------------------------------ */
+
+/* Text that fades into the page background instead of a hard edge. */
+.mask-fade-b {
+  -webkit-mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+  mask-image: linear-gradient(to bottom, #000 62%, transparent 100%);
+}
+
+.mask-fade-edges {
+  -webkit-mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+  mask-image: linear-gradient(
+    to right,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+}
+
+/* Fades a block into the ground on every side, for figures that should not end. */
+.mask-fade-all {
+  -webkit-mask-image: radial-gradient(75% 75% at 50% 50%, #000 42%, transparent 100%);
+  mask-image: radial-gradient(75% 75% at 50% 50%, #000 42%, transparent 100%);
+}
+
+/*
+ * The accent, as one flat electric blue.
+ *
+ * Editorial rules are not gradiented and neither is this: a single committed
+ * ink does the same jobs (buttons, timeline rules, hover underlines) without
+ * the sheen.
+ */
+.accent-gradient {
+  background-color: var(--color-accent);
+}
+
+/* The heading's closing line, set in the accent as solid ink. */
+.text-accent-gradient {
+  color: var(--color-accent);
+}
+
+/*
+ * Card surface: a solid lacquered panel, lit from above.
+ *
+ * Deliberately not glass: no backdrop blur, no translucent white wash and no
+ * neon border. A real surface is opaque, so what lifts it is a hairline of
+ * light along the top edge, a faint vertical sheen and a deep shadow.
+ */
+.glass-panel,
+.glass-card {
+  position: relative;
+  background-color: var(--glass-bg);
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.055) 0%,
+    rgba(255, 255, 255, 0.014) 34%,
+    rgba(255, 255, 255, 0) 100%
+  );
+  border-color: var(--glass-border);
+  box-shadow: var(--shadow-lux-sm);
+}
+
+.glass-card {
+  transition:
+    transform 0.5s var(--ease-cinematic),
+    box-shadow 0.5s var(--ease-cinematic),
+    border-color 0.5s var(--ease-cinematic);
+}
+
+.glass-card:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-lux), var(--shadow-bloom);
+  border-color: rgba(107, 164, 255, 0.28);
+}
+
+/* A single hairline that fades in from nothing and out again. */
+.accent-rule {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(107, 164, 255, 0.42) 22%,
+    rgba(107, 164, 255, 0.42) 78%,
+    transparent 100%
+  );
+}
+
+.hairline {
+  border-color: rgba(255, 255, 255, 0.09);
+}
+
+/*
+ * Cinematic furniture: a key light for the hero, a vignette to seat a section,
+ * and a single layer of fine grain over the whole page.
+ *
+ * The grain is an inline turbulence, not an asset: no request, no file, and it
+ * is what stops the large flat gradients above from banding on a dark screen.
+ */
+.keylight {
+  background-image: radial-gradient(
+    58% 46% at 62% 42%,
+    rgba(77, 141, 255, 0.17) 0%,
+    rgba(77, 141, 255, 0.05) 44%,
+    transparent 74%
+  );
+}
+
+.vignette {
+  background-image: radial-gradient(
+    118% 82% at 50% 0%,
+    transparent 38%,
+    rgba(0, 0, 0, 0.58) 100%
+  );
+}
+
+.grain {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 180px 180px;
+  opacity: 0.045;
+  mix-blend-mode: soft-light;
+}
+
+/* ------------------------------------------------------------------
+   TYPOGRAPHY HELPERS
+------------------------------------------------------------------ */
+
+/*
+ * Small label. Set in the mono, tracked wide: on an engineered page the
+ * technical face on a label is information, not costume.
+ */
+.label-mono {
+  font-family: var(--font-mono);
+  /* 12px, not 11: the floor for anything a reader has to read, and one fewer
+     size on the page than a step below it. */
+  font-size: 0.75rem;
+  font-weight: 500;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  line-height: 1;
+}
+
+.display-tight {
+  letter-spacing: -0.025em;
+  line-height: 0.96;
+}
+
+.stroke-text {
+  -webkit-text-stroke: 1px rgba(244, 247, 252, 0.34);
+  color: transparent;
+}
+
+/* ------------------------------------------------------------------
+   MOTION SAFETY
+------------------------------------------------------------------ */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}
