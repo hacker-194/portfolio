@@ -86,7 +86,7 @@ export function Hero() {
 
           <h1
             aria-label={PROFILE.name}
-            className="display-tight text-[clamp(2.9rem,8.4vw,7.4rem)] font-medium"
+            className="display-tight text-[clamp(3.1rem,9.6vw,9.25rem)] font-medium"
           >
             <MaskedLines
               lines={["Khagendra", "Luitel"]}

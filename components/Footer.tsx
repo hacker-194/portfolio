@@ -16,7 +16,7 @@ export function Footer() {
           className="pointer-events-none mask-fade-b select-none pb-2"
           aria-hidden
         >
-          <span className="block whitespace-nowrap font-display text-[clamp(3.4rem,15vw,13rem)] font-bold uppercase leading-[0.85] tracking-tight text-bright/[0.06]">
+          <span className="block whitespace-nowrap font-display text-[clamp(3.4rem,17vw,16.5rem)] font-bold uppercase leading-[0.85] tracking-tight text-bright/[0.06]">
             {PROFILE.name}
           </span>
         </div>
