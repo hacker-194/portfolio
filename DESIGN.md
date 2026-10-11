@@ -6,14 +6,14 @@ for anything drawn outside CSS (SVG, canvas).
 
 ## The world
 
-A dark instrument panel. Obsidian black ground, deep navy for cards and sections,
-platinum white ink, and one electric cyan carrying every interactive accent.
-Cyan is rationed rather than spread: it is the only saturated colour in the
+A dark instrument panel. Obsidian black ground, midnight navy for cards and
+sections, soft white ink, and one ice blue carrying every interactive accent.
+Ice blue is rationed rather than spread: it is the only saturated colour in the
 system, and it is kept off large fills, so it reads as an instrument light rather
 than as a gaming wash. A warm transitional serif (Spectral) sets the headings
 against the cool ground; Inter carries running text; JetBrains Mono carries
-figures, indices and labels; muted slate carries secondary text and the labels
-themselves.
+figures, indices and labels; platinum silver carries secondary text and the
+labels themselves.
 
 The mode is **Experience** (a portfolio): the work leads and the interface
 recedes. The page is composed like a lit set, not a dashboard. Light falls from
@@ -24,13 +24,13 @@ Two worlds share one set of token names:
 
 | Token | Ground (`void`) | Deep well |
 | --- | --- | --- |
-| `void` | `#0b0d10` page | `#05070a` |
-| `ink` | `#0e1219` band | `#080b11` |
-| `panel` / `panel2` / `panel3` | `#111827` / `#151d2e` / `#1a2438` | `#0e131c` / `#111a26` / `#17222f` |
-| `edge` | `#24314a` drawn lines | `#1f2c42` |
-| `accent` | `#64ffda` electric cyan | `#7cffe2` |
-| `volt` / `ice` | `#9bf5e4` / `#dce6e4` | `#b4fff0` / `#e4edea` |
-| `bright` / `soft` / `muted` | `#f5f5f0` / `#c9d0dc` / `#8993a4` | `#fcfcf9` / `#cbd2de` / `#94a0b1` |
+| `void` | `#08090c` page | `#050609` |
+| `ink` | `#0b0d12` band | `#08090e` |
+| `panel` / `panel2` / `panel3` | `#101827` / `#141c2b` / `#192337` | `#0d141f` / `#101827` / `#16202f` |
+| `edge` | `#26334a` drawn lines | `#1f2c40` |
+| `accent` | `#8be9fd` ice blue | `#a6eeff` |
+| `volt` / `ice` | `#b7f2fe` / `#dce4ee` | `#c6f5ff` / `#e4eaf2` |
+| `bright` / `soft` / `muted` | `#f5f7fa` / `#c8d0da` / `#8d97a8` | `#fafbfd` / `#cdd5df` / `#96a0b0` |
 
 `.panel-deep` is the well the hero and the open-source section sit in: the same
 roles pulled almost to black, with the blue lifted a step so it still reads
@@ -46,14 +46,14 @@ whole class of "flashed the wrong colour before hydration" bug.
 
 Every text token clears WCAG AA (4.5:1) against every ground token it can sit on,
 in both the base and deep ramps. The tightest pair in the run is `accent` on
-`panel3` at 5.0:1, with the deep ramp's `muted` on `panel3` at 6.1:1 behind it.
+`panel3` at 5.3:1, with the deep ramp's `muted` on `panel3` at 6.2:1 behind it.
 This is a floor, not an aspiration: it constrains the
 palette, so a colour change that drops any pair below 4.5:1 is a bug.
 
-The one place it bites is the primary button. Platinum on the electric cyan is
-1.14:1 and fails, so the primary action is the inverse: a platinum pill with
-obsidian text (17.8:1), turning cyan with the same obsidian text on hover
-(15.6:1). Both states clear AA.
+The one place it bites is the primary button. Soft white on the ice blue is
+1.29:1 and fails, so the primary action is the inverse: a platinum pill with
+obsidian text (18.6:1), turning ice blue with the same obsidian text on hover
+(14.4:1). Both states clear AA.
 
 ## Type
 
@@ -84,7 +84,7 @@ at `py-16 sm:py-20`. Generous space is the cheapest luxury there is.
   translucent white wash over the ground. What lifts them is a hairline of light
   along the top edge, a faint vertical sheen, a deep black shadow with a long
   blur, and a restrained blue bloom that only appears on hover.
-- **The accent** (`.accent-gradient`) is a flat electric cyan, never a gradient.
+- **The accent** (`.accent-gradient`) is a flat ice blue, never a gradient.
 - **Chips** are the one shape for every named technology or skill, in
   `lib/visuals.ts`: a hairline rounded rectangle on a 5% wash, mono at 12px.
   The project card's stack, the case study's stack and the skill universe's
@@ -107,56 +107,52 @@ Three utilities build the light, all in `globals.css`:
 
 ## The hero
 
-`components/AtomCore.tsx` draws the sculpture: a nucleus with three orbits
-turning around it, each orbit carrying one word for the frontier being studied
-(LLM, Transformers, RAG).
+`components/IntelligenceCore.tsx` draws the sculpture: a glass core with four
+capability nodes around it, wired to it by hairline struts that carry a pulse. It
+is Three.js through React Three Fiber and Drei, and it is the only WebGL on the
+page, loaded on demand rather than with the page.
 
-It replaced a neural-network mesh that used to fill the hero. The atom says the
-same thing more plainly: one core, three paths around it, and the vocabulary of
-the work riding those paths. Each orbit is a faint ellipse with a lit arc
-trailing a bead, so the ring reads as turning even while its carrier is dimmed
-round the back. On a wide screen the figure sits to the right of the copy; on a
-small one it centres behind it.
+The core is an icosahedral glass shell over a metal body with a small lit heart,
+turning slowly. Each node carries a metal bead, a hairline halo and a label, and
+the whole layout comes from `lib/core-nodes.ts`, so the ring is data rather than
+a literal buried in the scene. On a wide screen the figure sits to the right of
+the copy; on a small one it sits behind it.
 
-The nucleus is a marker, not a ball: a near-black core about 15px across on a
-laptop, with its interior lifted a touch toward the key light and a faint cyan
-glow inside it.
+Three rendering decisions are worth keeping:
 
-Everything the core is drawn with is a fraction of its radius: the two rim
-strokes and the wash behind it. Halving the radius without halving those turns a
-hairline rim into a fat ring around a dot, which is the one way this figure
-fails. At this size the strokes land under a pixel wide, which is the point
-where a rim begins to disappear on a low-DPI screen.
+- **The environment is built, not fetched.** A Drei preset downloads an HDRI
+  from a CDN, which would put a third-party request in front of every visit and a
+  network dependency in the build. What carries the glass and the metal is a
+  studio assembled from `Lightformer`s and baked once (`frames={1}`), because the
+  light never moves.
+- **The labels are HTML, not 3D text.** A `Text` node needs a font file, again
+  fetched, and the site already ships its own type. `Html` gives the labels the
+  real thing and keeps them crisp at any camera distance. Their z-index range is
+  capped below the site chrome, which sits at z-80, so a label can never cover
+  the navigation. They also carry `pointer-events: none`, because a label sitting
+  over the canvas would otherwise intercept the hover meant for its own node.
+- **Transmission glass is gated.** It is the expensive part of the scene, so it
+  renders only on a desktop-class device, guessed from screen width and core
+  count. Everywhere else the core is a polished metal shell against the same
+  environment, which still reads as a real object.
 
-It went through a packed-cluster phase at eight times this size, and the lesson
-is worth keeping: individual nucleons are the wrong level of detail at this
-scale. A translucent ball of spheres turns to noise long before it reads as
-matter, and a lit ball reads as a bead or a marble. A dark core with only its
-edge catching light reads as something dense, which is what a nucleus should look
-like.
+The camera is fitted to the figure rather than parked at a fixed distance.
+`r / sin(fov / 2)` is the exact distance at which a sphere of radius `r`
+subtends the field of view, so the scene is framed on both axes from arithmetic
+rather than from a fudge factor per breakpoint, which is what a fixed distance
+would need given that the canvas box changes shape at every one.
 
-The rim is two strokes on one circle: a faint full ring for the ambient edge, and
-a brighter arc where the key light lands, on the same upper left as everything
-else. The bright arc is a dash on the circle's own path, which begins at 3
-o'clock and runs clockwise, so its position is two fractions rather than a
-transform. The faint full ring underneath is what stops a one-sided rim from
-looking like a stray crescent.
+The pointer lean and the slow turn are kept on separate groups, because they are
+different motions: the turn accumulates on the inner group while the lean is set
+absolutely on the outer one, so a moving pointer cannot disturb the drift and the
+drift cannot fight the pointer.
 
-It is SVG and DOM, not canvas. The rings are static ellipse geometry, so the
-only thing that changes each frame is where each carrier sits on its ring, which
-keeps every label real HTML text: it takes the site's own type, and it stays
-upright the whole way round, which text riding a 3D transform would not.
-
-The depth cue is the turn's own phase rather than an intersection test. That is
-enough for a single figure with nothing behind it to occlude, and it means there
-is still no 3D dependency in `package.json` and no need for one.
-
-Under a fine pointer the whole figure turns a few degrees toward the cursor: the
-container applies `perspective()` with a small `rotateX`/`rotateY`, and the
-pointer only writes a target angle that the frame loop already running eases
-toward. So the response costs no second rAF loop and no React render, and it is
-off entirely on touch and under reduced motion, where a figure leaning at the
-finger would be the only thing moving.
+The scene renders only after a WebGL probe succeeds, so a machine that cannot
+draw it gets the hero without the canvas rather than an exception thrown inside
+the renderer. That probe and the quality guess are read through
+`useSyncExternalStore` rather than set from an effect: an effect calling
+`setState` on mount would cost a second render pass of the whole hero to answer
+a question whose answer never changes.
 
 The loop stops entirely while the hero is off screen, and reduced motion holds
 one still frame.
@@ -169,8 +165,9 @@ domains the section already used, placed on five icosahedron vertices so every
 domain sits the same 63 degrees from every other, joined by forty connections.
 Python sits at the middle of the graph because that is where the libraries meet.
 
-It is the hero's renderer, and it is the one figure on the page a visitor can
-operate. Dragging turns it, releasing lets it glide a little and settle, and it
+It is a hand-written canvas renderer, independent of the hero's WebGL, and it is
+the one figure on the page a visitor can operate. Dragging turns it, releasing
+lets it glide a little and settle, and it
 drifts slowly on its own until it is touched or a node is selected. Selecting a
 node turns the whole figure so that node faces the reader.
 

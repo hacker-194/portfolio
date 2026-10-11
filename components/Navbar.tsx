@@ -183,7 +183,7 @@ export function Navbar() {
             {/* An opaque ground and a wash of light from above, rather than a
                 blurred sheet: the menu should read as a deeper room, not as
                 frosted glass over the page behind it. */}
-            <div className="absolute inset-0 bg-void bg-[radial-gradient(120%_60%_at_50%_-10%,rgba(100,255,218,0.08),transparent_72%)]" />
+            <div className="absolute inset-0 bg-void bg-[radial-gradient(120%_60%_at_50%_-10%,rgba(139,233,253,0.08),transparent_72%)]" />
 
             <div className="relative flex h-full flex-col overflow-y-auto px-6 pb-10 pt-24">
               <nav className="flex flex-col" aria-label="Mobile">

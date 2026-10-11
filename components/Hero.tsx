@@ -1,20 +1,38 @@
 "use client";
 
+import { useState } from "react";
+import dynamic from "next/dynamic";
 import { motion } from "motion/react";
 import { useStillMotion } from "@/lib/hooks";
 import { ArrowDown, ArrowRight, Download } from "lucide-react";
 import { GithubMark } from "@/components/BrandIcons";
-import { AtomCore } from "@/components/AtomCore";
 import { MagneticButton } from "@/components/MagneticButton";
 import { MaskedLines } from "@/components/MaskedLines";
 import { Scramble } from "@/components/Scramble";
 import { scrollToHash } from "@/components/SmoothScroll";
+import { CORE_NODES } from "@/lib/core-nodes";
 import { PROFILE } from "@/lib/site";
 import { EASE_CINEMATIC } from "@/lib/motion";
+
+/**
+ * The sculpture is client-only and loaded on demand.
+ *
+ * WebGL has nothing to render on the server, and the renderer should not sit in
+ * the initial payload for a reader whose machine cannot draw it. Everything the
+ * sculpture says is repeated in the index row below, which is plain DOM, so the
+ * hero reads complete before the canvas arrives.
+ */
+const IntelligenceCore = dynamic(
+  () => import("@/components/IntelligenceCore").then((mod) => mod.IntelligenceCore),
+  { ssr: false },
+);
 
 export function Hero() {
   // Hydration-safe: stays false on the server AND on the first client render.
   const reduce = useStillMotion();
+  /** Which capability the core is presenting, or null for none. */
+  const [activeId, setActiveId] = useState<string | null>(null);
+  const active = CORE_NODES.find((node) => node.id === activeId) ?? null;
 
   /**
    * Entrance props for a block.
@@ -40,13 +58,18 @@ export function Hero() {
     >
       {/*
         The sculpture.
-        A nucleus with three orbits turning around it, each carrying a word for
-        the frontier being studied. Held to the right of the copy column on a
-        wide screen and centred behind it on a small one, so the reading column
-        never competes with the figure.
+        A glass core with four capability nodes around it, turning slowly and
+        leaning with the pointer. It takes pointer events, so the copy column
+        above it releases them everywhere it is not actually drawn. On a wide
+        screen it is held to the right; on a small one it sits behind the copy.
       */}
-      <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
-        <AtomCore className="absolute left-1/2 top-1/2 h-[min(94vh,94vw)] -translate-x-1/2 -translate-y-1/2 opacity-70 sm:opacity-90 lg:left-[70%] lg:opacity-100" />
+      <div className="absolute inset-0 z-0" aria-hidden>
+        <IntelligenceCore
+          activeId={activeId}
+          onActivate={setActiveId}
+          still={reduce}
+          className="absolute inset-0 lg:left-[40%]"
+        />
       </div>
 
       {/* Light, then falloff, then a single layer of grain over both. */}
@@ -63,9 +86,14 @@ export function Hero() {
       />
       <div className="grain pointer-events-none absolute inset-0 z-[3]" aria-hidden />
 
-      {/* Copy */}
-      <div className="relative z-[4] mx-auto flex w-full max-w-[1600px] flex-1 items-center px-5 pb-28 pt-32 sm:px-8 sm:pb-32 lg:px-12">
-        <div className="max-w-[46rem]">
+      {/*
+        Copy.
+        The container passes pointer events through and the drawn column takes
+        them back: a full-width box with events would swallow every hover meant
+        for the sculpture, including the empty space beside the text.
+      */}
+      <div className="pointer-events-none relative z-[4] mx-auto flex w-full max-w-[1600px] flex-1 items-center px-5 pb-28 pt-32 sm:px-8 sm:pb-32 lg:px-12">
+        <div className="pointer-events-auto max-w-[46rem]">
           <motion.div
             {...rise(0.1)}
             className="mb-10 flex flex-wrap items-center gap-x-5 gap-y-2"
@@ -150,12 +178,77 @@ export function Hero() {
               Résumé
             </MagneticButton>
           </motion.div>
+
+          {/*
+            The readable twin of the sculpture.
+
+            Every node in the core is a real button here, same four, same
+            order. The canvas is decoration; this is the path a keyboard or a
+            screen reader takes, and it is what keeps the panels a feature
+            rather than a hover-only trick. Height is reserved below so that
+            revealing a panel never moves the hero.
+          */}
+          <motion.div {...rise(1.3)} className="mt-12">
+            <div className="hairline flex flex-wrap items-center gap-x-5 gap-y-2 border-t pt-5">
+              <span className="label-mono text-muted">Core</span>
+              <ul className="flex flex-wrap items-center gap-x-5 gap-y-2">
+                {CORE_NODES.map((node) => {
+                  const on = node.id === activeId;
+                  return (
+                    <li key={node.id}>
+                      <button
+                        type="button"
+                        onMouseEnter={() => setActiveId(node.id)}
+                        onMouseLeave={() => setActiveId(null)}
+                        onFocus={() => setActiveId(node.id)}
+                        onBlur={() => setActiveId(null)}
+                        aria-current={on ? "true" : undefined}
+                        className={
+                          on
+                            ? "font-mono text-xs uppercase tracking-[0.18em] text-accent transition-colors duration-300"
+                            : "font-mono text-xs uppercase tracking-[0.18em] text-muted transition-colors duration-300 hover:text-bright"
+                        }
+                      >
+                        {node.label}
+                      </button>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+
+            <div className="mt-5 min-h-[4.5rem]">
+              {active ? (
+                <div className="glass-card hairline max-w-md rounded-xl border p-4">
+                  <div className="flex items-baseline justify-between gap-4">
+                    <span className="font-display text-sm font-semibold text-bright">
+                      {active.label}
+                    </span>
+                    <span className="font-mono text-[0.6rem] uppercase tracking-[0.18em] text-muted">
+                      {active.status}
+                    </span>
+                  </div>
+                  <p className="mt-2 text-xs leading-relaxed text-soft">{active.blurb}</p>
+                  <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-1">
+                    {active.keywords.map((word) => (
+                      <li
+                        key={word}
+                        className="font-mono text-[0.6rem] tracking-wide text-muted"
+                      >
+                        {word}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              ) : null}
+            </div>
+          </motion.div>
         </div>
       </div>
 
       {/* Meta bar */}
       <motion.div
-        className="relative z-[4] mx-auto w-full max-w-[1600px] px-5 pb-8 sm:px-8 sm:pb-10 lg:px-12"
+        className="pointer-events-none relative z-[4] mx-auto w-full max-w-[1600px] px-5 pb-8 sm:px-8 sm:pb-10 lg:px-12"
         initial={reduce ? false : { opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{
@@ -164,7 +257,7 @@ export function Hero() {
           delay: reduce ? 0 : 1.35,
         }}
       >
-        <div className="hairline flex flex-wrap items-center justify-between gap-4 border-t pt-5">
+        <div className="hairline pointer-events-auto flex flex-wrap items-center justify-between gap-4 border-t pt-5">
           <div className="flex items-center gap-5">
             {/* The hero is the cover, but it is still the first section of the
                 running order: the folio every heading below carries starts
