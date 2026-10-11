@@ -9,8 +9,8 @@
  *
  * Two worlds share one set of token names:
  *
- * - `PALETTE` is the page: obsidian black under deep navy, platinum white ink,
- *   and one electric cyan carrying every interactive accent. `bright` is the
+ * - `PALETTE` is the page: obsidian black under midnight navy, soft white ink,
+ *   and one ice blue carrying every interactive accent. `bright` is the
  *   lightest value, because on a dark ground primary text is light.
  * - `PALETTE_DEEP` is the well the hero and the open-source section sit in: the
  *   same roles pulled almost to black, with the blue lifted a step so it still
@@ -20,36 +20,36 @@
  */
 
 export const PALETTE = {
-  void: "#0b0d10",
-  ink: "#0e1219",
-  panel: "#111827",
-  panel2: "#151d2e",
-  panel3: "#1a2438",
-  edge: "#24314a",
-  indigo: "#0f1b2b",
-  accent: "#64ffda",
-  volt: "#9bf5e4",
-  ice: "#dce6e4",
-  muted: "#8993a4",
-  soft: "#c9d0dc",
-  bright: "#f5f5f0",
+  void: "#08090c",
+  ink: "#0b0d12",
+  panel: "#101827",
+  panel2: "#141c2b",
+  panel3: "#192337",
+  edge: "#26334a",
+  indigo: "#0d1a2e",
+  accent: "#8be9fd",
+  volt: "#b7f2fe",
+  ice: "#dce4ee",
+  muted: "#8d97a8",
+  soft: "#c8d0da",
+  bright: "#f5f7fa",
 } as const;
 
 /** The deeper rendition of the same roles, for the hero and open-source wells. */
 export const PALETTE_DEEP = {
-  void: "#05070a",
-  ink: "#080b11",
-  panel: "#0e131c",
-  panel2: "#111a26",
-  panel3: "#17222f",
-  edge: "#1f2c42",
-  indigo: "#08111f",
-  accent: "#7cffe2",
-  volt: "#b4fff0",
-  ice: "#e4edea",
-  muted: "#94a0b1",
-  soft: "#cbd2de",
-  bright: "#fcfcf9",
+  void: "#050609",
+  ink: "#08090e",
+  panel: "#0d141f",
+  panel2: "#101827",
+  panel3: "#16202f",
+  edge: "#1f2c40",
+  indigo: "#081426",
+  accent: "#a6eeff",
+  volt: "#c6f5ff",
+  ice: "#e4eaf2",
+  muted: "#96a0b0",
+  soft: "#cdd5df",
+  bright: "#fafbfd",
 } as const;
 
 export type PaletteColor = keyof typeof PALETTE;
@@ -69,7 +69,7 @@ const CHANNELS = buildChannelMap(PALETTE);
 const DEEP_CHANNELS = buildChannelMap(PALETTE_DEEP);
 
 /**
- * `"#64ffda"` → `"100, 255, 218"`.
+ * `"#8be9fd"` → `"139, 233, 253"`.
  *
  * Deriving the channels keeps alpha variants from drifting away from the hex
  * value they are supposed to match.

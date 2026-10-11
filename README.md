@@ -1,9 +1,9 @@
 # Khagendra Luitel: AI / ML Engineer Portfolio
 
 An editorial portfolio for an AI/ML engineer: a dark instrument panel, obsidian
-black under deep navy with one electric cyan carrying every interactive accent,
-a warm serif setting the headings against it, and every figure drawn in code with
-no 3D dependency.
+black under midnight navy with one ice blue carrying every interactive accent, a
+warm serif setting the headings against it, a WebGL intelligence core in the
+hero, and every other figure drawn in code.
 Every claim on the site is transcribed from the CV, and every repository link is
 read live from GitHub.
 
@@ -13,6 +13,7 @@ read live from GitHub.
 | --- | --- |
 | Framework | Next.js 16 (App Router, Turbopack) + TypeScript |
 | Styling | Tailwind CSS v4 (CSS-first `@theme` tokens) |
+| 3D | Three.js through React Three Fiber and Drei, hero core only |
 | Component motion | Motion for React (`motion/react`) |
 | Scroll-driven motion | GSAP + ScrollTrigger |
 | Smooth scroll | Lenis |
@@ -71,7 +72,7 @@ app/
   projects/[slug]/page.tsx   one case study per project, prerendered
 components/
   Navbar                 minimal bar + full-screen mobile menu
-  Hero / AtomCore        hero copy + the nucleus and its three orbits
+  Hero / IntelligenceCore  hero copy + the WebGL core and its four nodes
   SkillUniverse          the capability graph: canvas figure + the text panel
   OpenSource             live repositories, read straight from GitHub
   PipelineDiagram        the intelligence pipeline rail (Frontier)
@@ -98,6 +99,7 @@ lib/
   motion.ts              shared easing + viewport-once defaults
   utils.ts               `cn()` class joiner + `clamp()`
   visuals.ts              schematic + accent maps shared by card and page
+  core-nodes.ts           the four hero nodes, read by the scene and the index
   skill-universe.ts       the capability graph and its CV evidence lookup
 scripts/
   check-skill-universe.ts  fails if a skill node names something no CV entry records
@@ -110,10 +112,10 @@ CSS custom property, so every colour drawn outside CSS resolves from there. `app
 
 ## Palette
 
-Obsidian black under deep navy, with one committed ink: an electric cyan, held
-in reserve rather than spread across the page, so it reads as an instrument
-light rather than as decoration. Every colour is a token in the `@theme` block
-of `app/globals.css`, which stays the source of truth.
+Obsidian black under midnight navy, with one committed ink: an ice blue, held in
+reserve rather than spread across the page, so it reads as an instrument light
+rather than as decoration. Every colour is a token in the `@theme` block of
+`app/globals.css`, which stays the source of truth.
 
 The ratios below are computed, not asserted, and they are the reason the ramp
 holds together: each token is measured against the page ground (`void`) and
@@ -121,28 +123,28 @@ against the most raised surface it can sit on (`panel3`).
 
 | Token | Value | Role | On `void` | On `panel3` |
 | --- | --- | --- | --- | --- |
-| `bright` | `#f5f5f0` | headings, primary text | **17.8:1** (AAA) | 14.2:1 |
-| `soft` | `#c9d0dc` | secondary text | **12.5:1** (AAA) | 10.0:1 |
-| `muted` | `#8993a4` | small labels | **6.3:1** (AA) | 5.0:1 |
-| `accent` | `#64ffda` | the accent: links, rules, figures | **15.6:1** (AAA) | 12.5:1 |
-| `volt` | `#9bf5e4` | paler cyan, secondary accent | **15.4:1** (AAA) | 12.3:1 |
-| `ice` | `#dce6e4` | cool platinum, art highlight | **15.3:1** (AAA) | 12.2:1 |
-| `indigo` | `#0f1b2b` | gradient stop only | not text | not text |
+| `bright` | `#f5f7fa` | headings, primary text | **18.6:1** (AAA) | 14.6:1 |
+| `soft` | `#c8d0da` | secondary text | **12.8:1** (AAA) | 10.1:1 |
+| `muted` | `#8d97a8` | small labels | **6.8:1** (AA) | 5.3:1 |
+| `accent` | `#8be9fd` | the accent: links, rules, figures | **14.4:1** (AAA) | 11.4:1 |
+| `volt` | `#b7f2fe` | paler tint, secondary accent | **16.3:1** (AAA) | 12.8:1 |
+| `ice` | `#dce4ee` | cool platinum, art highlight | **15.5:1** (AAA) | 12.3:1 |
+| `indigo` | `#0d1a2e` | gradient stop only | not text | not text |
 
 Every token clears AA at the smallest size the site sets it at, which is what
 holding the whole ramp above the floor buys: a label can take any of them, and
-the tightest pair in the run (`muted` on `panel3`, 5.0:1) still clears the floor.
-`.accent-gradient` is a flat fill of the cyan; this world does not gradient its
-rules or buttons.
+the tightest pair in the run (`muted` on `panel3`, 5.3:1) still clears the floor.
+`.accent-gradient` is a flat fill of the ice blue; this world does not gradient
+its rules or buttons.
 
 ### Deep panels
 
 The hero and the open-source section sit in a well: the same roles pulled almost
-to black, with the cyan lifted a step so it still reads against a darker ground.
-`.on-deep` and `.panel-deep` re-declare the token names they inherit (`void`
-`#05070a`,
-`panel3` `#17222f`, `accent` `#7cffe2`, `volt` `#b4fff0`, `ice` `#e4edea`,
-`muted` `#94a0b1`, `soft` `#cbd2de`, `bright` `#fcfcf9`), so token-based
+to black, with the accent lifted a step so it still reads against a darker
+ground. `.on-deep` and `.panel-deep` re-declare the token names they inherit
+(`void` `#050609`,
+`panel3` `#16202f`, `accent` `#a6eeff`, `volt` `#c6f5ff`, `ice` `#e4eaf2`,
+`muted` `#96a0b0`, `soft` `#cdd5df`, `bright` `#fafbfd`), so token-based
 utilities flip to that rendition for the whole subtree with no component change.
 Art inside those panels resolves from `PALETTE_DEEP` in `lib/palette.ts`.
 
@@ -177,15 +179,23 @@ Four things react to the reader, none of them needing a pointer to be useful.
 
 ## Performance notes
 
-- One figure renders in three dimensions, through a small canvas renderer with
-  no 3D dependency: the skill universe in the skills section. The hero's atom is
-  SVG and plain DOM, and so is every other figure: its orbit rings are static
-  ellipse geometry and only the three carriers on them move, while the project
-  schematics and the pipeline rail animate with CSS keyframes on nodes the
-  browser already has.
-- The canvas figure is laid out from a seeded PRNG at module scope, and both it
-  and the atom stop their animation loop while off screen, so the drawing is
-  identical on every visit and costs nothing to scroll past.
+- The hero core is Three.js through React Three Fiber, and it is loaded on
+  demand: the renderer ships as its own chunk, 976 KB raw and 264 KB gzipped,
+  which the document does not even reference, so it never sits in the payload the
+  first paint waits on.
+- It renders only after a WebGL probe succeeds, so a machine that cannot draw it
+  gets the hero without the canvas rather than an exception thrown inside the
+  renderer. Its loop stops when the hero is off screen or motion is reduced,
+  where the scene holds one frame instead.
+- Transmission glass is the expensive part of the scene and only renders on a
+  desktop-class device, guessed from screen width and core count. Everywhere
+  else the core is a polished metal shell against the same environment, which
+  still reads as a real object.
+- The skill universe is the other three-dimensional figure, drawn by a
+  hand-written canvas renderer with no 3D dependency at all. It is laid out from
+  a seeded PRNG at module scope, so the drawing is identical on every visit, and
+  it stops its loop while off screen. The project schematics and the pipeline
+  rail animate with CSS keyframes on nodes the browser already has.
 - Scroll-linked motion (the pipeline rail, the experience timeline, the opposing
   parallax across each project card) runs through GSAP's ticker, so Lenis and
   ScrollTrigger share one rAF loop rather than racing.
@@ -201,6 +211,11 @@ Four things react to the reader, none of them needing a pointer to be useful.
   reachable by keyboard and on touch.
 - The Open Source list is the whole reading: every repository is a real link
   carrying its language and date, so the section has no visual-only path.
+- The hero core is decoration in the accessibility tree. Every node it presents
+  is a real button in the index row beneath the hero copy, same four and same
+  order, so the panels are reachable by keyboard and readable by assistive tech
+  instead of being a hover-only effect. The 3D labels carry `pointer-events:
+  none`, so they cannot intercept the hover meant for the node behind them.
 - The pointer companion is decoration, and it behaves like it: it installs only
   for a fine pointer with motion allowed, hides itself over text fields and dead
   buttons so the platform's own I-beam and `not-allowed` still work, and adds

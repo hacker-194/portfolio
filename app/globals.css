@@ -2,42 +2,45 @@
 
 /* ------------------------------------------------------------------
    DESIGN TOKENS
-   Obsidian black under deep navy, one electric cyan carrying every interactive
-   accent, platinum white for headings and a muted slate beneath it, a warm
+   Obsidian black under midnight navy, ice blue carrying every interactive
+   accent, soft white for headings and platinum silver beneath it, a warm
    transitional serif for display (Spectral), a neutral sans for running text
    (Inter), and a mono for figures, indices and labels (JetBrains Mono).
 
-   Cyan is rationed. It is the only saturated colour in the system, so a paler
-   cyan answers it and a cool platinum closes the trio without spending more of
-   it, and it is kept off large fills.
+   Ice blue is rationed. It is the only saturated colour in the system, so a
+   paler tint answers it and a cool platinum closes the trio without spending
+   more of it, and it is kept off large fills.
 
    The token *names* are unchanged from the systems this replaced, so the whole
    site re-themes from this one block; nothing else needed its class names
    edited to pick up the palette.
 ------------------------------------------------------------------ */
 @theme {
-  /* Ground scale: obsidian black through to raised navy panels. */
-  --color-void: #0b0d10;
-  --color-ink: #0e1219;
-  --color-panel: #111827;
-  --color-panel2: #151d2e;
-  --color-panel3: #1a2438;
-  --color-edge: #24314a;
+  /* Ground scale: obsidian black through to raised midnight navy panels. */
+  --color-void: #08090c;
+  --color-ink: #0b0d12;
+  --color-panel: #101827;
+  --color-panel2: #141c2b;
+  --color-panel3: #192337;
+  --color-edge: #26334a;
 
   /*
-   * One committed ink leads: an electric cyan. A paler cyan answers it and a
-   * cool platinum closes the trio, all three clearing AA against the ground so
-   * each can carry small labels as well as large shapes.
+   * One committed ink leads: an ice blue. A paler tint answers it and a cool
+   * platinum closes the trio, all three clearing AA against the ground so each
+   * can carry small labels as well as large shapes.
    */
-  --color-indigo: #0f1b2b;
-  --color-accent: #64ffda;
-  --color-volt: #9bf5e4;
-  --color-ice: #dce6e4;
+  --color-indigo: #0d1a2e;
+  --color-accent: #8be9fd;
+  --color-volt: #b7f2fe;
+  --color-ice: #dce4ee;
 
-  /* Text: platinum white primary, with two greys beneath it. Both clear AA. */
-  --color-muted: #8993a4;
-  --color-soft: #c9d0dc;
-  --color-bright: #f5f5f0;
+  /*
+   * Text: soft white primary, platinum silver beneath it, then a dimmer silver
+   * for labels. All three clear AA.
+   */
+  --color-muted: #8d97a8;
+  --color-soft: #c8d0da;
+  --color-bright: #f5f7fa;
 
   --font-display: var(--font-spectral), ui-serif, Georgia, serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
@@ -62,7 +65,7 @@
    * purpose: a wide bright halo is the fastest way to make a dark page look
    * cheap, so this reads as a lit surface rather than as a glow.
    */
-  --shadow-bloom: 0 0 80px -44px rgba(100, 255, 218, 0.3);
+  --shadow-bloom: 0 0 80px -44px rgba(139, 233, 253, 0.3);
 
   --animate-marquee: marquee 54s linear infinite;
   --animate-flicker: flicker 6s ease-in-out infinite;
@@ -80,10 +83,10 @@
   --bg-secondary: var(--color-ink);
   --accent-primary: var(--color-accent);
   --accent-secondary: var(--color-volt);
-  --accent-glow: rgba(100, 255, 218, 0.16);
+  --accent-glow: rgba(139, 233, 253, 0.16);
   --text-primary: var(--color-bright);
   --text-secondary: var(--color-soft);
-  --glass-bg: #111827;
+  --glass-bg: #101827;
   --glass-border: rgba(255, 255, 255, 0.08);
 }
 
@@ -91,8 +94,8 @@
  * The deep panels.
  *
  * The hero and the open-source section sit in a well deeper than the page: a
- * ground pulled almost to black, with the cyan lifted a step so it still reads
- * against it. As before, the scope re-declares the same token names it
+ * ground pulled almost to black, with the accent lifted a step so it still
+ * reads against it. As before, the scope re-declares the same token names it
  * inherits, so `text-bright`, `bg-void`, `border-*` and the rest flip for the
  * whole subtree without any component knowing. `.on-deep` carries only the
  * colours, for surfaces (like the fixed nav) that draw over that well without
@@ -100,20 +103,20 @@
  */
 .on-deep,
 .panel-deep {
-  --color-void: #05070a;
-  --color-ink: #080b11;
-  --color-panel: #0e131c;
-  --color-panel2: #111a26;
-  --color-panel3: #17222f;
-  --color-edge: #1f2c42;
-  --color-indigo: #08111f;
-  --color-accent: #7cffe2;
-  --color-volt: #b4fff0;
-  --color-ice: #e4edea;
-  --color-muted: #94a0b1;
-  --color-soft: #cbd2de;
-  --color-bright: #fcfcf9;
-  --glass-bg: #0e131c;
+  --color-void: #050609;
+  --color-ink: #08090e;
+  --color-panel: #0d141f;
+  --color-panel2: #101827;
+  --color-panel3: #16202f;
+  --color-edge: #1f2c40;
+  --color-indigo: #081426;
+  --color-accent: #a6eeff;
+  --color-volt: #c6f5ff;
+  --color-ice: #e4eaf2;
+  --color-muted: #96a0b0;
+  --color-soft: #cdd5df;
+  --color-bright: #fafbfd;
+  --glass-bg: #0d141f;
   --glass-border: rgba(255, 255, 255, 0.09);
 }
 
@@ -205,15 +208,15 @@
     /* The page opens on a cool wash from above and settles into the ground. */
     background-image: radial-gradient(
       120% 62% at 50% -12%,
-      rgba(100, 255, 218, 0.05) 0%,
-      rgba(100, 255, 218, 0.015) 38%,
+      rgba(139, 233, 253, 0.05) 0%,
+      rgba(139, 233, 253, 0.015) 38%,
       transparent 70%
     );
     background-repeat: no-repeat;
   }
 
   ::selection {
-    background-color: rgba(100, 255, 218, 0.22);
+    background-color: rgba(139, 233, 253, 0.22);
     color: var(--color-bright);
   }
 
@@ -314,17 +317,17 @@ html.lenis body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #0b0d10;
+  background: #08090c;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1e2a3d;
-  border: 2px solid #0b0d10;
+  background: #22304a;
+  border: 2px solid #08090c;
   border-radius: 99px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2a3a52;
+  background: #2f4060;
 }
 
 /* ------------------------------------------------------------------
@@ -361,7 +364,7 @@ html.lenis body {
 }
 
 /*
- * The accent, as one flat electric cyan.
+ * The accent, as one flat ice blue.
  *
  * Editorial rules are not gradiented and neither is this: a single committed
  * ink does the same jobs (buttons, timeline rules, hover underlines) without
@@ -407,7 +410,7 @@ html.lenis body {
 .glass-card:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-lux), var(--shadow-bloom);
-  border-color: rgba(100, 255, 218, 0.26);
+  border-color: rgba(139, 233, 253, 0.26);
 }
 
 /* A single hairline that fades in from nothing and out again. */
@@ -415,8 +418,8 @@ html.lenis body {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(100, 255, 218, 0.3) 22%,
-    rgba(100, 255, 218, 0.3) 78%,
+    rgba(139, 233, 253, 0.28) 22%,
+    rgba(139, 233, 253, 0.28) 78%,
     transparent 100%
   );
 }
@@ -435,8 +438,8 @@ html.lenis body {
 .keylight {
   background-image: radial-gradient(
     58% 46% at 62% 42%,
-    rgba(100, 255, 218, 0.1) 0%,
-    rgba(100, 255, 218, 0.03) 44%,
+    rgba(139, 233, 253, 0.1) 0%,
+    rgba(139, 233, 253, 0.03) 44%,
     transparent 74%
   );
 }
@@ -481,7 +484,7 @@ html.lenis body {
 }
 
 .stroke-text {
-  -webkit-text-stroke: 1px rgba(245, 245, 240, 0.32);
+  -webkit-text-stroke: 1px rgba(245, 247, 250, 0.32);
   color: transparent;
 }
 

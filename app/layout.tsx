@@ -69,7 +69,7 @@ export const metadata: Metadata = {
 export const viewport: Viewport = {
   // Matches the page ground in `globals.css`, so the browser chrome on mobile
   // continues the page rather than framing it in white.
-  themeColor: "#0b0d10",
+  themeColor: "#08090c",
   colorScheme: "dark",
 };
 
