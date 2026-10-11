@@ -94,7 +94,8 @@ lib/
   gsap.ts                reduced-motion check, ScrollTrigger setup, scroll scope
   layout.ts              shared section container class
   load.tsx                scroll lock for the menu and the palette
-  motion.ts              shared easing + viewport-once defaults  utils.ts               `cn()` class joiner + `clamp()`
+  motion.ts              shared easing + viewport-once defaults
+  utils.ts               `cn()` class joiner + `clamp()`
   visuals.ts              schematic + accent maps shared by card and page
   skill-universe.ts       the capability graph and its CV evidence lookup
 scripts/
@@ -113,6 +114,12 @@ below neon so it reads as an instrument light rather than a gaming accent. Every
 colour is a token in the `@theme` block of `app/globals.css`, which stays the
 source of truth.
 
+One warm value completes the system. `ember` is a muted brass, drawn only as a
+hairline rule on the two surfaces that open and close the reading (the
+at-a-glance plaque and the Contact section). It is never used for type, so the
+blue stays the only ink and the brass reads as a lit metal edge rather than a
+competing second accent.
+
 The ratios below are computed, not asserted, and they are the reason the ramp
 holds together: each token is measured against the page ground (`void`) and
 against the most raised surface it can sit on (`panel3`).
@@ -125,6 +132,7 @@ against the most raised surface it can sit on (`panel3`).
 | `accent` | `#4d8dff` | the accent: links, rules, figures | **6.3:1** (AA) | 5.3:1 |
 | `volt` | `#86b4ff` | paler blue, secondary accent | **9.6:1** (AAA) | 8.0:1 |
 | `ice` | `#cbd8ec` | platinum, art highlight | **14.1:1** (AAA) | 11.7:1 |
+| `ember` | `#cfa15f` | the one warm rule | **8.6:1** (AAA) | 7.2:1 |
 | `indigo` | `#16224a` | gradient stop only | not text | not text |
 
 Every token clears AA at the smallest size the site sets it at, which is what
@@ -140,7 +148,7 @@ to black, with the blue lifted a step so it still reads against a darker ground.
 `.on-deep` and `.panel-deep` re-declare the token names they inherit (`void`
 `#000206`,
 `panel3` `#0c1320`, `accent` `#6ba4ff`, `volt` `#9cc2ff`, `ice` `#dce5f2`,
-`muted` `#8d9ab0`, `soft` `#c6d0e0`, `bright` `#fbfcff`), so token-based
+`ember` `#e2b877`, `muted` `#8d9ab0`, `soft` `#c6d0e0`, `bright` `#fbfcff`), so token-based
 utilities flip to that rendition for the whole subtree with no component change.
 Art inside those panels resolves from `PALETTE_DEEP` in `lib/palette.ts`.
 
@@ -230,6 +238,10 @@ published yet and each card says so rather than linking somewhere misleading. Th
 Open Source section is the opposite case: every link there comes from the GitHub
 API, so it cannot point at a repository that does not exist. Nothing is
 hard-coded, and nothing is invented to fill space.
+
+## License
+
+MIT. See `LICENSE`.
 
 ## Known limitations
 

@@ -12,6 +12,12 @@ light rather than a gaming one. A warm transitional serif (Spectral) sets the
 headings against the cold ground; Inter carries running text; JetBrains Mono
 carries figures, indices and labels.
 
+One warm value completes the system: `ember`, a muted brass, drawn only as a
+hairline rule on the two surfaces that open and close the reading (the
+at-a-glance plaque and the Contact section). It is never used for type, so the
+blue stays the only ink and the brass reads as a lit metal edge rather than a
+competing second accent.
+
 The mode is **Experience** (a portfolio): the work leads and the interface
 recedes. The page is composed like a lit set, not a dashboard. Light falls from
 above, the figure in the hero is lit from one side, edges catch a hairline of
@@ -27,6 +33,7 @@ Two worlds share one set of token names:
 | `edge` | `#1e2a40` drawn lines | `#16233a` |
 | `accent` | `#4d8dff` electric blue | `#6ba4ff` |
 | `volt` / `ice` | `#86b4ff` / `#cbd8ec` | `#9cc2ff` / `#dce5f2` |
+| `ember` | `#cfa15f` brass rule | `#e2b877` |
 | `bright` / `soft` / `muted` | `#f4f7fc` / `#c2cbda` / `#8792a6` | `#fbfcff` / `#c6d0e0` / `#8d9ab0` |
 
 `.panel-deep` is the well the hero and the open-source section sit in: the same
@@ -64,6 +71,12 @@ hover (6.3:1). Both states clear AA.
 Labels (`.label-mono`) are mono, small and tracked wide. On an engineered page a
 technical face on a label is information rather than costume, and it is what
 makes the folio numbers, stage names and status words read as one system.
+
+The display scale is deliberately extreme: the hero name runs to 9.25rem, a
+section heading to 3.75rem and the footer wordmark to 16.5rem at their caps.
+Editorial layouts read as expensive when one element is allowed to be
+unreasonably large; the tracking is tightened to -0.03em to hold the serif at
+those sizes rather than letting it fall apart.
 
 Section rhythm is fixed: `py-24 sm:py-32 lg:py-40`, with the at-a-glance plaque
 at `py-16 sm:py-20`. Generous space is the cheapest luxury there is.

@@ -49,6 +49,12 @@ export function Contact() {
       id="contact"
       className="relative isolate overflow-hidden border-t border-bright/15 py-24 sm:py-32 lg:py-40"
     >
+      {/* The closing warm edge, the matching note to the plaque near the top of
+          the page. The reader meets brass twice and nowhere else. */}
+      <span
+        className="ember-rule pointer-events-none absolute inset-x-0 top-0 h-px"
+        aria-hidden
+      />
       <div className={SECTION_CONTAINER}>
         <div className="flex flex-col items-center text-center">
           <Reveal>
@@ -58,7 +64,7 @@ export function Contact() {
           {/* Set as plain text rather than a masked reveal: this is the last
               thing the reader should read, and it should read like a sentence
               on the page by the time they get here, not like an effect. */}
-          <h2 className="display-tight mt-8 text-[clamp(1.9rem,4.4vw,3.4rem)] font-medium text-bright">
+          <h2 className="display-tight mt-8 text-[clamp(2rem,4.8vw,3.75rem)] font-medium text-bright">
             <span className="block">Let&apos;s build</span>
             <span className="block">something</span>
             <span className="text-accent-gradient block">intelligent.</span>

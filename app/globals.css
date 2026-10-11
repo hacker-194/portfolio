@@ -25,11 +25,17 @@
    * as an instrument light rather than a gaming accent. A paler blue answers
    * it, and a platinum closes the trio. All three clear AA against the ground,
    * so each can carry small labels as well as large shapes.
+   *
+   * `ember` is the one warm note in an otherwise cold system: a muted brass,
+   * drawn only as a rule on the two surfaces that open and close the page. It
+   * is deliberately never used for type, so the blue stays the only ink and the
+   * brass reads as a lit metal edge rather than a competing second accent.
    */
   --color-indigo: #16224a;
   --color-accent: #4d8dff;
   --color-volt: #86b4ff;
   --color-ice: #cbd8ec;
+  --color-ember: #cfa15f;
 
   /* Text: near-white primary, with two greys beneath it. Both clear AA. */
   --color-muted: #8792a6;
@@ -103,6 +109,7 @@
   --color-accent: #6ba4ff;
   --color-volt: #9cc2ff;
   --color-ice: #dce5f2;
+  --color-ember: #e2b877;
   --color-muted: #8d9ab0;
   --color-soft: #c6d0e0;
   --color-bright: #fbfcff;
@@ -127,6 +134,17 @@
     transparent 0%,
     rgba(255, 255, 255, 0.3) 22%,
     rgba(255, 255, 255, 0.3) 78%,
+    transparent 100%
+  );
+}
+
+.on-deep .ember-rule,
+.panel-deep .ember-rule {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(226, 184, 119, 0.6) 22%,
+    rgba(226, 184, 119, 0.6) 78%,
     transparent 100%
   );
 }
@@ -414,6 +432,25 @@ html.lenis body {
   );
 }
 
+/*
+ * The same rule in the warm note.
+ *
+ * Used twice on the page and nowhere else: along the top of the at-a-glance
+ * plaque and along the top of the closing Contact section, so the reader meets
+ * one warm edge near the top and one at the end. Held to 50% opacity on
+ * purpose, because brass at full strength turns into a highlight and stops
+ * reading as metal.
+ */
+.ember-rule {
+  background: linear-gradient(
+    90deg,
+    transparent 0%,
+    rgba(207, 161, 95, 0.55) 22%,
+    rgba(207, 161, 95, 0.55) 78%,
+    transparent 100%
+  );
+}
+
 .hairline {
   border-color: rgba(255, 255, 255, 0.09);
 }
@@ -469,7 +506,7 @@ html.lenis body {
 }
 
 .display-tight {
-  letter-spacing: -0.025em;
+  letter-spacing: -0.03em;
   line-height: 0.96;
 }
 

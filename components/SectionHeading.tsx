@@ -67,7 +67,7 @@ export function SectionHeading({
 
       <h2
         className={cn(
-          "display-tight max-w-4xl text-[clamp(1.9rem,4.4vw,3.4rem)] font-medium text-bright",
+          "display-tight max-w-4xl text-[clamp(2rem,4.8vw,3.75rem)] font-medium text-bright",
           titleClassName,
         )}
       >
