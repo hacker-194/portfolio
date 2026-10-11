@@ -63,6 +63,77 @@ function pointOn(orbit: Orbit, turn: number) {
   };
 }
 
+/* ------------------------------------------------------------------
+   THE NUCLEUS
+------------------------------------------------------------------ */
+
+/** Radius of the whole ball, in the shared 0-100 box. */
+const NUCLEUS_RADIUS = 6.8;
+
+/**
+ * Nucleon centre spacing.
+ *
+ * Just under two radii, so neighbours touch and slightly interpenetrate. That
+ * overlap is wanted: these spheres are translucent, and where two of them cross
+ * the fill doubles up into a darker junction, which reads as the contact shadow
+ * between packed matter rather than as a rendering fault.
+ */
+const NUCLEON_STEP = 2.35;
+
+type Nucleon = {
+  /** Orthographic projection: x and y are already screen-space, z is depth. */
+  x: number;
+  y: number;
+  z: number;
+  r: number;
+  /** The blue nucleons, against the platinum ones. */
+  blue: boolean;
+};
+
+/** A small deterministic PRNG, so the nucleus is identical on every load. */
+function mulberry(seed: number) {
+  let a = seed;
+  return () => {
+    a |= 0;
+    a = (a + 0x6d2b79f5) | 0;
+    let t = Math.imul(a ^ (a >>> 15), 1 | a);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/**
+ * Packs the nucleus with nucleons on a jittered cubic lattice.
+ *
+ * A lattice rather than random placement, because random sequential packing jams
+ * near 38% and leaves visible gaps: the spheres have to touch for the ball to
+ * read as matter rather than as scattered dots. The jitter is what stops the
+ * lattice reading as a grid, and the sort puts the far spheres down first so the
+ * near ones occlude them.
+ */
+function buildNucleus(): Nucleon[] {
+  const rand = mulberry(20261011);
+  const out: Nucleon[] = [];
+  const span = Math.ceil(NUCLEUS_RADIUS / NUCLEON_STEP);
+
+  for (let i = -span; i <= span; i += 1) {
+    for (let j = -span; j <= span; j += 1) {
+      for (let k = -span; k <= span; k += 1) {
+        const x = i * NUCLEON_STEP + (rand() - 0.5) * 0.24;
+        const y = j * NUCLEON_STEP + (rand() - 0.5) * 0.24;
+        const z = k * NUCLEON_STEP + (rand() - 0.5) * 0.24;
+        // Keep the whole sphere inside the ball, not just its centre.
+        if (Math.hypot(x, y, z) > NUCLEUS_RADIUS - 1.15) continue;
+        out.push({ x, y, z, r: 1.12 + rand() * 0.18, blue: rand() < 0.42 });
+      }
+    }
+  }
+
+  return out.sort((a, b) => a.z - b.z);
+}
+
+const NUCLEONS = buildNucleus();
+
 export function AtomCore({ className }: { className?: string }) {
   const hostRef = useRef<HTMLDivElement | null>(null);
 
@@ -154,15 +225,47 @@ export function AtomCore({ className }: { className?: string }) {
         aria-hidden
       >
         <defs>
+          {/* The wide wash the whole figure sits in. */}
           <radialGradient id="atom-bloom">
             <stop offset="0%" stopColor={P.accent} stopOpacity="0.5" />
             <stop offset="45%" stopColor={P.accent} stopOpacity="0.14" />
             <stop offset="100%" stopColor={P.accent} stopOpacity="0" />
           </radialGradient>
-          <radialGradient id="atom-core">
-            <stop offset="0%" stopColor={P.bright} />
-            <stop offset="55%" stopColor={P.ice} />
-            <stop offset="100%" stopColor={P.volt} stopOpacity="0.7" />
+
+          {/*
+            Light between the nucleons, so the gaps inside the ball read as a
+            dense, lit core rather than as black holes in the figure.
+          */}
+          <radialGradient id="atom-heart">
+            <stop offset="0%" stopColor={P.bright} stopOpacity="0.8" />
+            <stop offset="55%" stopColor={P.volt} stopOpacity="0.3" />
+            <stop offset="100%" stopColor={P.accent} stopOpacity="0" />
+          </radialGradient>
+
+          {/*
+            The nucleons, lit from the upper left.
+            Both are `objectBoundingBox`, so a single definition shades every
+            sphere in the ball and the highlight stays a fixed direction across
+            the whole nucleus. Bright core, mid body, dark terminator.
+          */}
+          <radialGradient id="nucleon-platinum" cx="0.34" cy="0.3" r="0.82">
+            <stop offset="0%" stopColor="#fbfcff" />
+            <stop offset="34%" stopColor="#dce5f2" />
+            <stop offset="78%" stopColor="#93a4c0" />
+            <stop offset="100%" stopColor="#4f5f7d" />
+          </radialGradient>
+          <radialGradient id="nucleon-blue" cx="0.34" cy="0.3" r="0.82">
+            <stop offset="0%" stopColor="#f2f7ff" />
+            <stop offset="30%" stopColor="#9cc2ff" />
+            <stop offset="74%" stopColor="#4d8dff" />
+            <stop offset="100%" stopColor="#1e4694" />
+          </radialGradient>
+
+          {/* Seats the ball: light falls off away from the key light. */}
+          <radialGradient id="nucleus-shade" cx="0.35" cy="0.28" r="0.86">
+            <stop offset="0%" stopColor={P.void} stopOpacity="0" />
+            <stop offset="52%" stopColor={P.void} stopOpacity="0.1" />
+            <stop offset="100%" stopColor={P.void} stopOpacity="0.62" />
           </radialGradient>
         </defs>
 
@@ -195,15 +298,28 @@ export function AtomCore({ className }: { className?: string }) {
           </g>
         ))}
 
-        {/* Nucleus: the bloom, the core, and the nucleons packed inside it. */}
-        <circle cx="50" cy="50" r="20" fill="url(#atom-bloom)" />
-        <circle cx="50" cy="50" r="4.4" fill="url(#atom-core)" />
-        <g fill={tintDeep("bright", 0.8)}>
-          <circle cx="48.6" cy="48.8" r="1.15" />
-          <circle cx="51.4" cy="49.2" r="1.15" />
-          <circle cx="49.6" cy="51.6" r="1.15" />
-          <circle cx="51.1" cy="51.3" r="0.9" />
-        </g>
+        {/* The nucleus: outer wash, lit interior, then the packed nucleons. */}
+        <circle cx="50" cy="50" r="23" fill="url(#atom-bloom)" />
+        <circle cx="50" cy="50" r={NUCLEUS_RADIUS - 1.2} fill="url(#atom-heart)" />
+
+        {NUCLEONS.map((nucleon, index) => {
+          /** 0 at the back of the ball, 1 at the front. */
+          const front = (nucleon.z + NUCLEUS_RADIUS) / (NUCLEUS_RADIUS * 2);
+          return (
+            <circle
+              key={index}
+              cx={50 + nucleon.x}
+              cy={50 + nucleon.y}
+              r={nucleon.r * (0.86 + front * 0.14)}
+              fill={nucleon.blue ? "url(#nucleon-blue)" : "url(#nucleon-platinum)"}
+              opacity={0.62 + front * 0.38}
+            />
+          );
+        })}
+
+        {/* Shading and the specular seat the ball in the light. */}
+        <circle cx="50" cy="50" r={NUCLEUS_RADIUS} fill="url(#nucleus-shade)" />
+        <circle cx="48.1" cy="48.1" r="2.1" fill={tintDeep("bright", 0.5)} />
       </svg>
 
       {/* Each label rides its own orbit. Position and scale are set per frame. */}

@@ -117,11 +117,20 @@ turning around it, each orbit carrying one word for the frontier being studied
 
 It replaced a neural-network mesh that used to fill the hero. The atom says the
 same thing more plainly: one core, three paths around it, and the vocabulary of
-the work riding those paths. The nucleus carries a bloom, a dense core and four
-nucleons packed inside it, and each orbit is a faint ellipse with a lit arc
+the work riding those paths. Each orbit is a faint ellipse with a lit arc
 trailing a bead, so the ring reads as turning even while its carrier is dimmed
 round the back. On a wide screen the figure sits to the right of the copy; on a
 small one it centres behind it.
+
+The nucleus is a ball of 57 nucleons, packed on a jittered cubic lattice and
+sorted back to front. A lattice rather than random placement, because random
+sequential packing jams near 38% and leaves the ball visibly gappy: the spheres
+have to touch for it to read as matter rather than as scattered dots, and the
+jitter is what stops the lattice reading as a grid. Each sphere is translucent,
+so where two of them interpenetrate the fill doubles into a darker junction that
+reads as the contact shadow between packed matter. One `objectBoundingBox`
+gradient per tone, lit from the upper left, shades every nucleon in the ball, and
+depth is carried by size and opacity rather than by a second light.
 
 It is SVG and DOM, not canvas. The rings are static ellipse geometry, so the
 only thing that changes each frame is where each carrier sits on its ring, which
