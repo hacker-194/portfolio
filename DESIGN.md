@@ -118,15 +118,23 @@ trailing a bead, so the ring reads as turning even while its carrier is dimmed
 round the back. On a wide screen the figure sits to the right of the copy; on a
 small one it centres behind it.
 
-The nucleus is a ball of 57 nucleons, packed on a jittered cubic lattice and
-sorted back to front. A lattice rather than random placement, because random
-sequential packing jams near 38% and leaves the ball visibly gappy: the spheres
-have to touch for it to read as matter rather than as scattered dots, and the
-jitter is what stops the lattice reading as a grid. Each sphere is translucent,
-so where two of them interpenetrate the fill doubles into a darker junction that
-reads as the contact shadow between packed matter. One `objectBoundingBox`
-gradient per tone, lit from the upper left, shades every nucleon in the ball, and
-depth is carried by size and opacity rather than by a second light.
+The nucleus is a marker, not a ball: a near-black core about 30px across on a
+laptop, with its interior lifted a touch toward the key light and a faint cyan
+glow inside it.
+
+It went through a packed-cluster phase at nearly three times this size, and the
+lesson is worth keeping: individual nucleons are the wrong level of detail at
+this scale. A translucent ball of spheres turns to noise long before it reads as
+matter, and a lit ball reads as a bead or a marble. A dark core with only its
+edge catching light reads as something dense, which is what a nucleus should look
+like.
+
+The rim is two strokes on one circle: a faint full ring for the ambient edge, and
+a brighter arc where the key light lands, on the same upper left as everything
+else. The bright arc is a dash on the circle's own path, which begins at 3
+o'clock and runs clockwise, so its position is two fractions rather than a
+transform. The faint full ring underneath is what stops a one-sided rim from
+looking like a stray crescent.
 
 It is SVG and DOM, not canvas. The rings are static ellipse geometry, so the
 only thing that changes each frame is where each carrier sits on its ring, which
