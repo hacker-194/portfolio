@@ -78,14 +78,19 @@ function pointOn(orbit: Orbit, turn: number) {
 /**
  * Radius of the core, in the shared 0-100 box.
  *
- * A marker, not a ball: it renders around 30px across on a laptop, which is
+ * A marker, not a ball: it renders around 15px across on a laptop, which is
  * small enough to let the orbits carry the composition and to read as an
  * instrument rather than as a cartoon atom with a fat centre. It went through a
- * packed-cluster phase at nearly three times this size, and individual nucleons
- * are simply the wrong level of detail at this scale: they turn to noise long
+ * packed-cluster phase at eight times this size, and individual nucleons are
+ * simply the wrong level of detail at this scale: they turn to noise long
  * before they read as matter.
+ *
+ * Everything the core is drawn with is expressed as a fraction of this: the rim
+ * strokes below and the wash behind it. Halving the radius without halving those
+ * would turn a hairline rim into a fat ring around a dot, which is the one way
+ * this figure fails.
  */
-const NUCLEUS_RADIUS = 1.6;
+const NUCLEUS_RADIUS = 0.8;
 
 /**
  * The lit arc of the rim, as a start and length along the circle's path.
@@ -299,16 +304,16 @@ export function AtomCore({ className }: { className?: string }) {
           the rim. The rim is two strokes on one circle: a faint full ring for
           the ambient edge, and a brighter arc where the key light lands.
         */}
-        <circle cx="50" cy="50" r="8" fill="url(#atom-bloom)" />
+        <circle cx="50" cy="50" r={NUCLEUS_RADIUS * 5} fill="url(#atom-bloom)" />
         <circle cx="50" cy="50" r={NUCLEUS_RADIUS} fill="url(#core-body)" />
-        <circle cx="50" cy="50" r={NUCLEUS_RADIUS * 0.86} fill="url(#core-glow)" />
+        <circle cx="50" cy="50" r={(NUCLEUS_RADIUS * 0.86).toFixed(3)} fill="url(#core-glow)" />
         <circle
           cx="50"
           cy="50"
           r={NUCLEUS_RADIUS}
           fill="none"
           stroke={tintDeep("ice", 0.2)}
-          strokeWidth="0.14"
+          strokeWidth={(NUCLEUS_RADIUS * 0.0875).toFixed(3)}
         />
         <circle
           cx="50"
@@ -317,7 +322,7 @@ export function AtomCore({ className }: { className?: string }) {
           fill="none"
           pathLength={100}
           stroke={tintDeep("bright", 0.88)}
-          strokeWidth="0.22"
+          strokeWidth={(NUCLEUS_RADIUS * 0.1375).toFixed(3)}
           strokeLinecap="round"
           strokeDasharray={`${RIM_LENGTH} ${100 - RIM_LENGTH}`}
           strokeDashoffset={-RIM_START}

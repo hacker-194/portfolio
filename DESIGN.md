@@ -118,13 +118,19 @@ trailing a bead, so the ring reads as turning even while its carrier is dimmed
 round the back. On a wide screen the figure sits to the right of the copy; on a
 small one it centres behind it.
 
-The nucleus is a marker, not a ball: a near-black core about 30px across on a
+The nucleus is a marker, not a ball: a near-black core about 15px across on a
 laptop, with its interior lifted a touch toward the key light and a faint cyan
 glow inside it.
 
-It went through a packed-cluster phase at nearly three times this size, and the
-lesson is worth keeping: individual nucleons are the wrong level of detail at
-this scale. A translucent ball of spheres turns to noise long before it reads as
+Everything the core is drawn with is a fraction of its radius: the two rim
+strokes and the wash behind it. Halving the radius without halving those turns a
+hairline rim into a fat ring around a dot, which is the one way this figure
+fails. At this size the strokes land under a pixel wide, which is the point
+where a rim begins to disappear on a low-DPI screen.
+
+It went through a packed-cluster phase at eight times this size, and the lesson
+is worth keeping: individual nucleons are the wrong level of detail at this
+scale. A translucent ball of spheres turns to noise long before it reads as
 matter, and a lit ball reads as a bead or a marble. A dark core with only its
 edge catching light reads as something dense, which is what a nucleus should look
 like.
