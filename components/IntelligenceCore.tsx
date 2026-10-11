@@ -106,6 +106,7 @@ type Quality = "high" | "low";
 function FitCamera() {
   const camera = useThree((state) => state.camera);
   const size = useThree((state) => state.size);
+  const invalidate = useThree((state) => state.invalidate);
 
   useEffect(() => {
     const perspective = camera as THREE.PerspectiveCamera;
@@ -121,7 +122,13 @@ function FitCamera() {
     perspective.position.set(0, 0, toFitBoth * 1.02);
     perspective.lookAt(0, 0, 0);
     perspective.updateProjectionMatrix();
-  }, [camera, size.width, size.height]);
+
+    // Required, not decorative. Under `frameloop="demand"` nothing else
+    // schedules a frame, so without this the single frame a reduced-motion
+    // visitor is shown can be drawn from the camera's unfitted default position,
+    // which crops the ring.
+    invalidate();
+  }, [camera, size.width, size.height, invalidate]);
 
   return null;
 }
@@ -494,7 +501,10 @@ export function IntelligenceCore({
     <div ref={wrapRef} className={className}>
       {supported ? (
         <Canvas
-          dpr={[1, 1.6]}
+          // Tied to the same guess that decides the glass: a device that cannot
+          // carry transmission cannot carry extra pixels either, and the figure
+          // is soft light, so a fraction under native costs nothing visible.
+          dpr={quality === "high" ? [1, 1.75] : [1, 1.25]}
           // "always" only while the hero is on screen and motion is allowed;
           // otherwise the scene renders once and the GPU goes quiet.
           frameloop={live ? "always" : "demand"}
