@@ -164,29 +164,6 @@ export const PIPELINE_STAGES: PipelineStage[] = [
   { id: "output", label: "Output", detail: "Grounded, verifiable result" },
 ];
 
-/** The 3D neural-network nodes requested for the visualisation. */
-export type NetworkNode = {
-  id: string;
-  label: string;
-  detail: string;
-  /** Normalised layout position, used to align the 3D scene with HTML labels. */
-  x: number;
-  y: number;
-};
-
-/**
- * Same stages, same order and same names as `PIPELINE_STAGES`, so the graph and
- * the pipeline list beside it describe one process rather than two.
- */
-export const NETWORK_NODES: NetworkNode[] = [
-  { id: "input", label: "Input", detail: "Prompt · documents", x: 0.09, y: 0.62 },
-  { id: "llm", label: "LLM", detail: "Transformer core", x: 0.275, y: 0.4 },
-  { id: "reasoning", label: "Reasoning", detail: "Planning · decomposition", x: 0.455, y: 0.6 },
-  { id: "tools", label: "Tools", detail: "Retrieval · APIs", x: 0.635, y: 0.34 },
-  { id: "agent", label: "Agent", detail: "Plan · act", x: 0.79, y: 0.58 },
-  { id: "output", label: "Output", detail: "Ship · serve", x: 0.94, y: 0.42 },
-];
-
 export type LearningItem = {
   title: string;
   topic: string;

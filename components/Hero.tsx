@@ -4,7 +4,7 @@ import { motion } from "motion/react";
 import { useStillMotion } from "@/lib/hooks";
 import { ArrowDown, ArrowRight, Download } from "lucide-react";
 import { GithubMark } from "@/components/BrandIcons";
-import { HeroLattice } from "@/components/HeroLattice";
+import { AtomCore } from "@/components/AtomCore";
 import { MagneticButton } from "@/components/MagneticButton";
 import { MaskedLines } from "@/components/MaskedLines";
 import { Scramble } from "@/components/Scramble";
@@ -40,12 +40,13 @@ export function Hero() {
     >
       {/*
         The sculpture.
-        A network drawn in three dimensions, turning to face the pointer and
-        pulling back as the reader leaves. Full bleed on the right, held back on
-        small screens so the copy never competes with it.
+        A nucleus with three orbits turning around it, each carrying a word for
+        the frontier being studied. Held to the right of the copy column on a
+        wide screen and centred behind it on a small one, so the reading column
+        never competes with the figure.
       */}
       <div className="pointer-events-none absolute inset-0 z-0" aria-hidden>
-        <HeroLattice className="absolute inset-0 h-full w-full opacity-60 [mask-image:radial-gradient(120%_100%_at_74%_44%,#000_20%,transparent_74%)] sm:opacity-80 lg:opacity-100" />
+        <AtomCore className="absolute left-1/2 top-1/2 h-[min(94vh,94vw)] -translate-x-1/2 -translate-y-1/2 opacity-70 sm:opacity-90 lg:left-[70%] lg:opacity-100" />
       </div>
 
       {/* Light, then falloff, then a single layer of grain over both. */}

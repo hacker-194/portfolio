@@ -70,7 +70,7 @@ app/
   projects/[slug]/page.tsx   one case study per project, prerendered
 components/
   Navbar                 minimal bar + full-screen mobile menu
-  Hero / HeroLattice     hero copy + the 3D lattice behind it (background)
+  Hero / AtomCore        hero copy + the nucleus and its three orbits
   SkillUniverse          the capability graph: canvas figure + the text panel
   OpenSource             live repositories, read straight from GitHub
   PipelineDiagram        the intelligence pipeline rail (Frontier)
@@ -183,14 +183,15 @@ Four things react to the reader, none of them needing a pointer to be useful.
 
 ## Performance notes
 
-- Two figures render in three dimensions, both through the same small canvas
-  renderer and with no 3D dependency: the hero's lattice, and the skill universe
-  in the skills section. Every other figure is SVG or plain DOM, animating with
-  CSS keyframes on nodes the browser already has: the project schematics and the
-  pipeline rail.
-- Both canvas figures are laid out from a seeded PRNG at module scope and stop
-  their animation loop while off screen, so the drawing is identical on every
-  visit and costs nothing to scroll past.
+- One figure renders in three dimensions, through a small canvas renderer with
+  no 3D dependency: the skill universe in the skills section. The hero's atom is
+  SVG and plain DOM, and so is every other figure: its orbit rings are static
+  ellipse geometry and only the three carriers on them move, while the project
+  schematics and the pipeline rail animate with CSS keyframes on nodes the
+  browser already has.
+- The canvas figure is laid out from a seeded PRNG at module scope, and both it
+  and the atom stop their animation loop while off screen, so the drawing is
+  identical on every visit and costs nothing to scroll past.
 - Scroll-linked motion (the pipeline rail, the experience timeline, the opposing
   parallax across each project card) runs through GSAP's ticker, so Lenis and
   ScrollTrigger share one rAF loop rather than racing.
