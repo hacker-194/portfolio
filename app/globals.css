@@ -2,45 +2,42 @@
 
 /* ------------------------------------------------------------------
    DESIGN TOKENS
-   A deep navy ground under near-black, one muted electric blue carrying every
-   accent, platinum and pale steel as the only secondary notes, a warm
+   Obsidian black under deep navy, one electric cyan carrying every interactive
+   accent, platinum white for headings and a muted slate beneath it, a warm
    transitional serif for display (Spectral), a neutral sans for running text
    (Inter), and a mono for figures, indices and labels (JetBrains Mono).
+
+   Cyan is rationed. It is the only saturated colour in the system, so a paler
+   cyan answers it and a cool platinum closes the trio without spending more of
+   it, and it is kept off large fills.
 
    The token *names* are unchanged from the systems this replaced, so the whole
    site re-themes from this one block; nothing else needed its class names
    edited to pick up the palette.
 ------------------------------------------------------------------ */
 @theme {
-  /* Ground scale: near-black navy through to raised panels. */
-  --color-void: #04060c;
-  --color-ink: #070b14;
-  --color-panel: #0a101c;
-  --color-panel2: #0e1524;
-  --color-panel3: #141d2e;
-  --color-edge: #1e2a40;
+  /* Ground scale: obsidian black through to raised navy panels. */
+  --color-void: #0b0d10;
+  --color-ink: #0e1219;
+  --color-panel: #111827;
+  --color-panel2: #151d2e;
+  --color-panel3: #1a2438;
+  --color-edge: #24314a;
 
   /*
-   * One committed ink leads: a muted electric blue, held below neon so it reads
-   * as an instrument light rather than a gaming accent. A paler blue answers
-   * it, and a platinum closes the trio. All three clear AA against the ground,
-   * so each can carry small labels as well as large shapes.
-   *
-   * `ember` is the one warm note in an otherwise cold system: a muted brass,
-   * drawn only as a rule on the two surfaces that open and close the page. It
-   * is deliberately never used for type, so the blue stays the only ink and the
-   * brass reads as a lit metal edge rather than a competing second accent.
+   * One committed ink leads: an electric cyan. A paler cyan answers it and a
+   * cool platinum closes the trio, all three clearing AA against the ground so
+   * each can carry small labels as well as large shapes.
    */
-  --color-indigo: #16224a;
-  --color-accent: #4d8dff;
-  --color-volt: #86b4ff;
-  --color-ice: #cbd8ec;
-  --color-ember: #cfa15f;
+  --color-indigo: #0f1b2b;
+  --color-accent: #64ffda;
+  --color-volt: #9bf5e4;
+  --color-ice: #dce6e4;
 
-  /* Text: near-white primary, with two greys beneath it. Both clear AA. */
-  --color-muted: #8792a6;
-  --color-soft: #c2cbda;
-  --color-bright: #f4f7fc;
+  /* Text: platinum white primary, with two greys beneath it. Both clear AA. */
+  --color-muted: #8993a4;
+  --color-soft: #c9d0dc;
+  --color-bright: #f5f5f0;
 
   --font-display: var(--font-spectral), ui-serif, Georgia, serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
@@ -60,8 +57,12 @@
     0 48px 90px -60px rgba(0, 0, 0, 0.95);
   --shadow-lux-sm: 0 1px 0 0 rgba(255, 255, 255, 0.055) inset,
     0 24px 60px -46px rgba(0, 0, 0, 0.9);
-  /* A restrained bloom, used only where the blue is the subject. */
-  --shadow-bloom: 0 0 90px -40px rgba(77, 141, 255, 0.5);
+  /*
+   * A restrained bloom, used only where cyan is the subject and kept low on
+   * purpose: a wide bright halo is the fastest way to make a dark page look
+   * cheap, so this reads as a lit surface rather than as a glow.
+   */
+  --shadow-bloom: 0 0 80px -44px rgba(100, 255, 218, 0.3);
 
   --animate-marquee: marquee 54s linear infinite;
   --animate-flicker: flicker 6s ease-in-out infinite;
@@ -79,10 +80,10 @@
   --bg-secondary: var(--color-ink);
   --accent-primary: var(--color-accent);
   --accent-secondary: var(--color-volt);
-  --accent-glow: rgba(77, 141, 255, 0.22);
+  --accent-glow: rgba(100, 255, 218, 0.16);
   --text-primary: var(--color-bright);
   --text-secondary: var(--color-soft);
-  --glass-bg: #0a101c;
+  --glass-bg: #111827;
   --glass-border: rgba(255, 255, 255, 0.08);
 }
 
@@ -90,7 +91,7 @@
  * The deep panels.
  *
  * The hero and the open-source section sit in a well deeper than the page: a
- * ground pulled almost to black, with the blue lifted a step so it still reads
+ * ground pulled almost to black, with the cyan lifted a step so it still reads
  * against it. As before, the scope re-declares the same token names it
  * inherits, so `text-bright`, `bg-void`, `border-*` and the rest flip for the
  * whole subtree without any component knowing. `.on-deep` carries only the
@@ -99,21 +100,20 @@
  */
 .on-deep,
 .panel-deep {
-  --color-void: #000206;
-  --color-ink: #020409;
-  --color-panel: #05080f;
-  --color-panel2: #080d17;
-  --color-panel3: #0c1320;
-  --color-edge: #16233a;
-  --color-indigo: #060e28;
-  --color-accent: #6ba4ff;
-  --color-volt: #9cc2ff;
-  --color-ice: #dce5f2;
-  --color-ember: #e2b877;
-  --color-muted: #8d9ab0;
-  --color-soft: #c6d0e0;
-  --color-bright: #fbfcff;
-  --glass-bg: #05080f;
+  --color-void: #05070a;
+  --color-ink: #080b11;
+  --color-panel: #0e131c;
+  --color-panel2: #111a26;
+  --color-panel3: #17222f;
+  --color-edge: #1f2c42;
+  --color-indigo: #08111f;
+  --color-accent: #7cffe2;
+  --color-volt: #b4fff0;
+  --color-ice: #e4edea;
+  --color-muted: #94a0b1;
+  --color-soft: #cbd2de;
+  --color-bright: #fcfcf9;
+  --glass-bg: #0e131c;
   --glass-border: rgba(255, 255, 255, 0.09);
 }
 
@@ -134,17 +134,6 @@
     transparent 0%,
     rgba(255, 255, 255, 0.3) 22%,
     rgba(255, 255, 255, 0.3) 78%,
-    transparent 100%
-  );
-}
-
-.on-deep .ember-rule,
-.panel-deep .ember-rule {
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(226, 184, 119, 0.6) 22%,
-    rgba(226, 184, 119, 0.6) 78%,
     transparent 100%
   );
 }
@@ -216,15 +205,15 @@
     /* The page opens on a cool wash from above and settles into the ground. */
     background-image: radial-gradient(
       120% 62% at 50% -12%,
-      rgba(77, 141, 255, 0.09) 0%,
-      rgba(77, 141, 255, 0.02) 38%,
+      rgba(100, 255, 218, 0.05) 0%,
+      rgba(100, 255, 218, 0.015) 38%,
       transparent 70%
     );
     background-repeat: no-repeat;
   }
 
   ::selection {
-    background-color: rgba(77, 141, 255, 0.3);
+    background-color: rgba(100, 255, 218, 0.22);
     color: var(--color-bright);
   }
 
@@ -325,17 +314,17 @@ html.lenis body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #04060c;
+  background: #0b0d10;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #1a2436;
-  border: 2px solid #04060c;
+  background: #1e2a3d;
+  border: 2px solid #0b0d10;
   border-radius: 99px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #26334c;
+  background: #2a3a52;
 }
 
 /* ------------------------------------------------------------------
@@ -372,7 +361,7 @@ html.lenis body {
 }
 
 /*
- * The accent, as one flat electric blue.
+ * The accent, as one flat electric cyan.
  *
  * Editorial rules are not gradiented and neither is this: a single committed
  * ink does the same jobs (buttons, timeline rules, hover underlines) without
@@ -418,7 +407,7 @@ html.lenis body {
 .glass-card:hover {
   transform: translateY(-3px);
   box-shadow: var(--shadow-lux), var(--shadow-bloom);
-  border-color: rgba(107, 164, 255, 0.28);
+  border-color: rgba(100, 255, 218, 0.26);
 }
 
 /* A single hairline that fades in from nothing and out again. */
@@ -426,27 +415,8 @@ html.lenis body {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(107, 164, 255, 0.42) 22%,
-    rgba(107, 164, 255, 0.42) 78%,
-    transparent 100%
-  );
-}
-
-/*
- * The same rule in the warm note.
- *
- * Used twice on the page and nowhere else: along the top of the at-a-glance
- * plaque and along the top of the closing Contact section, so the reader meets
- * one warm edge near the top and one at the end. Held to 50% opacity on
- * purpose, because brass at full strength turns into a highlight and stops
- * reading as metal.
- */
-.ember-rule {
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(207, 161, 95, 0.55) 22%,
-    rgba(207, 161, 95, 0.55) 78%,
+    rgba(100, 255, 218, 0.3) 22%,
+    rgba(100, 255, 218, 0.3) 78%,
     transparent 100%
   );
 }
@@ -465,8 +435,8 @@ html.lenis body {
 .keylight {
   background-image: radial-gradient(
     58% 46% at 62% 42%,
-    rgba(77, 141, 255, 0.17) 0%,
-    rgba(77, 141, 255, 0.05) 44%,
+    rgba(100, 255, 218, 0.1) 0%,
+    rgba(100, 255, 218, 0.03) 44%,
     transparent 74%
   );
 }
@@ -511,7 +481,7 @@ html.lenis body {
 }
 
 .stroke-text {
-  -webkit-text-stroke: 1px rgba(244, 247, 252, 0.34);
+  -webkit-text-stroke: 1px rgba(245, 245, 240, 0.32);
   color: transparent;
 }
 

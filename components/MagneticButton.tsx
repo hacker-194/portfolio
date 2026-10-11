@@ -16,11 +16,11 @@ const BASE =
  * does the same. No gradient fill, no sheen.
  */
 const VARIANTS: Record<Variant, string> = {
-  // Ink and paper reversed: a solid near-white pill that turns electric blue
-  // under the pointer. Near-black on either fill clears AA comfortably, which
-  // white on the blue would not.
+  // Ink and paper reversed: a solid platinum pill that turns cyan under the
+  // pointer. Near-black on either fill clears AA comfortably, which white on
+  // the cyan would not.
   primary:
-    "bg-bright text-void hover:bg-accent hover:shadow-[0_0_54px_-14px_rgba(77,141,255,0.7)]",
+    "bg-bright text-void hover:bg-accent hover:shadow-[0_0_48px_-18px_rgba(100,255,218,0.55)]",
   secondary:
     "text-bright border border-bright/15 hover:border-accent hover:bg-accent/[0.07] hover:text-accent",
   ghost: "text-muted hover:text-bright px-0 py-0 rounded-none tracking-[0.18em]",

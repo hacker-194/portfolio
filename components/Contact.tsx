@@ -49,12 +49,6 @@ export function Contact() {
       id="contact"
       className="relative isolate overflow-hidden border-t border-bright/15 py-24 sm:py-32 lg:py-40"
     >
-      {/* The closing warm edge, the matching note to the plaque near the top of
-          the page. The reader meets brass twice and nowhere else. */}
-      <span
-        className="ember-rule pointer-events-none absolute inset-x-0 top-0 h-px"
-        aria-hidden
-      />
       <div className={SECTION_CONTAINER}>
         <div className="flex flex-col items-center text-center">
           <Reveal>

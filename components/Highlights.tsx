@@ -50,11 +50,8 @@ export function Highlights() {
       <div className={SECTION_CONTAINER}>
         <Reveal y={20}>
           <div className="glass-card hairline relative overflow-hidden rounded-2xl border p-7 sm:p-9">
-            {/* The one warm edge on the page: a brass rule along the top of
-                the credential card, so it reads as a lit nameplate rather than
-                a plain list. Ember is never used for type. */}
             <span
-              className="ember-rule pointer-events-none absolute inset-x-0 top-0 h-px"
+              className="accent-rule pointer-events-none absolute inset-x-0 top-0 h-px"
               aria-hidden
             />
 

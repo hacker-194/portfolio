@@ -51,6 +51,14 @@ const ORBITS: Orbit[] = [
  * hero, no overlap to resolve; swap in a z-sort against the core radius if the
  * atom ever gains a second layer.
  */
+/**
+ * Degrees the whole figure turns toward the pointer.
+ *
+ * Small on purpose: enough that the sculpture reads as a physical object under
+ * the cursor, not so much that the labels start to lean.
+ */
+const MAX_TILT = 7;
+
 function pointOn(orbit: Orbit, turn: number) {
   const angle = turn * Math.PI * 2;
   const tilt = (orbit.tilt * Math.PI) / 180;
@@ -67,8 +75,14 @@ function pointOn(orbit: Orbit, turn: number) {
    THE NUCLEUS
 ------------------------------------------------------------------ */
 
-/** Radius of the whole ball, in the shared 0-100 box. */
-const NUCLEUS_RADIUS = 6.8;
+/**
+ * Radius of the whole ball, in the shared 0-100 box.
+ *
+ * Deliberately small against the orbits. A large core reads as a cartoon atom
+ * (a fat ball with three rings round it); a small, fine-grained one reads as an
+ * instrument, and it lets the orbits carry the composition.
+ */
+const NUCLEUS_RADIUS = 4.6;
 
 /**
  * Nucleon centre spacing.
@@ -78,7 +92,7 @@ const NUCLEUS_RADIUS = 6.8;
  * the fill doubles up into a darker junction, which reads as the contact shadow
  * between packed matter rather than as a rendering fault.
  */
-const NUCLEON_STEP = 2.35;
+const NUCLEON_STEP = 1.5;
 
 type Nucleon = {
   /** Orthographic projection: x and y are already screen-space, z is depth. */
@@ -123,8 +137,8 @@ function buildNucleus(): Nucleon[] {
         const y = j * NUCLEON_STEP + (rand() - 0.5) * 0.24;
         const z = k * NUCLEON_STEP + (rand() - 0.5) * 0.24;
         // Keep the whole sphere inside the ball, not just its centre.
-        if (Math.hypot(x, y, z) > NUCLEUS_RADIUS - 1.15) continue;
-        out.push({ x, y, z, r: 1.12 + rand() * 0.18, blue: rand() < 0.42 });
+        if (Math.hypot(x, y, z) > NUCLEUS_RADIUS - 0.78) continue;
+        out.push({ x, y, z, r: 0.58 + rand() * 0.12, blue: rand() < 0.42 });
       }
     }
   }
@@ -149,6 +163,38 @@ export function AtomCore({ className }: { className?: string }) {
 
     let raf = 0;
     let running = true;
+
+    /*
+     * Pointer response.
+     *
+     * The figure turns a few degrees toward the cursor. The pointer writes a
+     * target and nothing else: the current angles ease toward it inside the
+     * frame loop that is already running, so this needs no second rAF loop and
+     * no React render. Off entirely for touch and for reduced motion, where a
+     * figure leaning at the finger would be the only thing moving.
+     */
+    const tilt = { x: 0, y: 0, targetX: 0, targetY: 0, drawnX: 99, drawnY: 99 };
+    const interactive =
+      !still && window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+
+    const onPointerMove = (event: PointerEvent) => {
+      const rect = host.getBoundingClientRect();
+      if (rect.width === 0) return;
+      const across = (event.clientX - (rect.left + rect.width / 2)) / (rect.width / 2);
+      const down = (event.clientY - (rect.top + rect.height / 2)) / (rect.height / 2);
+      tilt.targetX = Math.max(-1, Math.min(1, across)) * MAX_TILT;
+      tilt.targetY = -Math.max(-1, Math.min(1, down)) * MAX_TILT;
+    };
+    const restTheFigure = () => {
+      tilt.targetX = 0;
+      tilt.targetY = 0;
+    };
+
+    if (interactive) {
+      window.addEventListener("pointermove", onPointerMove, { passive: true });
+      window.addEventListener("blur", restTheFigure);
+      window.addEventListener("pointerleave", restTheFigure);
+    }
 
     const draw = (now: number) => {
       const elapsed = still ? 0 : (now - start) / 1000;
@@ -177,9 +223,21 @@ export function AtomCore({ className }: { className?: string }) {
         if (bead) {
           bead.setAttribute("cx", point.x.toFixed(2));
           bead.setAttribute("cy", point.y.toFixed(2));
-          bead.setAttribute("r", (0.8 + front * 0.5).toFixed(2));
+          bead.setAttribute("r", (0.55 + front * 0.35).toFixed(2));
         }
       });
+
+      if (interactive) {
+        tilt.x += (tilt.targetX - tilt.x) * 0.07;
+        tilt.y += (tilt.targetY - tilt.y) * 0.07;
+        // Only touch the DOM once the frame actually differs from the last one
+        // written, which is most frames spent resting at the centre.
+        if (Math.abs(tilt.x - tilt.drawnX) > 0.01 || Math.abs(tilt.y - tilt.drawnY) > 0.01) {
+          tilt.drawnX = tilt.x;
+          tilt.drawnY = tilt.y;
+          host.style.transform = `perspective(1400px) rotateX(${tilt.y.toFixed(3)}deg) rotateY(${tilt.x.toFixed(3)}deg)`;
+        }
+      }
     };
 
     const tick = (now: number) => {
@@ -214,6 +272,11 @@ export function AtomCore({ className }: { className?: string }) {
       running = false;
       cancelAnimationFrame(raf);
       observer.disconnect();
+      if (interactive) {
+        window.removeEventListener("pointermove", onPointerMove);
+        window.removeEventListener("blur", restTheFigure);
+        window.removeEventListener("pointerleave", restTheFigure);
+      }
     };
   }, []);
 
@@ -227,8 +290,8 @@ export function AtomCore({ className }: { className?: string }) {
         <defs>
           {/* The wide wash the whole figure sits in. */}
           <radialGradient id="atom-bloom">
-            <stop offset="0%" stopColor={P.accent} stopOpacity="0.5" />
-            <stop offset="45%" stopColor={P.accent} stopOpacity="0.14" />
+            <stop offset="0%" stopColor={P.accent} stopOpacity="0.26" />
+            <stop offset="45%" stopColor={P.accent} stopOpacity="0.08" />
             <stop offset="100%" stopColor={P.accent} stopOpacity="0" />
           </radialGradient>
 
@@ -237,35 +300,43 @@ export function AtomCore({ className }: { className?: string }) {
             dense, lit core rather than as black holes in the figure.
           */}
           <radialGradient id="atom-heart">
-            <stop offset="0%" stopColor={P.bright} stopOpacity="0.8" />
-            <stop offset="55%" stopColor={P.volt} stopOpacity="0.3" />
+            <stop offset="0%" stopColor={P.bright} stopOpacity="0.42" />
+            <stop offset="55%" stopColor={P.volt} stopOpacity="0.14" />
             <stop offset="100%" stopColor={P.accent} stopOpacity="0" />
           </radialGradient>
 
           {/*
             The nucleons, lit from the upper left.
             Both are `objectBoundingBox`, so a single definition shades every
-            sphere in the ball and the highlight stays a fixed direction across
-            the whole nucleus. Bright core, mid body, dark terminator.
+            sphere in the ball and the highlight stays one fixed direction
+            across the whole nucleus.
+
+            Both tones are desaturated steel. A first pass ran one of them at
+            full electric blue and the ball read as candy: at this size the eye
+            takes saturation for plastic, and two greys a step apart read as
+            machined metal instead. The falloff is wide and the highlight is
+            small, which is what keeps a sphere from looking like a toy.
           */}
-          <radialGradient id="nucleon-platinum" cx="0.34" cy="0.3" r="0.82">
-            <stop offset="0%" stopColor="#fbfcff" />
-            <stop offset="34%" stopColor="#dce5f2" />
-            <stop offset="78%" stopColor="#93a4c0" />
-            <stop offset="100%" stopColor="#4f5f7d" />
+          <radialGradient id="nucleon-steel" cx="0.36" cy="0.32" r="0.94">
+            <stop offset="0%" stopColor="#ffffff" />
+            <stop offset="16%" stopColor="#d7e0ee" />
+            <stop offset="58%" stopColor="#98a5bb" />
+            <stop offset="86%" stopColor="#5a6478" />
+            <stop offset="100%" stopColor="#454e61" />
           </radialGradient>
-          <radialGradient id="nucleon-blue" cx="0.34" cy="0.3" r="0.82">
-            <stop offset="0%" stopColor="#f2f7ff" />
-            <stop offset="30%" stopColor="#9cc2ff" />
-            <stop offset="74%" stopColor="#4d8dff" />
-            <stop offset="100%" stopColor="#1e4694" />
+          <radialGradient id="nucleon-cool" cx="0.36" cy="0.32" r="0.94">
+            <stop offset="0%" stopColor="#f6f9ff" />
+            <stop offset="16%" stopColor="#c8d4e8" />
+            <stop offset="58%" stopColor="#8798b6" />
+            <stop offset="86%" stopColor="#4e5b76" />
+            <stop offset="100%" stopColor="#3b465c" />
           </radialGradient>
 
           {/* Seats the ball: light falls off away from the key light. */}
-          <radialGradient id="nucleus-shade" cx="0.35" cy="0.28" r="0.86">
+          <radialGradient id="nucleus-shade" cx="0.36" cy="0.3" r="0.9">
             <stop offset="0%" stopColor={P.void} stopOpacity="0" />
-            <stop offset="52%" stopColor={P.void} stopOpacity="0.1" />
-            <stop offset="100%" stopColor={P.void} stopOpacity="0.62" />
+            <stop offset="58%" stopColor={P.void} stopOpacity="0.08" />
+            <stop offset="100%" stopColor={P.void} stopOpacity="0.5" />
           </radialGradient>
         </defs>
 
@@ -289,18 +360,18 @@ export function AtomCore({ className }: { className?: string }) {
               ry={orbit.ry}
               fill="none"
               pathLength={100}
-              stroke={tintDeep("accent", 0.9)}
-              strokeWidth="0.55"
+              stroke={tintDeep("accent", 0.85)}
+              strokeWidth="0.42"
               strokeLinecap="round"
               strokeDasharray="16 84"
             />
-            <circle data-bead={index} cx="50" cy="50" r="1" fill={tintDeep("bright", 0.95)} />
+            <circle data-bead={index} cx="50" cy="50" r="0.7" fill={tintDeep("bright", 0.9)} />
           </g>
         ))}
 
         {/* The nucleus: outer wash, lit interior, then the packed nucleons. */}
-        <circle cx="50" cy="50" r="23" fill="url(#atom-bloom)" />
-        <circle cx="50" cy="50" r={NUCLEUS_RADIUS - 1.2} fill="url(#atom-heart)" />
+        <circle cx="50" cy="50" r="15" fill="url(#atom-bloom)" />
+        <circle cx="50" cy="50" r={NUCLEUS_RADIUS - 0.9} fill="url(#atom-heart)" />
 
         {NUCLEONS.map((nucleon, index) => {
           /** 0 at the back of the ball, 1 at the front. */
@@ -311,15 +382,15 @@ export function AtomCore({ className }: { className?: string }) {
               cx={50 + nucleon.x}
               cy={50 + nucleon.y}
               r={nucleon.r * (0.86 + front * 0.14)}
-              fill={nucleon.blue ? "url(#nucleon-blue)" : "url(#nucleon-platinum)"}
-              opacity={0.62 + front * 0.38}
+              fill={nucleon.blue ? "url(#nucleon-cool)" : "url(#nucleon-steel)"}
+              opacity={0.68 + front * 0.32}
             />
           );
         })}
 
         {/* Shading and the specular seat the ball in the light. */}
         <circle cx="50" cy="50" r={NUCLEUS_RADIUS} fill="url(#nucleus-shade)" />
-        <circle cx="48.1" cy="48.1" r="2.1" fill={tintDeep("bright", 0.5)} />
+        <circle cx="48.6" cy="48.5" r="1.1" fill={tintDeep("bright", 0.3)} />
       </svg>
 
       {/* Each label rides its own orbit. Position and scale are set per frame. */}
@@ -327,7 +398,7 @@ export function AtomCore({ className }: { className?: string }) {
         <span
           key={orbit.label}
           data-carrier
-          className="absolute left-1/2 top-1/2 whitespace-nowrap rounded-full border border-volt/25 bg-void/80 px-2.5 py-1 font-mono text-[0.6rem] uppercase tracking-[0.18em] text-soft shadow-[0_0_24px_-8px_rgba(77,141,255,0.6)] sm:text-[0.68rem]"
+          className="absolute left-1/2 top-1/2 whitespace-nowrap rounded-full border border-volt/25 bg-void/80 px-2.5 py-1 font-mono text-[0.6rem] uppercase tracking-[0.18em] text-soft shadow-[0_0_20px_-10px_rgba(100,255,218,0.5)] sm:text-[0.68rem]"
         >
           {orbit.label}
         </span>
