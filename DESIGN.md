@@ -111,42 +111,29 @@ Three utilities build the light, all in `globals.css`:
 
 ## The hero
 
-`components/HeroLattice.tsx` draws a neural network in three dimensions. It is a
-small software renderer: nodes are projected by hand, depth sorted, fogged, lit
-by an orbiting virtual key light and composited from pre-rendered sprites.
+`components/AtomCore.tsx` draws the sculpture: a nucleus with three orbits
+turning around it, each orbit carrying one word for the frontier being studied
+(LLM, Transformers, RAG).
 
-The figure is a spindle rather than a flat wall of points, pinch at both ends and
-dense through the middle, so it reads as an encoder closing onto a latent space.
-Signals travel the connections, one in four, out and back, which is what makes it
-read as a system running rather than a diagram of one.
+It replaced a neural-network mesh that used to fill the hero. The atom says the
+same thing more plainly: one core, three paths around it, and the vocabulary of
+the work riding those paths. The nucleus carries a bloom, a dense core and four
+nucleons packed inside it, and each orbit is a faint ellipse with a lit arc
+trailing a bead, so the ring reads as turning even while its carrier is dimmed
+round the back. On a wide screen the figure sits to the right of the copy; on a
+small one it centres behind it.
 
-Why not a WebGL scene graph: this is one decorative layer behind copy, and a
-renderer that large to draw eighty points would cost more in load and battery
-than it returns. The illusion carries on depth and light, and both are
-arithmetic. There is no 3D dependency in `package.json` and there does not need
-to be one.
+It is SVG and DOM, not canvas. The rings are static ellipse geometry, so the
+only thing that changes each frame is where each carrier sits on its ring, which
+keeps every label real HTML text: it takes the site's own type, and it stays
+upright the whole way round, which text riding a 3D transform would not.
 
-Performance is a design constraint, not an afterthought:
+The depth cue is the turn's own phase rather than an intersection test. That is
+enough for a single figure with nothing behind it to occlude, and it means there
+is still no 3D dependency in `package.json` and no need for one.
 
-- Nothing is allocated inside the frame path. Six `Path2D` objects per frame
-  used to be 360 short-lived objects a second, and the collector pauses showed up
-  as dropped frames.
-- The wireframe strokes in three fog buckets, so 290 connections draw in six
-  passes rather than 290.
-- The bitmap renders at 0.8 of device resolution (capped at 1.5) and scales up,
-  which removes about a third of the pixels blended each frame from a figure made
-  of soft light, where it is invisible.
-- A tier guard demotes quality when the device cannot hold the frame budget, in
-  the order of cost against meaning: signals, then residue paths, then
-  resolution. It recovers the same way. It reads the *interval between animation
-  frames* as well as its own recording time, because canvas defers rasterising,
-  so a software rasteriser reports a fast frame while visibly dropping them.
-- The loop stops entirely while the hero is off screen.
-
-Measured in a headless software rasteriser (no GPU, so a worst case): p50 frame
-interval 16.7 ms, i.e. a sustained 60fps, against a 60.8fps idle control. Tail
-frames (p95 33.4 ms) drop occasionally there and should not on accelerated
-hardware.
+The loop stops entirely while the hero is off screen, and reduced motion holds
+one still frame.
 
 ## The skill universe
 
