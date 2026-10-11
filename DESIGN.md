@@ -6,17 +6,14 @@ for anything drawn outside CSS (SVG, canvas).
 
 ## The world
 
-A dark instrument panel. Near-black navy ground, near-white ink, and one muted
-electric blue carrying every accent, held below neon so it reads as an instrument
-light rather than a gaming one. A warm transitional serif (Spectral) sets the
-headings against the cold ground; Inter carries running text; JetBrains Mono
-carries figures, indices and labels.
-
-One warm value completes the system: `ember`, a muted brass, drawn only as a
-hairline rule on the two surfaces that open and close the reading (the
-at-a-glance plaque and the Contact section). It is never used for type, so the
-blue stays the only ink and the brass reads as a lit metal edge rather than a
-competing second accent.
+A dark instrument panel. Obsidian black ground, deep navy for cards and sections,
+platinum white ink, and one electric cyan carrying every interactive accent.
+Cyan is rationed rather than spread: it is the only saturated colour in the
+system, and it is kept off large fills, so it reads as an instrument light rather
+than as a gaming wash. A warm transitional serif (Spectral) sets the headings
+against the cool ground; Inter carries running text; JetBrains Mono carries
+figures, indices and labels; muted slate carries secondary text and the labels
+themselves.
 
 The mode is **Experience** (a portfolio): the work leads and the interface
 recedes. The page is composed like a lit set, not a dashboard. Light falls from
@@ -27,14 +24,13 @@ Two worlds share one set of token names:
 
 | Token | Ground (`void`) | Deep well |
 | --- | --- | --- |
-| `void` | `#04060c` page | `#000206` |
-| `ink` | `#070b14` band | `#020409` |
-| `panel` / `panel2` / `panel3` | `#0a101c` / `#0e1524` / `#141d2e` | `#05080f` / `#080d17` / `#0c1320` |
-| `edge` | `#1e2a40` drawn lines | `#16233a` |
-| `accent` | `#4d8dff` electric blue | `#6ba4ff` |
-| `volt` / `ice` | `#86b4ff` / `#cbd8ec` | `#9cc2ff` / `#dce5f2` |
-| `ember` | `#cfa15f` brass rule | `#e2b877` |
-| `bright` / `soft` / `muted` | `#f4f7fc` / `#c2cbda` / `#8792a6` | `#fbfcff` / `#c6d0e0` / `#8d9ab0` |
+| `void` | `#0b0d10` page | `#05070a` |
+| `ink` | `#0e1219` band | `#080b11` |
+| `panel` / `panel2` / `panel3` | `#111827` / `#151d2e` / `#1a2438` | `#0e131c` / `#111a26` / `#17222f` |
+| `edge` | `#24314a` drawn lines | `#1f2c42` |
+| `accent` | `#64ffda` electric cyan | `#7cffe2` |
+| `volt` / `ice` | `#9bf5e4` / `#dce6e4` | `#b4fff0` / `#e4edea` |
+| `bright` / `soft` / `muted` | `#f5f5f0` / `#c9d0dc` / `#8993a4` | `#fcfcf9` / `#cbd2de` / `#94a0b1` |
 
 `.panel-deep` is the well the hero and the open-source section sit in: the same
 roles pulled almost to black, with the blue lifted a step so it still reads
@@ -50,14 +46,14 @@ whole class of "flashed the wrong colour before hydration" bug.
 
 Every text token clears WCAG AA (4.5:1) against every ground token it can sit on,
 in both the base and deep ramps. The tightest pair in the run is `accent` on
-`panel3` at 5.28:1, with `muted` on the same surface a hair behind at 5.38:1.
+`panel3` at 5.0:1, with the deep ramp's `muted` on `panel3` at 6.1:1 behind it.
 This is a floor, not an aspiration: it constrains the
 palette, so a colour change that drops any pair below 4.5:1 is a bug.
 
-The one place it bites is the primary button. Near-white on the electric blue is
-2.98:1 and fails, so the primary action is the inverse: a near-white pill with
-near-black text (18.9:1), turning electric blue with the same near-black text on
-hover (6.3:1). Both states clear AA.
+The one place it bites is the primary button. Platinum on the electric cyan is
+1.14:1 and fails, so the primary action is the inverse: a platinum pill with
+obsidian text (17.8:1), turning cyan with the same obsidian text on hover
+(15.6:1). Both states clear AA.
 
 ## Type
 
@@ -88,7 +84,7 @@ at `py-16 sm:py-20`. Generous space is the cheapest luxury there is.
   translucent white wash over the ground. What lifts them is a hairline of light
   along the top edge, a faint vertical sheen, a deep black shadow with a long
   blur, and a restrained blue bloom that only appears on hover.
-- **The accent** (`.accent-gradient`) is a flat electric blue, never a gradient.
+- **The accent** (`.accent-gradient`) is a flat electric cyan, never a gradient.
 - **Chips** are the one shape for every named technology or skill, in
   `lib/visuals.ts`: a hairline rounded rectangle on a 5% wash, mono at 12px.
   The project card's stack, the case study's stack and the skill universe's
@@ -140,6 +136,13 @@ upright the whole way round, which text riding a 3D transform would not.
 The depth cue is the turn's own phase rather than an intersection test. That is
 enough for a single figure with nothing behind it to occlude, and it means there
 is still no 3D dependency in `package.json` and no need for one.
+
+Under a fine pointer the whole figure turns a few degrees toward the cursor: the
+container applies `perspective()` with a small `rotateX`/`rotateY`, and the
+pointer only writes a target angle that the frame loop already running eases
+toward. So the response costs no second rAF loop and no React render, and it is
+off entirely on touch and under reduced motion, where a figure leaning at the
+finger would be the only thing moving.
 
 The loop stops entirely while the hero is off screen, and reduced motion holds
 one still frame.

@@ -1,8 +1,9 @@
 # Khagendra Luitel: AI / ML Engineer Portfolio
 
-An editorial portfolio for an AI/ML engineer: a dark instrument panel,
-near-black navy with one muted electric blue carrying every accent, a warm serif
-setting the headings, and every figure drawn in code with no 3D dependency.
+An editorial portfolio for an AI/ML engineer: a dark instrument panel, obsidian
+black under deep navy with one electric cyan carrying every interactive accent,
+a warm serif setting the headings against it, and every figure drawn in code with
+no 3D dependency.
 Every claim on the site is transcribed from the CV, and every repository link is
 read live from GitHub.
 
@@ -109,16 +110,10 @@ CSS custom property, so every colour drawn outside CSS resolves from there. `app
 
 ## Palette
 
-A near-black navy ground with one committed ink: a muted electric blue, held
-below neon so it reads as an instrument light rather than a gaming accent. Every
-colour is a token in the `@theme` block of `app/globals.css`, which stays the
-source of truth.
-
-One warm value completes the system. `ember` is a muted brass, drawn only as a
-hairline rule on the two surfaces that open and close the reading (the
-at-a-glance plaque and the Contact section). It is never used for type, so the
-blue stays the only ink and the brass reads as a lit metal edge rather than a
-competing second accent.
+Obsidian black under deep navy, with one committed ink: an electric cyan, held
+in reserve rather than spread across the page, so it reads as an instrument
+light rather than as decoration. Every colour is a token in the `@theme` block
+of `app/globals.css`, which stays the source of truth.
 
 The ratios below are computed, not asserted, and they are the reason the ramp
 holds together: each token is measured against the page ground (`void`) and
@@ -126,29 +121,28 @@ against the most raised surface it can sit on (`panel3`).
 
 | Token | Value | Role | On `void` | On `panel3` |
 | --- | --- | --- | --- | --- |
-| `bright` | `#f4f7fc` | primary text | **18.9:1** (AAA) | 15.7:1 |
-| `soft` | `#c2cbda` | secondary text | **12.4:1** (AAA) | 10.3:1 |
-| `muted` | `#8792a6` | small labels | **6.5:1** (AA) | 5.4:1 |
-| `accent` | `#4d8dff` | the accent: links, rules, figures | **6.3:1** (AA) | 5.3:1 |
-| `volt` | `#86b4ff` | paler blue, secondary accent | **9.6:1** (AAA) | 8.0:1 |
-| `ice` | `#cbd8ec` | platinum, art highlight | **14.1:1** (AAA) | 11.7:1 |
-| `ember` | `#cfa15f` | the one warm rule | **8.6:1** (AAA) | 7.2:1 |
-| `indigo` | `#16224a` | gradient stop only | not text | not text |
+| `bright` | `#f5f5f0` | headings, primary text | **17.8:1** (AAA) | 14.2:1 |
+| `soft` | `#c9d0dc` | secondary text | **12.5:1** (AAA) | 10.0:1 |
+| `muted` | `#8993a4` | small labels | **6.3:1** (AA) | 5.0:1 |
+| `accent` | `#64ffda` | the accent: links, rules, figures | **15.6:1** (AAA) | 12.5:1 |
+| `volt` | `#9bf5e4` | paler cyan, secondary accent | **15.4:1** (AAA) | 12.3:1 |
+| `ice` | `#dce6e4` | cool platinum, art highlight | **15.3:1** (AAA) | 12.2:1 |
+| `indigo` | `#0f1b2b` | gradient stop only | not text | not text |
 
 Every token clears AA at the smallest size the site sets it at, which is what
 holding the whole ramp above the floor buys: a label can take any of them, and
-the tightest pair in the run (`accent` on `panel3`, 5.28:1) still has room.
-`.accent-gradient` is a flat fill of the blue; this world does not gradient its
+the tightest pair in the run (`muted` on `panel3`, 5.0:1) still clears the floor.
+`.accent-gradient` is a flat fill of the cyan; this world does not gradient its
 rules or buttons.
 
 ### Deep panels
 
 The hero and the open-source section sit in a well: the same roles pulled almost
-to black, with the blue lifted a step so it still reads against a darker ground.
+to black, with the cyan lifted a step so it still reads against a darker ground.
 `.on-deep` and `.panel-deep` re-declare the token names they inherit (`void`
-`#000206`,
-`panel3` `#0c1320`, `accent` `#6ba4ff`, `volt` `#9cc2ff`, `ice` `#dce5f2`,
-`ember` `#e2b877`, `muted` `#8d9ab0`, `soft` `#c6d0e0`, `bright` `#fbfcff`), so token-based
+`#05070a`,
+`panel3` `#17222f`, `accent` `#7cffe2`, `volt` `#b4fff0`, `ice` `#e4edea`,
+`muted` `#94a0b1`, `soft` `#cbd2de`, `bright` `#fcfcf9`), so token-based
 utilities flip to that rendition for the whole subtree with no component change.
 Art inside those panels resolves from `PALETTE_DEEP` in `lib/palette.ts`.
 
