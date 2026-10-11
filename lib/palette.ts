@@ -66,7 +66,6 @@ function buildChannelMap(source: Record<string, string>) {
 }
 
 const CHANNELS = buildChannelMap(PALETTE);
-const DEEP_CHANNELS = buildChannelMap(PALETTE_DEEP);
 
 /**
  * `"#8be9fd"` → `"139, 233, 253"`.
@@ -76,9 +75,4 @@ const DEEP_CHANNELS = buildChannelMap(PALETTE_DEEP);
  */
 export function tint(color: PaletteColor, alpha: number): string {
   return `rgba(${CHANNELS[color]}, ${alpha})`;
-}
-
-/** `tint` against the dark-panel palette. */
-export function tintDeep(color: PaletteColor, alpha: number): string {
-  return `rgba(${DEEP_CHANNELS[color]}, ${alpha})`;
 }

@@ -27,6 +27,9 @@ const IntelligenceCore = dynamic(
   { ssr: false },
 );
 
+/** Ties the index row to the panel it fills. */
+const CORE_PANEL_ID = "hero-core-panel";
+
 export function Hero() {
   // Hydration-safe: stays false on the server AND on the first client render.
   const reduce = useStillMotion();
@@ -203,6 +206,7 @@ export function Hero() {
                         onFocus={() => setActiveId(node.id)}
                         onBlur={() => setActiveId(null)}
                         aria-current={on ? "true" : undefined}
+                        aria-controls={CORE_PANEL_ID}
                         className={
                           on
                             ? "font-mono text-xs uppercase tracking-[0.18em] text-accent transition-colors duration-300"
@@ -217,7 +221,13 @@ export function Hero() {
               </ul>
             </div>
 
-            <div className="mt-5 min-h-[4.5rem]">
+            {/*
+              `aria-live` is the point of this region. The panel appears in
+              response to focus or hover, which assistive tech does not announce
+              on its own, so without it a screen reader hears four buttons and
+              never learns what selecting one revealed.
+            */}
+            <div id={CORE_PANEL_ID} aria-live="polite" className="mt-5 min-h-[4.5rem]">
               {active ? (
                 <div className="glass-card hairline max-w-md rounded-xl border p-4">
                   <div className="flex items-baseline justify-between gap-4">
