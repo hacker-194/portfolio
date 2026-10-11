@@ -41,6 +41,14 @@ const ORBITS: Orbit[] = [
 ];
 
 /**
+ * Degrees the whole figure turns toward the pointer.
+ *
+ * Small on purpose: enough that the sculpture reads as a physical object under
+ * the cursor, not so much that the labels start to lean.
+ */
+const MAX_TILT = 7;
+
+/**
  * A point on a tilted ellipse, in the shared 0-100 box.
  *
  * `depth` is the turn's phase (-1 at one end, 1 at the other) rather than a real
@@ -51,14 +59,6 @@ const ORBITS: Orbit[] = [
  * hero, no overlap to resolve; swap in a z-sort against the core radius if the
  * atom ever gains a second layer.
  */
-/**
- * Degrees the whole figure turns toward the pointer.
- *
- * Small on purpose: enough that the sculpture reads as a physical object under
- * the cursor, not so much that the labels start to lean.
- */
-const MAX_TILT = 7;
-
 function pointOn(orbit: Orbit, turn: number) {
   const angle = turn * Math.PI * 2;
   const tilt = (orbit.tilt * Math.PI) / 180;
@@ -76,77 +76,27 @@ function pointOn(orbit: Orbit, turn: number) {
 ------------------------------------------------------------------ */
 
 /**
- * Radius of the whole ball, in the shared 0-100 box.
+ * Radius of the core, in the shared 0-100 box.
  *
- * Deliberately small against the orbits. A large core reads as a cartoon atom
- * (a fat ball with three rings round it); a small, fine-grained one reads as an
- * instrument, and it lets the orbits carry the composition.
+ * A marker, not a ball: it renders around 30px across on a laptop, which is
+ * small enough to let the orbits carry the composition and to read as an
+ * instrument rather than as a cartoon atom with a fat centre. It went through a
+ * packed-cluster phase at nearly three times this size, and individual nucleons
+ * are simply the wrong level of detail at this scale: they turn to noise long
+ * before they read as matter.
  */
-const NUCLEUS_RADIUS = 4.6;
+const NUCLEUS_RADIUS = 1.6;
 
 /**
- * Nucleon centre spacing.
+ * The lit arc of the rim, as a start and length along the circle's path.
  *
- * Just under two radii, so neighbours touch and slightly interpenetrate. That
- * overlap is wanted: these spheres are translucent, and where two of them cross
- * the fill doubles up into a darker junction, which reads as the contact shadow
- * between packed matter rather than as a rendering fault.
+ * A circle's path begins at 3 o'clock and runs clockwise, so these fractions put
+ * the bright arc on the upper left, where the light is. The rest of the rim is a
+ * much fainter full circle, which is what stops a one-sided rim from looking
+ * like a stray crescent.
  */
-const NUCLEON_STEP = 1.5;
-
-type Nucleon = {
-  /** Orthographic projection: x and y are already screen-space, z is depth. */
-  x: number;
-  y: number;
-  z: number;
-  r: number;
-  /** The blue nucleons, against the platinum ones. */
-  blue: boolean;
-};
-
-/** A small deterministic PRNG, so the nucleus is identical on every load. */
-function mulberry(seed: number) {
-  let a = seed;
-  return () => {
-    a |= 0;
-    a = (a + 0x6d2b79f5) | 0;
-    let t = Math.imul(a ^ (a >>> 15), 1 | a);
-    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
-    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
-  };
-}
-
-/**
- * Packs the nucleus with nucleons on a jittered cubic lattice.
- *
- * A lattice rather than random placement, because random sequential packing jams
- * near 38% and leaves visible gaps: the spheres have to touch for the ball to
- * read as matter rather than as scattered dots. The jitter is what stops the
- * lattice reading as a grid, and the sort puts the far spheres down first so the
- * near ones occlude them.
- */
-function buildNucleus(): Nucleon[] {
-  const rand = mulberry(20261011);
-  const out: Nucleon[] = [];
-  const span = Math.ceil(NUCLEUS_RADIUS / NUCLEON_STEP);
-
-  for (let i = -span; i <= span; i += 1) {
-    for (let j = -span; j <= span; j += 1) {
-      for (let k = -span; k <= span; k += 1) {
-        const x = i * NUCLEON_STEP + (rand() - 0.5) * 0.24;
-        const y = j * NUCLEON_STEP + (rand() - 0.5) * 0.24;
-        const z = k * NUCLEON_STEP + (rand() - 0.5) * 0.24;
-        // Keep the whole sphere inside the ball, not just its centre.
-        if (Math.hypot(x, y, z) > NUCLEUS_RADIUS - 0.78) continue;
-        out.push({ x, y, z, r: 0.58 + rand() * 0.12, blue: rand() < 0.42 });
-      }
-    }
-  }
-
-  return out.sort((a, b) => a.z - b.z);
-}
-
-const NUCLEONS = buildNucleus();
+const RIM_START = 54;
+const RIM_LENGTH = 20;
 
 export function AtomCore({ className }: { className?: string }) {
   const hostRef = useRef<HTMLDivElement | null>(null);
@@ -223,7 +173,7 @@ export function AtomCore({ className }: { className?: string }) {
         if (bead) {
           bead.setAttribute("cx", point.x.toFixed(2));
           bead.setAttribute("cy", point.y.toFixed(2));
-          bead.setAttribute("r", (0.55 + front * 0.35).toFixed(2));
+          bead.setAttribute("r", (0.35 + front * 0.2).toFixed(2));
         }
       });
 
@@ -288,55 +238,30 @@ export function AtomCore({ className }: { className?: string }) {
         aria-hidden
       >
         <defs>
-          {/* The wide wash the whole figure sits in. */}
           <radialGradient id="atom-bloom">
-            <stop offset="0%" stopColor={P.accent} stopOpacity="0.26" />
-            <stop offset="45%" stopColor={P.accent} stopOpacity="0.08" />
+            <stop offset="0%" stopColor={P.accent} stopOpacity="0.22" />
+            <stop offset="45%" stopColor={P.accent} stopOpacity="0.07" />
             <stop offset="100%" stopColor={P.accent} stopOpacity="0" />
           </radialGradient>
 
           {/*
-            Light between the nucleons, so the gaps inside the ball read as a
-            dense, lit core rather than as black holes in the figure.
+            The core is dark on purpose. A lit ball at this size reads as a bead
+            or a marble; a near-black one with only its edge catching light reads
+            as something dense, which is what a nucleus should look like. The
+            interior is lifted a touch toward the key light, on the same upper
+            left as the rim.
           */}
-          <radialGradient id="atom-heart">
-            <stop offset="0%" stopColor={P.bright} stopOpacity="0.42" />
-            <stop offset="55%" stopColor={P.volt} stopOpacity="0.14" />
+          <radialGradient id="core-body" cx="0.38" cy="0.34" r="0.9">
+            <stop offset="0%" stopColor="#1a2431" />
+            <stop offset="42%" stopColor="#0d131c" />
+            <stop offset="100%" stopColor="#05070a" />
+          </radialGradient>
+
+          {/* A faint cyan interior, the only place the accent enters the core. */}
+          <radialGradient id="core-glow">
+            <stop offset="0%" stopColor={P.accent} stopOpacity="0.24" />
+            <stop offset="58%" stopColor={P.accent} stopOpacity="0.07" />
             <stop offset="100%" stopColor={P.accent} stopOpacity="0" />
-          </radialGradient>
-
-          {/*
-            The nucleons, lit from the upper left.
-            Both are `objectBoundingBox`, so a single definition shades every
-            sphere in the ball and the highlight stays one fixed direction
-            across the whole nucleus.
-
-            Both tones are desaturated steel. A first pass ran one of them at
-            full electric blue and the ball read as candy: at this size the eye
-            takes saturation for plastic, and two greys a step apart read as
-            machined metal instead. The falloff is wide and the highlight is
-            small, which is what keeps a sphere from looking like a toy.
-          */}
-          <radialGradient id="nucleon-steel" cx="0.36" cy="0.32" r="0.94">
-            <stop offset="0%" stopColor="#ffffff" />
-            <stop offset="16%" stopColor="#d7e0ee" />
-            <stop offset="58%" stopColor="#98a5bb" />
-            <stop offset="86%" stopColor="#5a6478" />
-            <stop offset="100%" stopColor="#454e61" />
-          </radialGradient>
-          <radialGradient id="nucleon-cool" cx="0.36" cy="0.32" r="0.94">
-            <stop offset="0%" stopColor="#f6f9ff" />
-            <stop offset="16%" stopColor="#c8d4e8" />
-            <stop offset="58%" stopColor="#8798b6" />
-            <stop offset="86%" stopColor="#4e5b76" />
-            <stop offset="100%" stopColor="#3b465c" />
-          </radialGradient>
-
-          {/* Seats the ball: light falls off away from the key light. */}
-          <radialGradient id="nucleus-shade" cx="0.36" cy="0.3" r="0.9">
-            <stop offset="0%" stopColor={P.void} stopOpacity="0" />
-            <stop offset="58%" stopColor={P.void} stopOpacity="0.08" />
-            <stop offset="100%" stopColor={P.void} stopOpacity="0.5" />
           </radialGradient>
         </defs>
 
@@ -349,8 +274,8 @@ export function AtomCore({ className }: { className?: string }) {
               rx={orbit.rx}
               ry={orbit.ry}
               fill="none"
-              stroke={tintDeep("volt", 0.14)}
-              strokeWidth="0.3"
+              stroke={tintDeep("volt", 0.12)}
+              strokeWidth="0.22"
             />
             <ellipse
               data-arc={index}
@@ -360,37 +285,43 @@ export function AtomCore({ className }: { className?: string }) {
               ry={orbit.ry}
               fill="none"
               pathLength={100}
-              stroke={tintDeep("accent", 0.85)}
-              strokeWidth="0.42"
+              stroke={tintDeep("accent", 0.8)}
+              strokeWidth="0.32"
               strokeLinecap="round"
-              strokeDasharray="16 84"
+              strokeDasharray="14 86"
             />
-            <circle data-bead={index} cx="50" cy="50" r="0.7" fill={tintDeep("bright", 0.9)} />
+            <circle data-bead={index} cx="50" cy="50" r="0.45" fill={tintDeep("bright", 0.9)} />
           </g>
         ))}
 
-        {/* The nucleus: outer wash, lit interior, then the packed nucleons. */}
-        <circle cx="50" cy="50" r="15" fill="url(#atom-bloom)" />
-        <circle cx="50" cy="50" r={NUCLEUS_RADIUS - 0.9} fill="url(#atom-heart)" />
-
-        {NUCLEONS.map((nucleon, index) => {
-          /** 0 at the back of the ball, 1 at the front. */
-          const front = (nucleon.z + NUCLEUS_RADIUS) / (NUCLEUS_RADIUS * 2);
-          return (
-            <circle
-              key={index}
-              cx={50 + nucleon.x}
-              cy={50 + nucleon.y}
-              r={nucleon.r * (0.86 + front * 0.14)}
-              fill={nucleon.blue ? "url(#nucleon-cool)" : "url(#nucleon-steel)"}
-              opacity={0.68 + front * 0.32}
-            />
-          );
-        })}
-
-        {/* Shading and the specular seat the ball in the light. */}
-        <circle cx="50" cy="50" r={NUCLEUS_RADIUS} fill="url(#nucleus-shade)" />
-        <circle cx="48.6" cy="48.5" r="1.1" fill={tintDeep("bright", 0.3)} />
+        {/*
+          The nucleus: a wash behind it, the dark core, its interior glow, then
+          the rim. The rim is two strokes on one circle: a faint full ring for
+          the ambient edge, and a brighter arc where the key light lands.
+        */}
+        <circle cx="50" cy="50" r="8" fill="url(#atom-bloom)" />
+        <circle cx="50" cy="50" r={NUCLEUS_RADIUS} fill="url(#core-body)" />
+        <circle cx="50" cy="50" r={NUCLEUS_RADIUS * 0.86} fill="url(#core-glow)" />
+        <circle
+          cx="50"
+          cy="50"
+          r={NUCLEUS_RADIUS}
+          fill="none"
+          stroke={tintDeep("ice", 0.2)}
+          strokeWidth="0.14"
+        />
+        <circle
+          cx="50"
+          cy="50"
+          r={NUCLEUS_RADIUS}
+          fill="none"
+          pathLength={100}
+          stroke={tintDeep("bright", 0.88)}
+          strokeWidth="0.22"
+          strokeLinecap="round"
+          strokeDasharray={`${RIM_LENGTH} ${100 - RIM_LENGTH}`}
+          strokeDashoffset={-RIM_START}
+        />
       </svg>
 
       {/* Each label rides its own orbit. Position and scale are set per frame. */}
