@@ -1,7 +1,6 @@
 "use client";
 
 import { useState } from "react";
-import dynamic from "next/dynamic";
 import { motion } from "motion/react";
 import { useStillMotion } from "@/lib/hooks";
 import { ArrowDown, ArrowRight, Download } from "lucide-react";
@@ -14,35 +13,22 @@ import { CORE_NODES } from "@/lib/core-nodes";
 import { PROFILE } from "@/lib/site";
 import { EASE_CINEMATIC } from "@/lib/motion";
 
-/**
- * The sculpture is client-only and loaded on demand.
- *
- * WebGL has nothing to render on the server, and the renderer should not sit in
- * the initial payload for a reader whose machine cannot draw it. Everything the
- * sculpture says is repeated in the index row below, which is plain DOM, so the
- * hero reads complete before the canvas arrives.
- */
-const IntelligenceCore = dynamic(
-  () => import("@/components/IntelligenceCore").then((mod) => mod.IntelligenceCore),
-  { ssr: false },
-);
-
 /** Ties the index row to the panel it fills. */
 const CORE_PANEL_ID = "hero-core-panel";
 
 export function Hero() {
-  // Hydration-safe: stays false on the server AND on the first client render.
+  // Stays false on the server and on the first client render, so hydration
+  // always matches the HTML.
   const reduce = useStillMotion();
-  /** Which capability the core is presenting, or null for none. */
+  /** The capability whose panel is open, or null. */
   const [activeId, setActiveId] = useState<string | null>(null);
   const active = CORE_NODES.find((node) => node.id === activeId) ?? null;
 
   /**
    * Entrance props for a block.
    *
-   * `animate` is always defined on purpose: when the still branch supplies
-   * `initial={false}`, an `undefined` animate target leaves those elements
-   * stuck in the server-rendered hidden state.
+   * `animate` is always set: if the still branch only passed `initial={false}`,
+   * an undefined target would leave the element stuck in its hidden state.
    */
   const rise = (delay: number) => ({
     initial: reduce ? false : { opacity: 0, y: 22 },
@@ -59,29 +45,11 @@ export function Hero() {
       id="home"
       className="panel-deep relative isolate flex min-h-[100svh] w-full flex-col overflow-hidden"
     >
-      {/*
-        The sculpture.
-        A glass core with four capability nodes around it, turning slowly and
-        leaning with the pointer. It takes pointer events, so the copy column
-        above it releases them everywhere it is not actually drawn. On a wide
-        screen it is held to the right; on a small one it sits behind the copy.
-      */}
-      <div className="absolute inset-0 z-0" aria-hidden>
-        <IntelligenceCore
-          activeId={activeId}
-          onActivate={setActiveId}
-          still={reduce}
-          className="absolute inset-0 lg:left-[40%]"
-        />
-      </div>
-
       {/* Light, then falloff, then a single layer of grain over both. */}
       <div className="keylight pointer-events-none absolute inset-0 z-0" aria-hidden />
       <div className="vignette pointer-events-none absolute inset-0 z-[1]" aria-hidden />
       {/*
-        A scrim weighted to the copy column. Without it the figure would run
-        under the text; with it the light falls off exactly where the page is
-        read, which is how a lit set is built.
+        A scrim over the copy column, so the light falls off where the text is.
       */}
       <div
         className="pointer-events-none absolute inset-0 z-[2] bg-[linear-gradient(100deg,rgba(0,2,6,0.94)_0%,rgba(0,2,6,0.66)_36%,transparent_70%)] lg:bg-[linear-gradient(100deg,rgba(0,2,6,0.88)_0%,rgba(0,2,6,0.42)_32%,transparent_60%)]"
@@ -89,12 +57,7 @@ export function Hero() {
       />
       <div className="grain pointer-events-none absolute inset-0 z-[3]" aria-hidden />
 
-      {/*
-        Copy.
-        The container passes pointer events through and the drawn column takes
-        them back: a full-width box with events would swallow every hover meant
-        for the sculpture, including the empty space beside the text.
-      */}
+      {/* The container lets pointer events through, the column takes them back. */}
       <div className="pointer-events-none relative z-[4] mx-auto flex w-full max-w-[1600px] flex-1 items-center px-5 pb-28 pt-32 sm:px-8 sm:pb-32 lg:px-12">
         <div className="pointer-events-auto max-w-[46rem]">
           <motion.div
@@ -106,9 +69,7 @@ export function Hero() {
                 <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
                 <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
               </span>
-              {/* A sentence, not a label: sentence case at the size floor reads
-                  faster than tracked upper case, and this is the first thing a
-                  hiring reader scans. */}
+              {/* Sentence case rather than a label: it reads faster. */}
               <span className="font-mono text-xs leading-relaxed tracking-[0.06em] text-soft">
                 {PROFILE.availability}
               </span>
@@ -147,7 +108,7 @@ export function Hero() {
             </div>
           </motion.div>
 
-          {/* The statement, set large: on this page the sentence is the design. */}
+          {/* The statement, set large. */}
           <p className="mt-10 max-w-2xl font-display text-[clamp(1.15rem,1.9vw,1.7rem)] leading-[1.45] text-soft">
             <MaskedLines lines={PROFILE.headline} delay={0.85} stagger={0.07} />
           </p>
@@ -183,13 +144,9 @@ export function Hero() {
           </motion.div>
 
           {/*
-            The readable twin of the sculpture.
-
-            Every node in the core is a real button here, same four, same
-            order. The canvas is decoration; this is the path a keyboard or a
-            screen reader takes, and it is what keeps the panels a feature
-            rather than a hover-only trick. Height is reserved below so that
-            revealing a panel never moves the hero.
+            The capabilities: four buttons over one panel, reachable by
+            keyboard. Height is reserved for the panel so opening it never moves
+            the hero.
           */}
           <motion.div {...rise(1.3)} className="mt-12">
             <div className="hairline flex flex-wrap items-center gap-x-5 gap-y-2 border-t pt-5">
@@ -222,10 +179,8 @@ export function Hero() {
             </div>
 
             {/*
-              `aria-live` is the point of this region. The panel appears in
-              response to focus or hover, which assistive tech does not announce
-              on its own, so without it a screen reader hears four buttons and
-              never learns what selecting one revealed.
+              `aria-live` on the panel: it opens on focus or hover, which
+              assistive tech does not announce on its own.
             */}
             <div id={CORE_PANEL_ID} aria-live="polite" className="mt-5 min-h-[4.5rem]">
               {active ? (

@@ -2,8 +2,8 @@
 
 An editorial portfolio for an AI/ML engineer: a dark instrument panel, obsidian
 black under midnight navy with one ice blue carrying every interactive accent, a
-warm serif setting the headings against it, a WebGL intelligence core in the
-hero, and every other figure drawn in code.
+warm serif setting the headings against it, and every figure on the page drawn
+in code. The hero is type and nothing else.
 Every claim on the site is transcribed from the CV, and every repository link is
 read live from GitHub.
 
@@ -13,7 +13,6 @@ read live from GitHub.
 | --- | --- |
 | Framework | Next.js 16 (App Router, Turbopack) + TypeScript |
 | Styling | Tailwind CSS v4 (CSS-first `@theme` tokens) |
-| 3D | Three.js through React Three Fiber and Drei, hero core only |
 | Component motion | Motion for React (`motion/react`) |
 | Scroll-driven motion | GSAP + ScrollTrigger |
 | Smooth scroll | Lenis |
@@ -72,7 +71,7 @@ app/
   projects/[slug]/page.tsx   one case study per project, prerendered
 components/
   Navbar                 minimal bar + full-screen mobile menu
-  Hero / IntelligenceCore  hero copy + the WebGL core and its four nodes
+  Hero                   hero copy + the capability row and its panels
   SkillUniverse          the capability graph: canvas figure + the text panel
   OpenSource             live repositories, read straight from GitHub
   PipelineDiagram        the intelligence pipeline rail (Frontier)
@@ -99,7 +98,7 @@ lib/
   motion.ts              shared easing + viewport-once defaults
   utils.ts               `cn()` class joiner + `clamp()`
   visuals.ts              schematic + accent maps shared by card and page
-  core-nodes.ts           the four hero nodes, read by the scene and the index
+  core-nodes.ts           the four hero capabilities, read by the row and the panel
   skill-universe.ts       the capability graph and its CV evidence lookup
 scripts/
   check-skill-universe.ts  fails if a skill node names something no CV entry records
@@ -150,7 +149,8 @@ Art inside those panels resolves from `PALETTE_DEEP` in `lib/palette.ts`.
 
 ## Interactivity
 
-Four things react to the reader, none of them needing a pointer to be useful.
+Three things react to the reader, none of them needing a pointer to be useful.
+The hero's capability row is a fourth, and it reads the same either way.
 
 - **Command palette.** `Cmd K` (or `Ctrl K`) and `/` open a jump list over the
   sections, the projects and the outbound links, filtered as you type. Arrow
@@ -158,9 +158,6 @@ Four things react to the reader, none of them needing a pointer to be useful.
   highlighted row is pointed at through `aria-activedescendant`. The dialog is
   portalled to `document.body` because the bar that hosts the trigger flips its
   colour tokens while the dark hero is under it.
-- **Hero pointer lamp.** The network topology lights up under the cursor. One
-  throttled listener moves a radial SVG mask across a brighter copy of the same
-  drawing, so a frame costs two attribute writes and never re-renders a node.
 - **Scramble headings.** Section headings and the hero role decode from random
   glyphs when they scroll into view. The real string ships in the document and
   sits in a visually hidden node, so assistive tech never reads a half-decoded
@@ -179,23 +176,16 @@ Four things react to the reader, none of them needing a pointer to be useful.
 
 ## Performance notes
 
-- The hero core is Three.js through React Three Fiber, and it is loaded on
-  demand: the renderer ships as its own chunk, 976 KB raw and 264 KB gzipped,
-  which the document does not even reference, so it never sits in the payload the
-  first paint waits on.
-- It renders only after a WebGL probe succeeds, so a machine that cannot draw it
-  gets the hero without the canvas rather than an exception thrown inside the
-  renderer. Its loop stops when the hero is off screen or motion is reduced,
-  where the scene holds one frame instead.
-- Transmission glass is the expensive part of the scene and only renders on a
-  desktop-class device, guessed from screen width and core count. Everywhere
-  else the core is a polished metal shell against the same environment, which
-  still reads as a real object.
-- The skill universe is the other three-dimensional figure, drawn by a
-  hand-written canvas renderer with no 3D dependency at all. It is laid out from
-  a seeded PRNG at module scope, so the drawing is identical on every visit, and
-  it stops its loop while off screen. The project schematics and the pipeline
-  rail animate with CSS keyframes on nodes the browser already has.
+- No WebGL ships. The hero was a Three.js figure until this revision, with a
+  renderer chunk of 995 KB raw and 269 KB gzipped that the page had to fetch and
+  parse on top of its own bundle, for a figure that was decoration in the
+  accessibility tree. The hero is type now, and the three and React Three Fiber
+  packages are no longer dependencies.
+- What the page does draw is drawn by hand: the skill universe is the one
+  canvas figure, laid out from a seeded PRNG at module scope so the drawing is
+  identical on every visit, and it stops its loop while off screen. The project
+  schematics and the pipeline rail animate with CSS keyframes on nodes the
+  browser already has.
 - Scroll-linked motion (the pipeline rail, the experience timeline, the opposing
   parallax across each project card) runs through GSAP's ticker, so Lenis and
   ScrollTrigger share one rAF loop rather than racing.
@@ -211,11 +201,11 @@ Four things react to the reader, none of them needing a pointer to be useful.
   reachable by keyboard and on touch.
 - The Open Source list is the whole reading: every repository is a real link
   carrying its language and date, so the section has no visual-only path.
-- The hero core is decoration in the accessibility tree. Every node it presents
-  is a real button in the index row beneath the hero copy, same four and same
-  order, so the panels are reachable by keyboard and readable by assistive tech
-  instead of being a hover-only effect. The 3D labels carry `pointer-events:
-  none`, so they cannot intercept the hover meant for the node behind them.
+- The hero's four capabilities are real buttons in an index row beneath the
+  copy, same four and same order as `lib/core-nodes.ts`, and each one fills a
+  panel announced through `aria-live`. They were built as the readable twin of
+  the 3D figure that used to stand beside them, and they carry the row on their
+  own now that it is gone.
 - The pointer companion is decoration, and it behaves like it: it installs only
   for a fine pointer with motion allowed, hides itself over text fields and dead
   buttons so the platform's own I-beam and `not-allowed` still work, and adds
