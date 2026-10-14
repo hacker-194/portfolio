@@ -25,15 +25,21 @@ export function ProjectVisual({ variant, className }: ProjectVisualProps) {
   return (
     <div
       className={cn(
-        "shadow-lux relative aspect-[16/11] w-full overflow-hidden rounded-2xl",
+        "relative w-full overflow-hidden rounded-[3px]",
         className,
       )}
     >
       <div className="absolute inset-0 bg-gradient-to-br from-panel3/70 via-panel to-void" />
 
+      {/* The schematic is 640 units wide. Where the container fits that, the
+          figure lays itself out exactly as before; on a phone it scrolls
+          sideways at 616px minimum, which is what keeps the smallest label
+          above the 12px reading floor instead of shrinking to ~5px. */}
+      <div className="overflow-x-auto">
+
       <svg
         viewBox="0 0 640 440"
-        className="relative h-full w-full"
+        className="relative h-auto w-full min-w-[38.5rem]"
         role="img"
         aria-label={
           variant === "api"
@@ -83,10 +89,10 @@ export function ProjectVisual({ variant, className }: ProjectVisualProps) {
               fill={tint("bright", 0.04)}
               stroke={tint("bright", 0.16)}
             />
-            <text x="102" y="214" textAnchor="middle" className="fill-soft" fontSize="11" fontFamily="var(--font-mono)" letterSpacing="1.6">
+            <text x="102" y="214" textAnchor="middle" className="fill-soft" fontSize="13.5" fontFamily="var(--font-mono)" letterSpacing="1.6">
               REQUEST
             </text>
-            <text x="102" y="234" textAnchor="middle" fill={tint("muted", 0.9)} fontSize="9" fontFamily="var(--font-mono)">
+            <text x="102" y="234" textAnchor="middle" fill={tint("muted", 0.9)} fontSize="12.5" fontFamily="var(--font-mono)">
               POST /predict
             </text>
 
@@ -101,15 +107,15 @@ export function ProjectVisual({ variant, className }: ProjectVisualProps) {
 
             {/* Service */}
             <rect
-              x="290"
+              x="286"
               y="126"
-              width="164"
+              width="172"
               height="188"
               rx="12"
               fill={tint("panel3", 0.66)}
               stroke={tint("accent", 0.35)}
             />
-            <text x="372" y="156" textAnchor="middle" fill={PALETTE.volt} fontSize="11" fontFamily="var(--font-mono)" letterSpacing="1.8">
+            <text x="372" y="156" textAnchor="middle" fill={PALETTE.volt} fontSize="13.5" fontFamily="var(--font-mono)" letterSpacing="1.8">
               FASTAPI
             </text>
 
@@ -141,8 +147,8 @@ export function ProjectVisual({ variant, className }: ProjectVisualProps) {
                 }
               />
             ))}
-            <text x="372" y="286" textAnchor="middle" fill={tint("muted", 0.95)} fontSize="9" fontFamily="var(--font-mono)">
-              SCikit-learn estimator
+            <text x="372" y="286" textAnchor="middle" fill={tint("muted", 0.95)} fontSize="12.5" fontFamily="var(--font-mono)">
+              Scikit-learn estimator
             </text>
 
             <path
@@ -208,16 +214,16 @@ export function ProjectVisual({ variant, className }: ProjectVisualProps) {
             <path
               d="M386 278 L470 232 L560 168"
               fill="none"
-              stroke={`url(#pv-line-${variant})`}
+              stroke={tint("data", 0.9)}
               strokeWidth="2"
               strokeDasharray="7 7"
               style={reduce ? undefined : { animation: "dash-flow 7s linear infinite" }}
             />
 
-            <text x="66" y="382" fill={tint("muted", 0.9)} fontSize="10" fontFamily="var(--font-mono)" letterSpacing="1.6">
+            <text x="66" y="382" fill={tint("muted", 0.9)} fontSize="13" fontFamily="var(--font-mono)" letterSpacing="1.6">
               DISTRIBUTION
             </text>
-            <text x="350" y="382" fill={tint("muted", 0.9)} fontSize="10" fontFamily="var(--font-mono)" letterSpacing="1.6">
+            <text x="350" y="382" fill={tint("muted", 0.9)} fontSize="13" fontFamily="var(--font-mono)" letterSpacing="1.6">
               TREND
             </text>
           </g>
@@ -249,7 +255,7 @@ export function ProjectVisual({ variant, className }: ProjectVisualProps) {
                   x="70"
                   y={lane.y + 35}
                   fill={index === 2 ? PALETTE.ice : tint("soft", 0.85)}
-                  fontSize="11"
+                  fontSize="13.5"
                   fontFamily="var(--font-mono)"
                   letterSpacing="1.4"
                 >
@@ -268,12 +274,12 @@ export function ProjectVisual({ variant, className }: ProjectVisualProps) {
 
             {/* Evaluation panel */}
             <rect x="396" y="92" width="192" height="266" rx="10" fill={tint("bright", 0.03)} stroke={tint("bright", 0.14)} />
-            <text x="418" y="124" fill={tint("muted", 0.95)} fontSize="10" fontFamily="var(--font-mono)" letterSpacing="1.6">
+            <text x="418" y="124" fill={tint("muted", 0.95)} fontSize="13" fontFamily="var(--font-mono)" letterSpacing="1.6">
               EVALUATION
             </text>
             {["R2", "MAE", "RMSE"].map((metric, index) => (
               <g key={metric}>
-                <text x="418" y={170 + index * 46} fill={PALETTE.volt} fontSize="11" fontFamily="var(--font-mono)">
+                <text x="418" y={170 + index * 46} fill={PALETTE.volt} fontSize="13.5" fontFamily="var(--font-mono)">
                   {metric}
                 </text>
                 <rect x="418" y={180 + index * 46} width="148" height="4" rx="2" fill={tint("bright", 0.08)} />
@@ -282,7 +288,7 @@ export function ProjectVisual({ variant, className }: ProjectVisualProps) {
                   y={180 + index * 46}
                   height="4"
                   rx="2"
-                  fill={PALETTE.accent}
+                  fill={PALETTE.data}
                   initial={reduce ? false : { width: 0 }}
                   whileInView={{ width: [104, 132, 88][index] }}
                   viewport={{ once: true, margin: "-15%" }}
@@ -310,9 +316,10 @@ export function ProjectVisual({ variant, className }: ProjectVisualProps) {
           </g>
         ) : null}
       </svg>
+      </div>
 
       {/* Frame + bottom fade */}
-      <div className="hairline pointer-events-none absolute inset-0 rounded-2xl border" aria-hidden />
+      <div className="hairline pointer-events-none absolute inset-0 rounded-[3px] border" aria-hidden />
       <div className="pointer-events-none absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-void/85 to-transparent" aria-hidden />
     </div>
   );

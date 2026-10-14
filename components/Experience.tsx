@@ -85,18 +85,17 @@ export function Experience() {
     >
       <div className={SECTION_CONTAINER}>
         <SectionHeading
-          index="08"
-          eyebrow="Experience & leadership"
-          title={["Experience, leadership,", "and the degree behind it."]}
-          decode={false}
+          eyebrow="Career & Education"
+          title={["Experience, leadership,", "and academic foundation."]}
+          description="Internship experience, organizational leadership, and formal Computer Science coursework."
         />
 
-        <div ref={root} className="relative mt-16 lg:mt-20">
+        <div ref={root} className="relative mt-14 lg:mt-18">
           {/* Rail */}
-          <div className="absolute left-[1.4rem] top-0 bottom-0 w-px bg-bright/12" aria-hidden />
+          <div className="absolute left-[1.4rem] top-0 bottom-0 w-px bg-bright/10" aria-hidden />
           <div
             data-timeline-rail
-            className="accent-gradient absolute left-[1.4rem] top-0 bottom-0 w-px origin-top"
+            className="absolute left-[1.4rem] top-0 bottom-0 w-px origin-top bg-accent"
             aria-hidden
           />
 
@@ -106,44 +105,40 @@ export function Experience() {
               return (
                 <li key={entry.id} className="relative pl-14 sm:pl-20">
                   {/* Node */}
-                  <span className="absolute left-0 top-1 grid h-[2.8rem] w-[2.8rem] place-items-center rounded-full border border-volt/30 bg-void">
-                    <span
-                      className="absolute inset-[5px] rounded-full bg-panel2/80"
-                      aria-hidden
-                    />
-                    <Icon className="relative h-4 w-4 text-volt" strokeWidth={1.7} />
+                  <span className="absolute left-0 top-1 grid h-[2.8rem] w-[2.8rem] place-items-center rounded-xl border border-bright/15 bg-panel shadow-md">
+                    <Icon className="h-4 w-4 text-accent" strokeWidth={1.8} />
                   </span>
 
                   <div>
-                    <div className="flex flex-wrap items-center gap-x-4 gap-y-2">
+                    <div className="flex flex-wrap items-center gap-3">
                       <span
                         className={cn(
-                          "label-mono rounded-full border px-2.5 py-1",
+                          "rounded-full border px-3 py-0.5 text-xs font-medium tracking-wide uppercase",
                           entry.kind === "leadership"
-                            ? "border-ice/25 text-ice"
+                            ? "border-data/30 bg-data/10 text-data"
                             : entry.kind === "education"
-                              ? "border-bright/15 text-muted"
-                              : "border-accent/35 text-accent",
+                              ? "border-bright/15 bg-bright/5 text-muted"
+                              : "border-accent/30 bg-accent/10 text-accent",
                         )}
                       >
                         {LABELS[entry.kind]}
                       </span>
-                      <span className="label-mono text-muted">{entry.period}</span>
+                      <span className="text-xs font-mono text-muted">{entry.period}</span>
                     </div>
 
-                    <h3 className="mt-4 font-display text-[clamp(1.35rem,2.4vw,1.9rem)] font-semibold leading-tight tracking-tight text-bright">
+                    <h3 className="mt-3 font-display text-xl sm:text-2xl font-bold tracking-tight text-bright">
                       {entry.role}
                     </h3>
-                    <p className="mt-2 text-base text-soft">{entry.org}</p>
+                    <p className="mt-1 text-sm font-medium text-accent">{entry.org}</p>
 
-                    <ul className="mt-5 flex flex-col gap-3">
+                    <ul className="mt-4 flex flex-col gap-2.5">
                       {entry.points.map((point) => (
                         <li
                           key={point}
-                          className="flex gap-3.5 text-sm leading-relaxed text-muted"
+                          className="flex gap-3 text-sm leading-relaxed text-muted"
                         >
                           <span
-                            className="mt-[0.6rem] h-px w-4 shrink-0 bg-accent/50"
+                            className="mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-accent/60"
                             aria-hidden
                           />
                           <span>{point}</span>
@@ -152,11 +147,11 @@ export function Experience() {
                     </ul>
 
                     {entry.stack?.length ? (
-                      <ul className="mt-6 flex flex-wrap gap-2">
+                      <ul className="mt-5 flex flex-wrap gap-2">
                         {entry.stack.map((tech) => (
                           <li
                             key={tech}
-                            className="hairline rounded-lg border bg-bright/5 px-2.5 py-1.5 font-mono text-xs tracking-wide text-soft"
+                            className="rounded-md border border-bright/10 bg-panel px-2.5 py-1 font-mono text-xs text-soft"
                           >
                             {tech}
                           </li>
@@ -167,11 +162,9 @@ export function Experience() {
 
                   {index < ENTRIES.length - 1 ? (
                     <span
-                      className="pointer-events-none absolute left-[1.4rem] top-[3.4rem] -translate-x-1/2 font-mono text-xs text-accent"
+                      className="pointer-events-none absolute left-[calc(1.4rem-0.5px)] top-[3.4rem] h-4 w-px bg-accent/40"
                       aria-hidden
-                    >
-                      │
-                    </span>
+                    />
                   ) : null}
                 </li>
               );

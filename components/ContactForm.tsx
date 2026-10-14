@@ -21,7 +21,7 @@ export function ContactForm() {
 
   return (
     <div className="mx-auto mt-14 w-full max-w-2xl text-left">
-      <div className="shadow-lux glass-card hairline relative overflow-hidden rounded-2xl border p-6 sm:p-8">
+      <div className="glass-card hairline relative overflow-hidden rounded-[3px] border p-6 sm:p-8">
         <span
           className="accent-rule pointer-events-none absolute inset-x-0 top-0 h-px"
           aria-hidden
@@ -37,7 +37,7 @@ export function ContactForm() {
           title="Contact form"
           loading="lazy"
           style={{ height: EMBED_HEIGHT }}
-          className="mt-6 w-full rounded-lg border border-bright/10 bg-transparent"
+          className="mt-6 w-full rounded-[2px] border border-bright/10 bg-transparent"
         />
       </div>
     </div>

@@ -1,40 +1,22 @@
 "use client";
 
-import { useState } from "react";
 import { motion } from "motion/react";
 import { useStillMotion } from "@/lib/hooks";
-import { ArrowDown, ArrowRight, Download } from "lucide-react";
-import { GithubMark } from "@/components/BrandIcons";
+import { ArrowDown, ArrowRight } from "lucide-react";
 import { MagneticButton } from "@/components/MagneticButton";
-import { MaskedLines } from "@/components/MaskedLines";
-import { Scramble } from "@/components/Scramble";
-import { scrollToHash } from "@/components/SmoothScroll";
+import { scrollToHash } from "@/components/ScrollSync";
 import { CORE_NODES } from "@/lib/core-nodes";
 import { PROFILE } from "@/lib/site";
 import { EASE_CINEMATIC } from "@/lib/motion";
 
-/** Ties the index row to the panel it fills. */
-const CORE_PANEL_ID = "hero-core-panel";
-
 export function Hero() {
-  // Stays false on the server and on the first client render, so hydration
-  // always matches the HTML.
   const reduce = useStillMotion();
-  /** The capability whose panel is open, or null. */
-  const [activeId, setActiveId] = useState<string | null>(null);
-  const active = CORE_NODES.find((node) => node.id === activeId) ?? null;
 
-  /**
-   * Entrance props for a block.
-   *
-   * `animate` is always set: if the still branch only passed `initial={false}`,
-   * an undefined target would leave the element stuck in its hidden state.
-   */
   const rise = (delay: number) => ({
-    initial: reduce ? false : { opacity: 0, y: 22 },
+    initial: reduce ? false : { opacity: 0, y: 16 },
     animate: { opacity: 1, y: 0 },
     transition: {
-      duration: reduce ? 0 : 1,
+      duration: reduce ? 0 : 0.6,
       ease: EASE_CINEMATIC,
       delay: reduce ? 0 : delay,
     },
@@ -43,169 +25,92 @@ export function Hero() {
   return (
     <section
       id="home"
-      className="panel-deep relative isolate flex min-h-[100svh] w-full flex-col overflow-hidden"
+      className="panel-deep relative isolate flex min-h-[100svh] w-full flex-col justify-between overflow-hidden"
     >
-      {/* Light, then falloff, then a single layer of grain over both. */}
-      <div className="keylight pointer-events-none absolute inset-0 z-0" aria-hidden />
-      <div className="vignette pointer-events-none absolute inset-0 z-[1]" aria-hidden />
-      {/*
-        A scrim over the copy column, so the light falls off where the text is.
-      */}
-      <div
-        className="pointer-events-none absolute inset-0 z-[2] bg-[linear-gradient(100deg,rgba(0,2,6,0.94)_0%,rgba(0,2,6,0.66)_36%,transparent_70%)] lg:bg-[linear-gradient(100deg,rgba(0,2,6,0.88)_0%,rgba(0,2,6,0.42)_32%,transparent_60%)]"
-        aria-hidden
-      />
-      <div className="grain pointer-events-none absolute inset-0 z-[3]" aria-hidden />
-
-      {/* The container lets pointer events through, the column takes them back. */}
-      <div className="pointer-events-none relative z-[4] mx-auto flex w-full max-w-[1600px] flex-1 items-center px-5 pb-28 pt-32 sm:px-8 sm:pb-32 lg:px-12">
-        <div className="pointer-events-auto max-w-[46rem]">
-          <motion.div
-            {...rise(0.1)}
-            className="mb-10 flex flex-wrap items-center gap-x-5 gap-y-2"
-          >
-            <span className="inline-flex items-center gap-2.5">
-              <span className="relative flex h-1.5 w-1.5">
-                <span className="absolute inline-flex h-full w-full animate-ping rounded-full bg-accent opacity-60" />
-                <span className="relative inline-flex h-1.5 w-1.5 rounded-full bg-accent" />
-              </span>
-              {/* Sentence case rather than a label: it reads faster. */}
-              <span className="font-mono text-xs leading-relaxed tracking-[0.06em] text-soft">
-                {PROFILE.availability}
-              </span>
-            </span>
-            <span className="label-mono text-muted">{PROFILE.location}</span>
-          </motion.div>
-
-          <h1
-            aria-label={PROFILE.name}
-            className="display-tight text-[clamp(3.1rem,9.6vw,9.25rem)] font-medium"
-          >
-            <MaskedLines
-              lines={["Khagendra", "Luitel"]}
-              delay={0.2}
-              stagger={0.1}
-              lineClassName="font-display text-bright"
-            />
-          </h1>
-
-          <motion.div {...rise(0.5)} className="mt-8">
-            <div className="flex items-center gap-4">
-              <span className="font-mono text-xs uppercase tracking-[0.24em] text-accent">
-                <Scramble text={PROFILE.role} delay={650} />
-              </span>
-              <motion.span
-                className="accent-gradient h-px flex-1 origin-left"
-                initial={reduce ? false : { scaleX: 0 }}
-                animate={{ scaleX: 1 }}
-                transition={{
-                  duration: reduce ? 0 : 1.4,
-                  ease: EASE_CINEMATIC,
-                  delay: reduce ? 0 : 0.7,
-                }}
-                aria-hidden
-              />
+      <div className="relative z-10 mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-center px-5 pb-16 pt-32 sm:px-8 sm:pt-36 lg:px-12">
+        <div className="max-w-4xl">
+          {/* Status Badge */}
+          <motion.div {...rise(0.05)}>
+            <div className="inline-flex items-center gap-2.5 rounded-full border border-accent/30 bg-accent/10 px-3.5 py-1.5 text-xs font-medium text-accent">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
+              <span>{PROFILE.availability}</span>
             </div>
           </motion.div>
 
-          {/* The statement, set large. */}
-          <p className="mt-10 max-w-2xl font-display text-[clamp(1.15rem,1.9vw,1.7rem)] leading-[1.45] text-soft">
-            <MaskedLines lines={PROFILE.headline} delay={0.85} stagger={0.07} />
-          </p>
+          {/* Headline */}
+          <motion.h1
+            {...rise(0.12)}
+            className="mt-6 text-[clamp(2.5rem,6.5vw,5.5rem)] font-bold leading-[1.08] tracking-tight text-bright"
+          >
+            I turn machine learning into dependable software.
+          </motion.h1>
 
+          {/* Statement */}
+          <motion.p
+            {...rise(0.2)}
+            className="mt-6 max-w-2xl text-base leading-relaxed text-muted sm:text-lg sm:leading-relaxed"
+          >
+            I&apos;m <span className="font-semibold text-bright">{PROFILE.name}</span>, a Machine Learning Engineer based in {PROFILE.location}. I work across the full lifecycle: training PyTorch models, structuring data pipelines, and serving low-latency APIs.
+          </motion.p>
+
+          {/* CTAs */}
           <motion.div
-            {...rise(1.15)}
-            className="mt-12 flex flex-wrap items-center gap-3 sm:gap-4"
+            {...rise(0.28)}
+            className="mt-9 flex flex-wrap items-center gap-3.5 sm:gap-4"
           >
             <MagneticButton
               variant="primary"
               onClick={() => scrollToHash("#projects")}
               icon={<ArrowRight className="h-4 w-4" strokeWidth={2.2} />}
             >
-              View Projects
-            </MagneticButton>
-            <MagneticButton
-              variant="secondary"
-              href={PROFILE.github}
-              external
-              icon={<GithubMark className="h-4 w-4" />}
-            >
-              GitHub
+              View Featured Work
             </MagneticButton>
             <MagneticButton
               variant="secondary"
               href={PROFILE.resume}
               external
               ariaLabel="Open curriculum vitae (PDF)"
-              icon={<Download className="h-4 w-4" strokeWidth={1.9} />}
             >
-              Résumé
+              Curriculum Vitae ↗
+            </MagneticButton>
+            <MagneticButton
+              variant="secondary"
+              href={PROFILE.github}
+              external
+              ariaLabel="Open GitHub profile"
+            >
+              GitHub ↗
             </MagneticButton>
           </motion.div>
 
-          {/*
-            The capabilities: four buttons over one panel, reachable by
-            keyboard. Height is reserved for the panel so opening it never moves
-            the hero.
-          */}
-          <motion.div {...rise(1.3)} className="mt-12">
-            <div className="hairline flex flex-wrap items-center gap-x-5 gap-y-2 border-t pt-5">
-              <span className="label-mono text-muted">Core</span>
-              <ul className="flex flex-wrap items-center gap-x-5 gap-y-2">
-                {CORE_NODES.map((node) => {
-                  const on = node.id === activeId;
-                  return (
-                    <li key={node.id}>
-                      <button
-                        type="button"
-                        onMouseEnter={() => setActiveId(node.id)}
-                        onMouseLeave={() => setActiveId(null)}
-                        onFocus={() => setActiveId(node.id)}
-                        onBlur={() => setActiveId(null)}
-                        aria-current={on ? "true" : undefined}
-                        aria-controls={CORE_PANEL_ID}
-                        className={
-                          on
-                            ? "font-mono text-xs uppercase tracking-[0.18em] text-accent transition-colors duration-300"
-                            : "font-mono text-xs uppercase tracking-[0.18em] text-muted transition-colors duration-300 hover:text-bright"
-                        }
-                      >
-                        {node.label}
-                      </button>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-
-            {/*
-              `aria-live` on the panel: it opens on focus or hover, which
-              assistive tech does not announce on its own.
-            */}
-            <div id={CORE_PANEL_ID} aria-live="polite" className="mt-5 min-h-[4.5rem]">
-              {active ? (
-                <div className="glass-card hairline max-w-md rounded-xl border p-4">
-                  <div className="flex items-baseline justify-between gap-4">
-                    <span className="font-display text-sm font-semibold text-bright">
-                      {active.label}
-                    </span>
-                    <span className="font-mono text-[0.6rem] uppercase tracking-[0.18em] text-muted">
-                      {active.status}
+          {/* Capabilities Grid */}
+          <motion.div {...rise(0.36)} className="mt-14 sm:mt-16">
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+              {CORE_NODES.map((node) => (
+                <div
+                  key={node.id}
+                  className="rounded-xl border border-bright/10 bg-panel/50 p-4 backdrop-blur-sm transition-all duration-300 hover:border-accent/40 hover:bg-panel2"
+                >
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="font-display text-sm font-semibold tracking-tight text-bright">
+                      {node.label}
                     </span>
                   </div>
-                  <p className="mt-2 text-xs leading-relaxed text-soft">{active.blurb}</p>
-                  <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-1">
-                    {active.keywords.map((word) => (
-                      <li
+                  <p className="mt-2 text-xs leading-relaxed text-muted line-clamp-2">
+                    {node.blurb}
+                  </p>
+                  <div className="mt-3 flex flex-wrap gap-1.5">
+                    {node.keywords.slice(0, 2).map((word) => (
+                      <span
                         key={word}
-                        className="font-mono text-[0.6rem] tracking-wide text-muted"
+                        className="rounded border border-bright/10 bg-bright/5 px-2 py-0.5 font-mono text-[0.6875rem] text-soft"
                       >
                         {word}
-                      </li>
+                      </span>
                     ))}
-                  </ul>
+                  </div>
                 </div>
-              ) : null}
+              ))}
             </div>
           </motion.div>
         </div>
@@ -213,46 +118,25 @@ export function Hero() {
 
       {/* Meta bar */}
       <motion.div
-        className="pointer-events-none relative z-[4] mx-auto w-full max-w-[1600px] px-5 pb-8 sm:px-8 sm:pb-10 lg:px-12"
-        initial={reduce ? false : { opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{
-          duration: reduce ? 0 : 1.1,
-          ease: EASE_CINEMATIC,
-          delay: reduce ? 0 : 1.35,
-        }}
+        className="relative z-10 mx-auto w-full max-w-[1600px] px-5 pb-8 sm:px-8 sm:pb-10 lg:px-12"
+        {...rise(0.4)}
       >
-        <div className="hairline pointer-events-auto flex flex-wrap items-center justify-between gap-4 border-t pt-5">
-          <div className="flex items-center gap-5">
-            {/* The hero is the cover, but it is still the first section of the
-                running order: the folio every heading below carries starts
-                here, so the nav's numbers have somewhere to land. */}
-            <span className="font-mono text-xs tabular-nums text-muted">01</span>
-            <button
-              type="button"
-              onClick={() => scrollToHash("#about")}
-              className="group flex items-center gap-3"
-            >
-              <span className="relative grid h-7 w-7 place-items-center overflow-hidden rounded-full border border-bright/15 transition-colors duration-500 group-hover:border-accent/60">
-                <motion.span
-                  animate={{ y: reduce ? 0 : [-6, 6, -6] }}
-                  transition={{ duration: 2.6, repeat: Infinity, ease: "easeInOut" }}
-                  className="flex"
-                >
-                  <ArrowDown className="h-3.5 w-3.5 text-accent" strokeWidth={2} />
-                </motion.span>
-              </span>
-              <span className="label-mono text-muted transition-colors group-hover:text-bright">
-                Scroll to explore
-              </span>
-            </button>
-          </div>
-
-          <div className="flex flex-wrap items-center gap-x-8 gap-y-2">
-            <span className="label-mono text-muted">{PROFILE.timezone}</span>
-            <span className="label-mono hidden text-muted sm:inline">
-              {PROFILE.discipline}
+        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-bright/10 pt-5">
+          <button
+            type="button"
+            onClick={() => scrollToHash("#projects")}
+            className="group flex items-center gap-2.5 text-xs text-muted transition-colors hover:text-bright"
+          >
+            <span className="grid h-6 w-6 place-items-center rounded-full border border-bright/15 transition-colors group-hover:border-accent/60">
+              <ArrowDown className="h-3 w-3 text-accent transition-transform group-hover:translate-y-0.5" strokeWidth={2} />
             </span>
+            <span>Explore technical work</span>
+          </button>
+
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-muted">
+            <span>{PROFILE.timezone}</span>
+            <span className="hidden sm:inline">·</span>
+            <span className="hidden sm:inline">{PROFILE.discipline}</span>
           </div>
         </div>
       </motion.div>

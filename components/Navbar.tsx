@@ -4,8 +4,8 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Menu, X } from "lucide-react";
 import { CommandPalette } from "@/components/CommandPalette";
-import { scrollToHash } from "@/components/SmoothScroll";
-import { useScrollLock } from "@/lib/load";
+import { scrollToHash } from "@/components/ScrollSync";
+import { useScrollLock } from "@/lib/scroll-lock";
 import { useScrollState, useStillMotion } from "@/lib/hooks";
 import { ALL_SECTIONS, NAV_ITEMS, PROFILE } from "@/lib/site";
 import { EASE_CINEMATIC } from "@/lib/motion";
@@ -25,6 +25,23 @@ export function Navbar() {
   const condensed = scrollY > 24;
   // Hide the bar while scrolling down, bring it back on the way up.
   const hidden = scrollingDown && !menuOpen;
+
+  /*
+   * Reading progress: 0 at the top of the page, 1 at the bottom. The bar
+   * already re-renders on every scroll frame, so the denominator is read here
+   * rather than kept in state that would need its own invalidation; during a
+   * steady scroll nothing is mutating the DOM, so the read is cheap. The
+   * server renders 0 (no document) and the first client render is 0 too, so
+   * hydration always agrees.
+   */
+  const scrollable =
+    typeof document === "undefined"
+      ? 0
+      : Math.max(
+          1,
+          document.documentElement.scrollHeight - window.innerHeight,
+        );
+  const progress = scrollable ? Math.min(1, scrollY / scrollable) : 0;
 
   /*
    * The bar used to flip between a light-on-paper and a light-on-dark rendition
@@ -68,12 +85,26 @@ export function Navbar() {
         initial={reduce ? false : { y: -70, opacity: 0 }}
         animate={{ y: hidden && !menuOpen ? -100 : 0, opacity: 1 }}
         transition={{ duration: 0.7, ease: EASE_CINEMATIC, delay: reduce ? 0 : 0.15 }}
-        className="fixed inset-x-0 top-0 z-[80]"
+        className={cn(
+          "fixed inset-x-0 top-0 z-[80] transition-colors duration-500",
+          // Once the reader leaves the top, the bar becomes a sheet of frosted
+          // glass over the page it is floating on: the one place on this site
+          // where backdrop blur earns its keep, because content passes under it.
+          condensed &&
+            "border-b border-bright/10 bg-void/60 shadow-lift backdrop-blur-xl",
+        )}
       >
+        {/* Reading progress hairline */}
+        <div className="absolute inset-x-0 top-0 h-[2px]" aria-hidden>
+          <div
+            className="h-full origin-left bg-accent"
+            style={{ transform: `scaleX(${progress})` }}
+          />
+        </div>
         <div
           className={cn(
-            "mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-5 transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] sm:px-8 lg:px-12",
-            condensed ? "py-2.5" : "py-4 sm:py-5",
+            "mx-auto flex max-w-[1600px] items-center justify-between gap-4 px-5 transition-all duration-300 ease-out sm:px-8 lg:px-12",
+            condensed ? "py-3" : "py-4 sm:py-5",
           )}
         >
           {/* Brand */}
@@ -81,25 +112,25 @@ export function Navbar() {
             type="button"
             onClick={() => go("#home")}
             aria-label={`${PROFILE.name}, home`}
-            className="group flex items-center gap-3"
+            className="group flex items-center gap-3.5"
           >
-            <span className="relative grid h-8 w-8 place-items-center rounded-lg border border-accent/35 bg-accent/5 transition-colors duration-500 group-hover:border-accent/80 group-hover:bg-accent/10">
-              <span className="font-mono text-xs font-medium tracking-tight text-bright">
+            <span className="relative grid h-8 w-8 place-items-center rounded-lg border border-accent/30 bg-accent/10 transition-colors duration-300 group-hover:border-accent/60 group-hover:bg-accent/20">
+              <span className="font-mono text-xs font-semibold tracking-tight text-accent">
                 {PROFILE.initials}
               </span>
             </span>
-            <span className="flex items-baseline gap-2">
-              <span className="font-display text-sm font-semibold uppercase tracking-[0.16em] text-bright">
-                {PROFILE.name.split(" ")[0]}
+            <span className="flex items-center gap-2">
+              <span className="font-display text-sm font-semibold tracking-tight text-bright">
+                {PROFILE.name}
               </span>
-              <span className="hidden font-mono text-xs uppercase tracking-[0.16em] text-muted sm:inline">
-                / AI·ML
+              <span className="hidden rounded-full border border-bright/10 bg-bright/5 px-2 py-0.5 font-mono text-[0.6875rem] text-muted sm:inline">
+                ML Systems
               </span>
             </span>
           </button>
 
           {/* Desktop nav */}
-          <nav className="hidden items-center gap-1 lg:flex" aria-label="Primary">
+          <nav className="hidden items-center gap-1.5 rounded-full border border-bright/10 bg-ink/70 px-2 py-1 backdrop-blur-md lg:flex" aria-label="Primary">
             {NAV_ITEMS.map((item) => {
               const isActive = active === item.href;
               return (
@@ -108,18 +139,18 @@ export function Navbar() {
                   type="button"
                   onClick={() => go(item.href)}
                   className={cn(
-                    "relative rounded-lg px-3.5 py-2 text-sm font-medium uppercase tracking-[0.16em] transition-colors duration-300",
+                    "relative rounded-full px-4 py-1.5 text-xs font-medium transition-all duration-200",
                     isActive
-                      ? "text-bright"
-                      : "text-muted hover:bg-bright/5 hover:text-bright",
+                      ? "bg-accent/15 text-bright"
+                      : "text-muted hover:text-bright",
                   )}
                 >
                   {item.label}
                   {isActive ? (
                     <motion.span
-                      layoutId="nav-underline"
-                      className="absolute inset-x-3 -bottom-px h-px bg-accent"
-                      transition={{ duration: 0.4, ease: EASE_CINEMATIC }}
+                      layoutId="nav-pill"
+                      className="absolute inset-0 rounded-full border border-accent/30 bg-accent/10 -z-10"
+                      transition={{ duration: 0.25, ease: EASE_CINEMATIC }}
                     />
                   ) : null}
                 </button>
@@ -127,11 +158,12 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* Actions. GitHub, LinkedIn and the CV live in the hero, the mobile
-              menu and the footer; repeating them in the bar was clutter. The
-              command palette trigger lives here too, as the discoverable way to
-              find a shortcut most readers never learn about. */}
-          <div className="flex items-center gap-2">
+          {/* Actions */}
+          <div className="flex items-center gap-3">
+            <span className="hidden items-center gap-2 rounded-full border border-bright/10 bg-bright/5 px-3 py-1 text-xs text-muted xl:inline-flex">
+              <span className="h-1.5 w-1.5 rounded-full bg-data animate-pulse" aria-hidden />
+              Available for Q1/Q2
+            </span>
             <CommandPalette />
 
             {/* Mobile trigger */}
@@ -140,7 +172,7 @@ export function Navbar() {
               onClick={() => setMenuOpen((open) => !open)}
               aria-label={menuOpen ? "Close menu" : "Open menu"}
               aria-expanded={menuOpen}
-              className="grid h-9 w-9 place-items-center rounded-lg border border-bright/15 text-bright lg:hidden"
+              className="grid h-9 w-9 place-items-center rounded-[2px] border border-bright/15 text-bright lg:hidden"
             >
               <AnimatePresence mode="wait" initial={false}>
                 {menuOpen ? (
@@ -183,7 +215,7 @@ export function Navbar() {
             {/* An opaque ground and a wash of light from above, rather than a
                 blurred sheet: the menu should read as a deeper room, not as
                 frosted glass over the page behind it. */}
-            <div className="absolute inset-0 bg-void bg-[radial-gradient(120%_60%_at_50%_-10%,rgba(139,233,253,0.08),transparent_72%)]" />
+            <div className="absolute inset-0 bg-void bg-[radial-gradient(120%_60%_at_50%_-10%,color-mix(in_srgb,var(--color-accent)_7%,transparent),transparent_72%)]" />
 
             <div className="relative flex h-full flex-col overflow-y-auto px-6 pb-10 pt-24">
               <nav className="flex flex-col" aria-label="Mobile">

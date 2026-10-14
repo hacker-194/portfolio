@@ -22,31 +22,24 @@ export function Research() {
     >
       <div className={SECTION_CONTAINER}>
         <SectionHeading
-          index="06"
-          eyebrow="Research / Learning"
-          title={["What I'm reading", "right now."]}
-          description="The papers and books I'm working through at the moment."
+          eyebrow="Research & Literature"
+          title={["Foundational papers", "and ongoing study."]}
+          description="Key machine learning literature and deep-dive technical material I analyze to inform architectural design decisions."
         />
 
         {/* Learning archive */}
-        <div className="mt-16 lg:mt-20">
-          <div className="hairline flex items-baseline justify-between gap-4 border-b pb-4">
-            <span className="label-mono text-muted">Learning archive</span>
-            <span className="label-mono text-muted">
-              {String(LEARNING.length).padStart(2, "0")} entries
-            </span>
+        <div className="mt-14 lg:mt-18">
+          <div className="flex items-center justify-between border-b border-bright/10 pb-4 text-xs text-muted">
+            <span className="font-semibold uppercase tracking-wider text-muted">Selected Literature</span>
+            <span className="font-mono">{LEARNING.length} Publications</span>
           </div>
 
-          <ul className="flex flex-col">
+          <ul className="flex flex-col divide-y divide-bright/10">
             {LEARNING.map((item, index) => (
-              <Reveal key={item.title} delay={index * 0.06} y={16}>
-                <li className="hairline grid gap-4 border-b py-7 md:grid-cols-12 md:items-baseline">
-                  <span className="font-mono text-xs text-muted md:col-span-1">
-                    {String(index + 1).padStart(2, "0")}
-                  </span>
-
-                  <div className="md:col-span-6">
-                    <h3 className="font-display text-base font-medium leading-snug text-bright sm:text-lg">
+              <Reveal key={item.title} delay={index * 0.05} y={12}>
+                <li className="grid gap-4 py-6 transition-colors hover:bg-bright/[0.02] md:grid-cols-12 md:items-baseline">
+                  <div className="md:col-span-7">
+                    <h3 className="font-display text-base font-semibold leading-snug text-bright sm:text-lg">
                       {item.href ? (
                         <a
                           href={item.href}
@@ -56,8 +49,8 @@ export function Research() {
                         >
                           {item.title}
                           <ArrowUpRight
-                            className="h-3.5 w-3.5 shrink-0 text-muted transition-transform duration-300 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
-                            strokeWidth={1.8}
+                            className="h-3.5 w-3.5 shrink-0 text-muted transition-transform duration-200 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 group-hover/link:text-accent"
+                            strokeWidth={2}
                           />
                         </a>
                       ) : (
@@ -65,24 +58,26 @@ export function Research() {
                       )}
                     </h3>
                     {item.source ? (
-                      <p className="mt-2 text-sm text-muted">{item.source}</p>
+                      <p className="mt-1 text-xs text-muted">{item.source}</p>
                     ) : null}
                   </div>
 
                   <div className="md:col-span-2">
-                    <span className="label-mono text-soft">{item.topic}</span>
+                    <span className="rounded-full border border-bright/10 bg-panel px-3 py-1 font-mono text-xs text-soft">
+                      {item.topic}
+                    </span>
                   </div>
 
                   <div className="md:col-span-3">
-                    <span className="inline-flex items-center gap-2 rounded-full border border-bright/15 px-3 py-1 font-mono text-xs uppercase tracking-[0.14em] text-accent">
-                      <span className="h-1 w-1 rounded-full bg-accent" aria-hidden />
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/25 bg-accent/10 px-3 py-0.5 font-mono text-[0.6875rem] text-accent">
+                      <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
                       {item.status}
                     </span>
-                    <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-1.5">
+                    <ul className="mt-2.5 flex flex-wrap gap-1.5">
                       {item.notes.map((note) => (
                         <li
                           key={note}
-                          className="text-sm leading-snug text-muted"
+                          className="rounded border border-bright/10 bg-ink px-2 py-0.5 text-xs text-muted"
                         >
                           {note}
                         </li>

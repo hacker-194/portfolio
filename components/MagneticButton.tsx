@@ -8,22 +8,14 @@ import { cn } from "@/lib/utils";
 type Variant = "primary" | "secondary" | "ghost";
 
 const BASE =
-  "group relative inline-flex items-center justify-center gap-3 rounded-full px-7 py-3.5 text-sm font-semibold uppercase tracking-[0.16em] transition-[color,background-color,border-color,box-shadow] duration-500 sm:px-8 sm:py-4";
+  "group relative inline-flex items-center justify-center gap-2.5 rounded-xl px-6 py-3 text-sm font-medium transition-all duration-300 sm:px-7 sm:py-3.5";
 
-/**
- * Buttons are the vocabulary of the world, so they are rebuilt in it: a solid
- * ink pill that answers in the accent on hover, and a hairline outline that
- * does the same. No gradient fill, no sheen.
- */
 const VARIANTS: Record<Variant, string> = {
-  // Ink and paper reversed: a solid platinum pill that turns ice blue under the
-  // pointer. Near-black on either fill clears AA comfortably, which soft white
-  // on the blue would not.
   primary:
-    "bg-bright text-void hover:bg-accent hover:shadow-[0_0_48px_-18px_rgba(139,233,253,0.55)]",
+    "bg-accent text-void hover:bg-accent/90 shadow-md shadow-accent/20 active:scale-[0.98]",
   secondary:
-    "text-bright border border-bright/15 hover:border-accent hover:bg-accent/[0.07] hover:text-accent",
-  ghost: "text-muted hover:text-bright px-0 py-0 rounded-none tracking-[0.18em]",
+    "text-bright border border-bright/15 bg-panel/70 backdrop-blur-sm hover:border-accent/50 hover:bg-panel2 active:scale-[0.98]",
+  ghost: "text-muted hover:text-bright px-0 py-0 rounded-none",
 };
 
 type MagneticButtonProps = {

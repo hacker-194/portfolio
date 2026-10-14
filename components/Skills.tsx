@@ -13,14 +13,13 @@ export function Skills() {
   return (
     <section
       id="skills"
-      className="relative overflow-hidden border-t border-bright/15 py-24 sm:py-32 lg:py-40"
+      className="relative overflow-hidden border-t border-bright/10 py-24 sm:py-32 lg:py-36"
     >
       <div className={SECTION_CONTAINER}>
         <SectionHeading
-          index="07"
-          eyebrow="Skills"
-          title={["What I actually", "reach for."]}
-          description="Grouped by how I work, marked where I'm still learning, and drawn as a universe you can turn."
+          eyebrow="Technical Stack"
+          title={["Core competencies,", "tooling, and frameworks."]}
+          description="An interactive capability graph organized by engineering domain, backed by verified project evidence."
         />
 
         <SkillUniverse />

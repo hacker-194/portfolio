@@ -1,9 +1,12 @@
 # Khagendra Luitel: AI / ML Engineer Portfolio
 
-An editorial portfolio for an AI/ML engineer: a dark instrument panel, obsidian
-black under midnight navy with one ice blue carrying every interactive accent, a
-warm serif setting the headings against it, and every figure on the page drawn
-in code. The hero is type and nothing else.
+An editorial portfolio for an AI/ML engineer: warm paper, near-black ink, and
+one oxblood carrying every interactive accent. A reserved mist blue is spent
+only on measured data, a high-contrast display serif sets the headings, and
+every figure on the page is drawn in code. The cover is type on a masthead and
+nothing else, and each section opens as a spread: title in the left column, the
+standfirst in the right gutter. No gradient text and no coloured glow: the
+language is a printed page, not a dark screen with lights on it.
 Every claim on the site is transcribed from the CV, and every repository link is
 read live from GitHub.
 
@@ -15,7 +18,7 @@ read live from GitHub.
 | Styling | Tailwind CSS v4 (CSS-first `@theme` tokens) |
 | Component motion | Motion for React (`motion/react`) |
 | Scroll-driven motion | GSAP + ScrollTrigger |
-| Smooth scroll | Lenis |
+| Scrolling | Native (no scroll-hijacking layer) |
 | Icons | lucide-react (+ two inlined brand glyphs) |
 
 ## Getting started
@@ -27,7 +30,7 @@ npm run lint     # includes the copy guard
 npm run check    # every skill node traces back to a CV entry
 npm run build    # runs the guard, type-checks, then builds
 npm start        # serve the production build
-npx tsc --noEmit # types only
+npm run typecheck # types only
 ```
 
 `npm run check` strips types with Node itself, so it needs Node 22.6 or newer
@@ -41,6 +44,14 @@ empty and the Contact section renders no form at all, keeping its email buttons.
 
 `GITHUB_TOKEN` is optional and only raises the anonymous API rate limit: 60
 requests an hour against the 24 a day this needs.
+
+## Dependency audit
+
+`npm install` prints no audit summary here, on purpose (see `.npmrc`). `npm audit`
+reports high-severity findings in the lint toolchain only, and the fix it
+suggests, `npm audit fix --force`, downgrades `eslint-config-next` to the Next 14
+line and breaks lint and the build. Never run it. `npm run audit:prod` checks
+what actually ships to visitors and reports 0.
 
 ## Live data
 
@@ -72,20 +83,19 @@ app/
 components/
   Navbar                 minimal bar + full-screen mobile menu
   Hero                   hero copy + the capability row and its panels
-  SkillUniverse          the capability graph: canvas figure + the text panel
+  SkillUniverse / SkillUniverseCanvas   the capability graph: canvas figure + the text panel
   OpenSource             live repositories, read straight from GitHub
   PipelineDiagram        the intelligence pipeline rail (Frontier)
   About / Projects / ProjectCard / ProjectVisual (drawn project schematics)
   CommandPalette          ⌘K / "/" jump list over sections, projects, links
   WorkIndex               the index table that opens the Selected work section
-  CursorCompanion         trailing ring, labels the hovered action (desktop only)
-  Scramble                terminal-style decode for headings and the hero role
+  FactList                label and value rows, shared by the spec and the results
   ContactForm             the Tally embed, framed in this site's typography
   StudyBlock              labelled case-study block, shared by card and page
   Frontier / Research / Skills / Experience / Contact / Footer
   Highlights / BrandIcons
   Reveal / MaskedLines / SectionHeading / MagneticButton
-  SmoothScroll           Lenis + ScrollTrigger bootstrap
+  ScrollSync             ScrollTrigger bootstrap + the anchor-jump helper
 lib/
   site.ts                identity, contact details, nav order
   data.ts                projects, skills, experience, learning (CV-derived)
@@ -94,7 +104,7 @@ lib/
   palette.ts             palette channels + the `tint()` helper
   gsap.ts                reduced-motion check, ScrollTrigger setup, scroll scope
   layout.ts              shared section container class
-  load.tsx                scroll lock for the menu and the palette
+  scroll-lock.ts          scroll lock for the menu and the palette
   motion.ts              shared easing + viewport-once defaults
   utils.ts               `cn()` class joiner + `clamp()`
   visuals.ts              schematic + accent maps shared by card and page
@@ -111,46 +121,74 @@ CSS custom property, so every colour drawn outside CSS resolves from there. `app
 
 ## Palette
 
-Obsidian black under midnight navy, with one committed ink: an ice blue, held in
-reserve rather than spread across the page, so it reads as an instrument light
-rather than as decoration. Every colour is a token in the `@theme` block of
-`app/globals.css`, which stays the source of truth.
+Paper and ink, with one committed hue: an oxblood, held in reserve rather than
+spread across the page, so it reads as a printed accent rather than as
+decoration. One mist blue is spent only on measured data (the activity strip
+and the diagrams' metric bars), so when the reader sees blue it always means a
+number. Every colour is a token in the `@theme` block of `app/globals.css`,
+which stays the source of truth.
+
+Two counted hues, not a shelf of pastels. `npm run check` measures the chroma
+of every token in both scopes and fails if anything but `accent` and `data` is
+saturated, because a dark ground carrying a handful of near-pastel accents is
+exactly what generated design looks like.
 
 The ratios below are computed, not asserted, and they are the reason the ramp
 holds together: each token is measured against the page ground (`void`) and
-against the most raised surface it can sit on (`panel3`).
+against the most recessive surface it can sit on (`panel3`). The check computes
+the same pairs and fails a build that drops one below AA.
 
 | Token | Value | Role | On `void` | On `panel3` |
 | --- | --- | --- | --- | --- |
-| `bright` | `#f5f7fa` | headings, primary text | **18.6:1** (AAA) | 14.6:1 |
-| `soft` | `#c8d0da` | secondary text | **12.8:1** (AAA) | 10.1:1 |
-| `muted` | `#8d97a8` | small labels | **6.8:1** (AA) | 5.3:1 |
-| `accent` | `#8be9fd` | the accent: links, rules, figures | **14.4:1** (AAA) | 11.4:1 |
-| `volt` | `#b7f2fe` | paler tint, secondary accent | **16.3:1** (AAA) | 12.8:1 |
-| `ice` | `#dce4ee` | cool platinum, art highlight | **15.5:1** (AAA) | 12.3:1 |
-| `indigo` | `#0d1a2e` | gradient stop only | not text | not text |
+| `bright` | `#17140f` | headings, primary text (ink) | **16.1:1** (AAA) | 14.4:1 |
+| `soft` | `#46423a` | secondary text | **8.8:1** (AAA) | 7.8:1 |
+| `muted` | `#665f52` | small labels | **5.6:1** (AA) | 4.9:1 |
+| `accent` | `#7b2d26` | the accent: links, rules, figures | **8.2:1** (AAA) | 7.3:1 |
+| `volt` | `#3f3a32` | drawing ink, mid | **9.9:1** (AAA) | 8.8:1 |
+| `ice` | `#211e1a` | drawing ink, deepest | **14.6:1** (AAA) | 13.0:1 |
+| `data` | `#2f5d8c` | measured data only: activity, metrics | **6.0:1** (AA) | 5.4:1 |
+| `indigo` | `#e2d8c4` | gradient stop only | not text | not text |
 
 Every token clears AA at the smallest size the site sets it at, which is what
 holding the whole ramp above the floor buys: a label can take any of them, and
-the tightest pair in the run (`muted` on `panel3`, 5.3:1) still clears the floor.
-`.accent-gradient` is a flat fill of the ice blue; this world does not gradient
-its rules or buttons.
+the tightest pair in the run (`muted` on `panel3`, 4.9:1) still clears the floor.
+`.accent-gradient` is a flat fill of the accent; this world does not gradient its
+rules, its buttons, or a line of its headings.
 
-### Deep panels
+Every colour resolves from a token. Where an alpha is needed (washes, glints,
+keylights, the selection, the scrollbar) the stylesheet mixes the token with
+`color-mix()` rather than writing its channels out again, because a spelled-out
+rgb triple is a second copy of a colour and the first thing to drift from the
+one it copies. `npm run check` holds that line: it fails on a hand-written
+literal, on a token that disagrees with `lib/palette.ts`, on a text token below
+AA against the ground it can land on, on a third saturated hue, and on a favicon
+value that has left the palette. `app/icon.svg` is the one asset that cannot reference
+a token, so it is checked against the palette instead of being trusted, while
+`app/opengraph-image.tsx` draws from `lib/palette.ts` like the diagrams do.
 
-The hero and the open-source section sit in a well: the same roles pulled almost
-to black, with the accent lifted a step so it still reads against a darker
-ground. `.on-deep` and `.panel-deep` re-declare the token names they inherit
-(`void` `#050609`,
-`panel3` `#16202f`, `accent` `#a6eeff`, `volt` `#c6f5ff`, `ice` `#e4eaf2`,
-`muted` `#96a0b0`, `soft` `#cdd5df`, `bright` `#fafbfd`), so token-based
-utilities flip to that rendition for the whole subtree with no component change.
-Art inside those panels resolves from `PALETTE_DEEP` in `lib/palette.ts`.
+### Ink plates
+
+The hero and the open-source section are plates of ink cut out of the sheet: the
+same roles flipped, with the accent lifted a step and both the drawing inks and
+the ambient greys inverted so they still read against the near-black ground.
+`.panel-deep` re-declares the token names it inherits
+(`void` `#141310`,
+`panel3` `#2e2a25`, `accent` `#d2896b`, `volt` `#e8ded0`, `ice` `#f5f0e6`,
+`brand` `#b3aca0`, `muted` `#9a948a`, `soft` `#d6d0c4`, `bright` `#f7f3ea`), so
+token-based utilities flip to that rendition for the whole subtree with no
+component change. Nothing drawn in JavaScript sits on a plate, so there is no
+second palette in code: `lib/palette.ts` mirrors the sheet's tokens only, and a
+figure printed on a plate would need its own.
 
 ## Interactivity
 
-Three things react to the reader, none of them needing a pointer to be useful.
-The hero's capability row is a fourth, and it reads the same either way.
+Three things react to the reader, and none of them needs a pointer: the
+command palette, the activity strip, and the hero's capability row, which reads
+the same with or without one.
+
+Motion is kept deliberately quiet. An earlier revision also had terminal-style
+decoding headings, a trailing custom cursor and a smooth-scroll layer; all three
+were removed because they performed for the reader instead of serving them.
 
 - **Command palette.** `Cmd K` (or `Ctrl K`) and `/` open a jump list over the
   sections, the projects and the outbound links, filtered as you type. Arrow
@@ -158,10 +196,6 @@ The hero's capability row is a fourth, and it reads the same either way.
   highlighted row is pointed at through `aria-activedescendant`. The dialog is
   portalled to `document.body` because the bar that hosts the trigger flips its
   colour tokens while the dark hero is under it.
-- **Scramble headings.** Section headings and the hero role decode from random
-  glyphs when they scroll into view. The real string ships in the document and
-  sits in a visually hidden node, so assistive tech never reads a half-decoded
-  line and reduced motion gets the plain text.
 - **Activity strip.** Thirteen weeks of public GitHub events as a 13 by 7 grid,
   one cell per day, with a title on each cell and a readable summary label.
 
@@ -171,8 +205,9 @@ The hero's capability row is a fourth, and it reads the same either way.
   magnetic buttons, the mobile menu.
 - **GSAP + ScrollTrigger** owns position-linked work: the pipeline rail, the
   experience timeline, the opposing parallax across each project card.
-- **Lenis** owns the scroll itself, driven by GSAP's ticker so there is only one
-  rAF loop.
+- **The browser** owns the scroll itself. There is no smooth-scroll library:
+  wheel, trackpad, find-in-page and anchor links behave as the reader's system
+  is set up, and ScrollTrigger reads the native position.
 
 ## Performance notes
 
@@ -181,19 +216,27 @@ The hero's capability row is a fourth, and it reads the same either way.
   parse on top of its own bundle, for a figure that was decoration in the
   accessibility tree. The hero is type now, and the three and React Three Fiber
   packages are no longer dependencies.
+- The skill universe canvas is split into its own chunk with `next/dynamic` and
+  fetched after hydration, behind a placeholder of the same size so nothing
+  shifts. The text panel beside it is the full reading and never waits for it.
+- `next.config.ts` sends baseline security headers (`nosniff`, `DENY` framing, a
+  strict referrer policy, a locked-down permissions policy) and drops
+  `X-Powered-By`. A full CSP is deliberately omitted: the inline JSON-LD and the
+  framework bootstrap would need a per-request nonce, which makes pages dynamic.
 - What the page does draw is drawn by hand: the skill universe is the one
   canvas figure, laid out from a seeded PRNG at module scope so the drawing is
   identical on every visit, and it stops its loop while off screen. The project
   schematics and the pipeline rail animate with CSS keyframes on nodes the
   browser already has.
 - Scroll-linked motion (the pipeline rail, the experience timeline, the opposing
-  parallax across each project card) runs through GSAP's ticker, so Lenis and
-  ScrollTrigger share one rAF loop rather than racing.
+  parallax across each project card) runs on ScrollTrigger against the native scroll
+  position, so there is no second scroll loop to keep in sync.
 
 ## Accessibility
 
-- `prefers-reduced-motion` disables Lenis, the intro sequence and all entrance
-  animation.
+- A skip link is the first tab stop and lands on `<main id="main">`.
+- `prefers-reduced-motion` disables the scroll animations and all entrance
+  animation, and jumps between sections instantly.
 - Reduced motion is applied through a hydration-safe flag (`useStillMotion`) so
   the server HTML and the first client render always agree.
 - All interactive elements are real buttons and links with visible focus rings.
@@ -206,11 +249,6 @@ The hero's capability row is a fourth, and it reads the same either way.
   panel announced through `aria-live`. They were built as the readable twin of
   the 3D figure that used to stand beside them, and they carry the row on their
   own now that it is gone.
-- The pointer companion is decoration, and it behaves like it: it installs only
-  for a fine pointer with motion allowed, hides itself over text fields and dead
-  buttons so the platform's own I-beam and `not-allowed` still work, and adds
-  its labels through `data-cursor` on elements that are already links or
-  buttons. Switch it off and the site is unchanged.
 
 ## Writing
 
@@ -238,6 +276,18 @@ published yet and each card says so rather than linking somewhere misleading. Th
 Open Source section is the opposite case: every link there comes from the GitHub
 API, so it cannot point at a repository that does not exist. Nothing is
 hard-coded, and nothing is invented to fill space.
+
+## Adding proof
+
+Case studies take two optional fields in `lib/data.ts`, and nothing renders for
+either until it exists:
+
+- `href`: a repository or demo link. A project with a link shows it in place of
+  the "not published yet" note.
+- `results`: measured outcomes as `{ label, value }` rows. When present, a
+  Results block appears on the card and the case study. Record only what was
+  actually measured, for example one row per compared model with its R², MAE and
+  RMSE.
 
 ## License
 

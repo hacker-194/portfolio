@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowRight } from "lucide-react";
-import { scrollToHash } from "@/components/SmoothScroll";
+import { scrollToHash } from "@/components/ScrollSync";
 import { PROJECTS } from "@/lib/data";
 import { cn } from "@/lib/utils";
 
@@ -33,8 +33,7 @@ export function WorkIndex() {
               type="button"
               onClick={() => scrollToHash(`#${project.id}`)}
               aria-label={`Jump to the ${project.title} case study`}
-              data-cursor="Jump to case study"
-              className="group grid w-full grid-cols-[2.25rem_1fr_auto] items-baseline gap-x-4 gap-y-2 py-5 text-left sm:gap-x-6"
+              className="group -mx-3 grid w-full grid-cols-[2.25rem_1fr_auto] items-baseline gap-x-4 gap-y-2 rounded-[2px] px-3 py-5 text-left transition-colors duration-300 hover:bg-bright/[0.035] sm:gap-x-6"
             >
               <span className="font-mono text-xs tabular-nums text-muted">
                 {project.index}

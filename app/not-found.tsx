@@ -26,14 +26,15 @@ export default function NotFound() {
           <span className="label-mono text-muted">Not in the running order</span>
         </div>
 
-        <h1 className="display-tight mt-8 max-w-3xl text-[clamp(1.9rem,4.4vw,3.4rem)] font-medium text-bright">
+        <h1 className="display-tight mt-8 max-w-3xl text-[clamp(1.9rem,4.4vw,3.4rem)] font-light text-bright">
           This address doesn&apos;t lead anywhere.
         </h1>
 
         <p className="mt-6 max-w-xl text-base leading-relaxed text-soft">
-          Nothing is published at this URL. The three case studies, the source
-          and the contact details are all on the front page, and the work is the
-          fastest way in.
+          I don&apos;t have a page here, and I&apos;d rather you didn&apos;t hit
+          a dead end. Everything I&apos;ve built is on the front page: the three
+          case studies, where the source will land, and my contact details. The
+          work is the quickest way in.
         </p>
 
         <div className="mt-10 flex flex-wrap gap-4">

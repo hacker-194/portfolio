@@ -1,24 +1,32 @@
 import type { Metadata, Viewport } from "next";
-import { Inter, JetBrains_Mono, Spectral } from "next/font/google";
+import { Cormorant, JetBrains_Mono, Montserrat } from "next/font/google";
 import "./globals.css";
 
 import { Footer } from "@/components/Footer";
-import { CursorCompanion } from "@/components/CursorCompanion";
 import { Navbar } from "@/components/Navbar";
-import { SmoothScroll } from "@/components/SmoothScroll";
+import { ScrollSync } from "@/components/ScrollSync";
+import { PALETTE } from "@/lib/palette";
 import { PROFILE, SITE_URL } from "@/lib/site";
 
-// Display face: a warm editorial serif, and it carries the headings.
-const spectral = Spectral({
+// Display face: a high-contrast old-style serif with the poise of a fashion
+// masthead, and it carries the headings.
+//
+// 300 is the weight the large type is set in. A display page reads as designed
+// from its scale contrast, and the lightest cut is what carries it at 60px and
+// up; the heavier cuts are still here for the small display text (card titles,
+// captions) where 300 would be too faint to hold.
+const cormorant = Cormorant({
   subsets: ["latin"],
-  weight: ["400", "500", "600", "700"],
-  variable: "--font-spectral",
+  weight: ["300", "400", "500", "600", "700"],
+  variable: "--font-cormorant",
   display: "swap",
 });
 
-const inter = Inter({
+// Body: a geometric sans, wide and calm, set against the serif.
+const montserrat = Montserrat({
   subsets: ["latin"],
-  variable: "--font-inter",
+  weight: ["400", "500", "600", "700"],
+  variable: "--font-montserrat",
   display: "swap",
 });
 
@@ -49,6 +57,7 @@ export const metadata: Metadata = {
     "FastAPI",
     "portfolio",
   ],
+  alternates: { canonical: "/" },
   authors: [{ name: PROFILE.name }],
   creator: PROFILE.name,
   openGraph: {
@@ -67,10 +76,9 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  // Matches the page ground in `globals.css`, so the browser chrome on mobile
-  // continues the page rather than framing it in white.
-  themeColor: "#08090c",
-  colorScheme: "dark",
+  // Match the paper ground through the shared palette token.
+  themeColor: PALETTE.void,
+  colorScheme: "light",
 };
 
 const PERSON_SCHEMA = {
@@ -96,7 +104,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html
       lang="en"
-      className={`${spectral.variable} ${inter.variable} ${jetbrains.variable}`}
+      className={`${cormorant.variable} ${montserrat.variable} ${jetbrains.variable}`}
     >
       <body className="relative min-h-screen bg-void font-sans text-bright antialiased">
         <script
@@ -105,10 +113,16 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
           dangerouslySetInnerHTML={{ __html: JSON.stringify(PERSON_SCHEMA) }}
         />
 
-        <SmoothScroll />
-        <CursorCompanion />
+        <a
+          href="#main"
+          className="sr-only focus:not-sr-only focus:fixed focus:left-4 focus:top-4 focus:z-[100] focus:rounded-[2px] focus:bg-accent focus:px-4 focus:py-2 focus:font-mono focus:text-sm focus:text-void"
+        >
+          Skip to content
+        </a>
+
+        <ScrollSync />
         <Navbar />
-        <main className="relative z-10">{children}</main>
+        <main id="main" tabIndex={-1} className="relative z-10 outline-none">{children}</main>
         <Footer />
       </body>
     </html>

@@ -2,72 +2,63 @@
 
 /* ------------------------------------------------------------------
    DESIGN TOKENS
-   Obsidian black under midnight navy, ice blue carrying every interactive
-   accent, soft white for headings and platinum silver beneath it, a warm
-   transitional serif for display (Spectral), a neutral sans for running text
-   (Inter), and a mono for figures, indices and labels (JetBrains Mono).
+   Paper, ink and one oxblood. The page is a warm off-white sheet, the type is
+   near-black ink set in a high-contrast display serif (Cormorant) with a
+   geometric sans for running text (Montserrat) and a mono for figures, indices
+   and labels (JetBrains Mono). The figures are drawn in the same ink.
 
-   Ice blue is rationed. It is the only saturated colour in the system, so a
-   paler tint answers it and a cool platinum closes the trio without spending
-   more of it, and it is kept off large fills.
+   Oxblood is rationed: it is the only saturated hue on the page, spent on
+   interactive accents, rules and the mark, and never on a large fill. One
+   muted blue-green is held in reserve for measured data: the activity graph and the
+   metric bars, nowhere else. Everything else is paper tones and warm greys.
+   No neon, no purple, no gradient text and no coloured glow: what reads as
+   cheap generated design is a dark ground lit by halos, so there are none.
+
+   Two grounds. The sheet is the page, and the hero and the open-source well
+   are ink plates cut out of it (`.panel-deep` scopes the tokens back to ink).
+   Everything drawn in code resolves `lib/palette.ts` instead, and that is the
+   sheet's ink, so the figures are only ever printed on paper.
 
    The token *names* are unchanged from the systems this replaced, so the whole
    site re-themes from this one block; nothing else needed its class names
    edited to pick up the palette.
 ------------------------------------------------------------------ */
 @theme {
-  /* Ground scale: obsidian black through to raised midnight navy panels. */
-  --color-void: #08090c;
-  --color-ink: #0b0d12;
-  --color-panel: #101827;
-  --color-panel2: #141c2b;
-  --color-panel3: #192337;
-  --color-edge: #26334a;
+  /* Warm paper, charcoal ink, and one restrained oxblood accent. */
+  --color-void: #f4f1eb;
+  --color-ink: #ebe7df;
+  --color-panel: #fffdf9;
+  --color-panel2: #f8f5ef;
+  --color-panel3: #e7e1d7;
+  --color-edge: #d5cec2;
 
-  /*
-   * One committed ink leads: an ice blue. A paler tint answers it and a cool
-   * platinum closes the trio, all three clearing AA against the ground so each
-   * can carry small labels as well as large shapes.
-   */
-  --color-indigo: #0d1a2e;
-  --color-accent: #8be9fd;
-  --color-volt: #b7f2fe;
-  --color-ice: #dce4ee;
+  --color-indigo: #292521;
+  --color-accent: #873f36;
+  --color-volt: #71685d;
+  --color-ice: #ded8cd;
 
-  /*
-   * Text: soft white primary, platinum silver beneath it, then a dimmer silver
-   * for labels. All three clear AA.
-   */
-  --color-muted: #8d97a8;
-  --color-soft: #c8d0da;
-  --color-bright: #f5f7fa;
+  /* Quiet blue-green reserved for measured data. */
+  --color-data: #426d69;
 
-  --font-display: var(--font-spectral), ui-serif, Georgia, serif;
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  /* Ambient neutrals for structural framing and subtle borders. */
+  --color-brand: #756e65;
+  --color-brand-deep: #514b44;
+
+  /* Text hierarchy: charcoal primary, balanced secondary, legible tertiary. */
+  --color-muted: #68635b;
+  --color-soft: #4c4740;
+  --color-bright: #211e1a;
+
+  --font-display: var(--font-cormorant), Georgia, serif;
+  --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
   --font-mono: var(--font-jetbrains), ui-monospace, SFMono-Regular, monospace;
-  --font-editorial: var(--font-spectral), ui-serif, Georgia, serif;
+  --font-editorial: var(--font-cormorant), Georgia, serif;
 
   --ease-cinematic: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-swift: cubic-bezier(0.4, 0, 0.2, 1);
 
-  /*
-   * Depth. On a dark ground a shadow has to be deep and wide to read at all, so
-   * these are black with a large offset and a long blur, plus a hairline of
-   * light along the top edge: the suggestion of a lit edge on a solid material
-   * rather than a drop shadow on paper.
-   */
-  --shadow-lux: 0 1px 0 0 rgba(255, 255, 255, 0.07) inset,
-    0 48px 90px -60px rgba(0, 0, 0, 0.95);
-  --shadow-lux-sm: 0 1px 0 0 rgba(255, 255, 255, 0.055) inset,
-    0 24px 60px -46px rgba(0, 0, 0, 0.9);
-  /*
-   * A restrained bloom, used only where cyan is the subject and kept low on
-   * purpose: a wide bright halo is the fastest way to make a dark page look
-   * cheap, so this reads as a lit surface rather than as a glow.
-   */
-  --shadow-bloom: 0 0 80px -44px rgba(139, 233, 253, 0.3);
+  --shadow-lift: 0 16px 32px -22px rgba(40, 31, 23, 0.28), 0 0 0 1px rgba(40, 31, 23, 0.04);
 
-  --animate-marquee: marquee 54s linear infinite;
   --animate-flicker: flicker 6s ease-in-out infinite;
 }
 
@@ -83,71 +74,46 @@
   --bg-secondary: var(--color-ink);
   --accent-primary: var(--color-accent);
   --accent-secondary: var(--color-volt);
-  --accent-glow: rgba(139, 233, 253, 0.16);
+  --accent-glow: color-mix(in srgb, var(--color-accent) 16%, transparent);
   --text-primary: var(--color-bright);
   --text-secondary: var(--color-soft);
-  --glass-bg: #101827;
-  --glass-border: rgba(255, 255, 255, 0.08);
+  --glass-bg: var(--color-panel);
+  --glass-border: color-mix(in srgb, var(--color-bright) 14%, transparent);
 }
 
 /*
  * The deep panels.
  *
- * The hero and the open-source section sit in a well deeper than the page: a
- * ground pulled almost to black, with the accent lifted a step so it still
- * reads against it. As before, the scope re-declares the same token names it
- * inherits, so `text-bright`, `bg-void`, `border-*` and the rest flip for the
- * whole subtree without any component knowing. `.on-deep` carries only the
- * colours, for surfaces (like the fixed nav) that draw over that well without
- * being inside it.
+ * The hero and the open-source section are printed on ink plates: a near-black
+ * ground cut out of the sheet, with the accent lifted a step and both the
+ * drawing inks and the ambient greys inverted so they still read against it.
+ * The scope re-declares the same token names it inherits, so
+ * `text-bright`, `bg-void`, `border-*` and the rest flip for the whole subtree
+ * without any component knowing.
  */
-.on-deep,
 .panel-deep {
-  --color-void: #050609;
-  --color-ink: #08090e;
-  --color-panel: #0d141f;
-  --color-panel2: #101827;
-  --color-panel3: #16202f;
-  --color-edge: #1f2c40;
-  --color-indigo: #081426;
-  --color-accent: #a6eeff;
-  --color-volt: #c6f5ff;
-  --color-ice: #e4eaf2;
-  --color-muted: #96a0b0;
-  --color-soft: #cdd5df;
-  --color-bright: #fafbfd;
-  --glass-bg: #0d141f;
-  --glass-border: rgba(255, 255, 255, 0.09);
+  --color-void: #211f1c;
+  --color-ink: #292622;
+  --color-panel: #312d28;
+  --color-panel2: #39342f;
+  --color-panel3: #423c36;
+  --color-edge: #514a42;
+  --color-indigo: #211f1c;
+  --color-accent: #d3a094;
+  --color-volt: #b8aa98;
+  --color-ice: #ded8cd;
+  --color-data: #9dbdb5;
+  --color-brand: #b8aa98;
+  --color-brand-deep: #ded8cd;
+  --color-muted: #bdb5aa;
+  --color-soft: #ded8cd;
+  --color-bright: #f4f1eb;
+  --glass-bg: var(--color-panel);
 }
 
 .panel-deep {
   background-color: var(--color-void);
   color: var(--color-bright);
-}
-
-.on-deep .hairline,
-.panel-deep .hairline {
-  border-color: rgba(255, 255, 255, 0.1);
-}
-
-.on-deep .accent-rule,
-.panel-deep .accent-rule {
-  background: linear-gradient(
-    90deg,
-    transparent 0%,
-    rgba(255, 255, 255, 0.3) 22%,
-    rgba(255, 255, 255, 0.3) 78%,
-    transparent 100%
-  );
-}
-
-@keyframes marquee {
-  from {
-    transform: translate3d(0, 0, 0);
-  }
-  to {
-    transform: translate3d(-50%, 0, 0);
-  }
 }
 
 @keyframes flicker {
@@ -194,8 +160,8 @@
   html {
     -webkit-text-size-adjust: 100%;
     -webkit-tap-highlight-color: transparent;
-    /* Native controls, scrollbars and form fields follow the dark ground. */
-    color-scheme: dark;
+    color-scheme: light;
+    scroll-padding-top: 5.5rem;
   }
 
   body {
@@ -205,18 +171,11 @@
     font-synthesis-weight: none;
     text-rendering: optimizeLegibility;
     overflow-x: clip;
-    /* The page opens on a cool wash from above and settles into the ground. */
-    background-image: radial-gradient(
-      120% 62% at 50% -12%,
-      rgba(139, 233, 253, 0.05) 0%,
-      rgba(139, 233, 253, 0.015) 38%,
-      transparent 70%
-    );
-    background-repeat: no-repeat;
+    background-image: none;
   }
 
   ::selection {
-    background-color: rgba(139, 233, 253, 0.22);
+    background-color: color-mix(in srgb, var(--color-accent) 30%, transparent);
     color: var(--color-bright);
   }
 
@@ -225,7 +184,8 @@
   h3,
   h4 {
     font-family: var(--font-display);
-    font-weight: 500;
+    font-weight: 600;
+    letter-spacing: -0.025em;
     text-wrap: balance;
   }
 
@@ -236,7 +196,7 @@
   :focus-visible {
     outline: 2px solid var(--color-accent);
     outline-offset: 3px;
-    border-radius: 2px;
+    border-radius: 4px;
   }
 
   button,
@@ -244,10 +204,6 @@
     -webkit-tap-highlight-color: transparent;
   }
 
-  /*
-   * Tailwind's preflight leaves buttons on the default cursor, so a plain
-   * <button> reads as inert text. Give every control the pointer it earned.
-   */
   button:not(:disabled),
   [role="button"]:not([aria-disabled="true"]),
   summary {
@@ -260,55 +216,6 @@
 }
 
 /* ------------------------------------------------------------------
-   POINTER COMPANION
-
-   The ring and dot in `components/CursorCompanion.tsx` only take over once
-   that component is mounted and running, which is why the system cursor is
-   hidden through an attribute it sets itself: no script, no attribute, normal
-   cursor. Text fields and dead buttons are deliberately left out, so the
-   platform's own I-beam and `not-allowed` still work.
------------------------------------------------------------------- */
-html[data-cursor="custom"],
-html[data-cursor="custom"] body,
-html[data-cursor="custom"] a,
-html[data-cursor="custom"] button:not(:disabled),
-html[data-cursor="custom"] [role="button"]:not([aria-disabled="true"]),
-html[data-cursor="custom"] summary {
-  cursor: none;
-}
-
-html[data-cursor="custom"] input,
-html[data-cursor="custom"] textarea,
-html[data-cursor="custom"] select,
-html[data-cursor="custom"] [contenteditable="true"] {
-  cursor: auto;
-}
-
-/* ------------------------------------------------------------------
-   LENIS SMOOTH SCROLL
------------------------------------------------------------------- */
-html.lenis,
-html.lenis body {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto !important;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
-.lenis.lenis-stopped {
-  overflow: hidden;
-}
-
-.lenis.lenis-smooth iframe {
-  pointer-events: none;
-}
-
-/* ------------------------------------------------------------------
    SCROLLBAR
 ------------------------------------------------------------------ */
 ::-webkit-scrollbar {
@@ -317,17 +224,17 @@ html.lenis body {
 }
 
 ::-webkit-scrollbar-track {
-  background: #08090c;
+  background: var(--color-void);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #22304a;
-  border: 2px solid #08090c;
+  background: var(--color-edge);
+  border: 2px solid var(--color-void);
   border-radius: 99px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #2f4060;
+  background: color-mix(in srgb, var(--color-bright) 12%, var(--color-edge));
 }
 
 /* ------------------------------------------------------------------
@@ -363,12 +270,11 @@ html.lenis body {
   mask-image: radial-gradient(75% 75% at 50% 50%, #000 42%, transparent 100%);
 }
 
-/*
- * The accent, as one flat ice blue.
- *
- * Editorial rules are not gradiented and neither is this: a single committed
- * ink does the same jobs (buttons, timeline rules, hover underlines) without
- * the sheen.
+/*   * The accent, as one committed ink.
+   *
+   * Editorial rules are not gradiented and neither is this: a single committed
+   * ink does the same jobs (buttons, timeline rules, hover underlines) without
+   * the sheen.
  */
 .accent-gradient {
   background-color: var(--color-accent);
@@ -380,11 +286,11 @@ html.lenis body {
 }
 
 /*
- * Card surface: a solid lacquered panel, lit from above.
+ * Card surface: a sheet of card stock laid on the page.
  *
- * Deliberately not glass: no backdrop blur, no translucent white wash and no
- * neon border. A real surface is opaque, so what lifts it is a hairline of
- * light along the top edge, a faint vertical sheen and a deep shadow.
+ * Deliberately not glass: no backdrop blur, no translucent wash and no neon
+ * border. A real surface is opaque, so what lifts it is a brighter sheet edge
+ * along the top, a faint tone falling to the bottom and a shadow in ink.
  */
 .glass-panel,
 .glass-card {
@@ -392,12 +298,11 @@ html.lenis body {
   background-color: var(--glass-bg);
   background-image: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.055) 0%,
-    rgba(255, 255, 255, 0.014) 34%,
-    rgba(255, 255, 255, 0) 100%
+    color-mix(in srgb, var(--color-bright) 3%, transparent) 0%,
+    color-mix(in srgb, var(--color-bright) 1%, transparent) 34%,
+    transparent 100%
   );
   border-color: var(--glass-border);
-  box-shadow: var(--shadow-lux-sm);
 }
 
 .glass-card {
@@ -408,9 +313,9 @@ html.lenis body {
 }
 
 .glass-card:hover {
-  transform: translateY(-3px);
-  box-shadow: var(--shadow-lux), var(--shadow-bloom);
-  border-color: rgba(139, 233, 253, 0.26);
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lift);
+  border-color: color-mix(in srgb, var(--color-accent) 28%, transparent);
 }
 
 /* A single hairline that fades in from nothing and out again. */
@@ -418,45 +323,14 @@ html.lenis body {
   background: linear-gradient(
     90deg,
     transparent 0%,
-    rgba(139, 233, 253, 0.28) 22%,
-    rgba(139, 233, 253, 0.28) 78%,
+    color-mix(in srgb, var(--color-accent) 30%, transparent) 22%,
+    color-mix(in srgb, var(--color-accent) 30%, transparent) 78%,
     transparent 100%
   );
 }
 
 .hairline {
-  border-color: rgba(255, 255, 255, 0.09);
-}
-
-/*
- * Cinematic furniture: a key light for the hero, a vignette to seat a section,
- * and a single layer of fine grain over the whole page.
- *
- * The grain is an inline turbulence, not an asset: no request, no file, and it
- * is what stops the large flat gradients above from banding on a dark screen.
- */
-.keylight {
-  background-image: radial-gradient(
-    58% 46% at 62% 42%,
-    rgba(139, 233, 253, 0.1) 0%,
-    rgba(139, 233, 253, 0.03) 44%,
-    transparent 74%
-  );
-}
-
-.vignette {
-  background-image: radial-gradient(
-    118% 82% at 50% 0%,
-    transparent 38%,
-    rgba(0, 0, 0, 0.58) 100%
-  );
-}
-
-.grain {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='180' height='180' filter='url(%23n)'/%3E%3C/svg%3E");
-  background-size: 180px 180px;
-  opacity: 0.045;
-  mix-blend-mode: soft-light;
+  border-color: color-mix(in srgb, var(--color-bright) 14%, transparent);
 }
 
 /* ------------------------------------------------------------------
@@ -469,11 +343,12 @@ html.lenis body {
  */
 .label-mono {
   font-family: var(--font-mono);
-  /* 12px, not 11: the floor for anything a reader has to read, and one fewer
-     size on the page than a step below it. */
-  font-size: 0.75rem;
+  /* 13px: the floor for anything a reader has to read. Tracking is eased from
+     0.2em to 0.14em, because wide-set small caps are the first thing to blur
+     on a phone. */
+  font-size: 0.8125rem;
   font-weight: 500;
-  letter-spacing: 0.2em;
+  letter-spacing: 0.14em;
   text-transform: uppercase;
   line-height: 1;
 }
@@ -484,7 +359,7 @@ html.lenis body {
 }
 
 .stroke-text {
-  -webkit-text-stroke: 1px rgba(245, 247, 250, 0.32);
+  -webkit-text-stroke: 1px color-mix(in srgb, var(--color-bright) 32%, transparent);
   color: transparent;
 }
 

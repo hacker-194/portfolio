@@ -34,7 +34,7 @@ export const ACCENT_CLASS: Record<Project["accent"], string> = {
  * so Tailwind still sees every name as a literal.
  */
 export const CHIP =
-  "inline-flex items-center rounded-lg border border-bright/15 bg-bright/5 px-2.5 py-1.5 font-mono text-xs tracking-wide text-soft";
+  "inline-flex items-center rounded-[2px] border border-bright/15 bg-bright/5 px-2.5 py-1.5 font-mono text-xs tracking-wide text-soft";
 
 /** A chip that can be pressed. Same shape, with a pointer and focus state. */
 export const CHIP_BUTTON = cn(
@@ -48,4 +48,4 @@ export const CHIP_BUTTON = cn(
  * "pressable", so the face can stay display type.
  */
 export const CHIP_BUTTON_LARGE =
-  "inline-flex items-center rounded-lg border border-bright/15 bg-bright/5 px-3 py-1.5 font-display text-base font-medium tracking-tight text-soft transition-colors duration-300 hover:border-accent/45 hover:text-bright sm:text-lg";
+  "inline-flex items-center rounded-[2px] border border-bright/15 bg-bright/5 px-3 py-1.5 font-display text-base font-medium tracking-tight text-soft transition-colors duration-300 hover:border-accent/45 hover:text-bright sm:text-lg";

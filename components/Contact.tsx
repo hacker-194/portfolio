@@ -49,53 +49,52 @@ export function Contact() {
       id="contact"
       className="relative isolate overflow-hidden border-t border-bright/15 py-24 sm:py-32 lg:py-40"
     >
+      {/* One tinted sheet under the closing call to action: the accent and the
+          ambient grey together, the destination the scroll has been building
+          toward. A printed tone, not a glow, and this section stays on the
+          sheet rather than becoming a plate, because the embedded form is
+          served by a third party and cannot be trusted to set dark type. */}
       <div className={SECTION_CONTAINER}>
         <div className="flex flex-col items-center text-center">
           <Reveal>
-            <span className="label-mono text-volt">09 · Contact</span>
+            <span className="inline-flex items-center gap-2 rounded-full border border-accent/25 bg-accent/10 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-accent">
+              <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" aria-hidden />
+              Get in Touch
+            </span>
           </Reveal>
 
-          {/* Set as plain text rather than a masked reveal: this is the last
-              thing the reader should read, and it should read like a sentence
-              on the page by the time they get here, not like an effect. */}
-          <h2 className="display-tight mt-8 text-[clamp(2rem,4.8vw,3.75rem)] font-medium text-bright">
-            <span className="block">Let&apos;s build</span>
-            <span className="block">something</span>
-            <span className="text-accent-gradient block">intelligent.</span>
+          <h2 className="mt-6 text-[clamp(2.25rem,5vw,4rem)] font-bold tracking-tight text-bright">
+            Let&apos;s build something <span className="text-accent">exceptional.</span>
           </h2>
 
-          <Reveal delay={0.2}>
-            <p className="mt-8 max-w-xl text-base leading-relaxed text-muted sm:text-base">
-              {PROFILE.availability}. If you&apos;re working on something in AI,
-              ML or security and want an extra pair of hands, my inbox is open.
+          <Reveal delay={0.15}>
+            <p className="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
+              {PROFILE.availability}. If you have an engineering problem, an ML project, or a research direction to explore, I&apos;d love to connect.
             </p>
           </Reveal>
 
-          <Reveal delay={0.3} className="mt-10">
+          <Reveal delay={0.25} className="mt-9">
             <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
               <MagneticButton
                 variant="primary"
                 href={`mailto:${PROFILE.email}`}
                 icon={<ArrowUpRight className="h-4 w-4" strokeWidth={2.2} />}
               >
-                Email me
+                Send Email
               </MagneticButton>
               <MagneticButton
                 variant="secondary"
                 onClick={() => copy(PROFILE.email)}
                 icon={
                   copied ? (
-                    <Check className="h-4 w-4 text-volt" strokeWidth={2.2} />
+                    <Check className="h-4 w-4 text-accent" strokeWidth={2.2} />
                   ) : (
                     <Copy className="h-4 w-4" strokeWidth={1.9} />
                   )
                 }
               >
-                {copied ? "Copied" : "Copy address"}
+                {copied ? "Copied to clipboard" : "Copy email address"}
               </MagneticButton>
-              {/* The CV is the action a hiring reader is most likely to take
-                  from this section, so it carries the same weight as the two
-                  beside it rather than sitting under them as muted text. */}
               <MagneticButton
                 variant="secondary"
                 href={PROFILE.resume}
@@ -103,18 +102,18 @@ export function Contact() {
                 ariaLabel="Open curriculum vitae (PDF)"
                 icon={<ArrowUpRight className="h-4 w-4" strokeWidth={2} />}
               >
-                Curriculum vitae
+                Curriculum Vitae
               </MagneticButton>
             </div>
           </Reveal>
 
-          <Reveal delay={0.4}>
+          <Reveal delay={0.35}>
             <ContactForm />
           </Reveal>
         </div>
 
         {/* Channels */}
-        <div className="shadow-lux mt-20 grid gap-px overflow-hidden rounded-2xl border border-bright/15 bg-bright/5 sm:grid-cols-3">
+        <div className="mt-16 grid overflow-hidden rounded-2xl border border-bright/10 bg-panel/50 backdrop-blur-sm sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-bright/10">
           {CHANNELS.map((channel, index) => {
             const Icon = channel.icon;
             return (
@@ -127,44 +126,41 @@ export function Contact() {
                     ? undefined
                     : "noreferrer noopener"
                 }
-                className="group relative flex flex-col gap-6 bg-void p-7 transition-colors duration-500 hover:bg-panel2/60 sm:p-8"
-                initial={reduce ? false : { opacity: 0, y: 20 }}
+                className="group relative flex flex-col justify-between gap-6 p-7 transition-all duration-300 hover:bg-panel2 sm:p-8"
+                initial={reduce ? false : { opacity: 0, y: 16 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={viewportOnce}
                 transition={{
-                  duration: 0.65,
+                  duration: 0.5,
                   ease: EASE_CINEMATIC,
-                  delay: index * 0.08,
+                  delay: index * 0.06,
                 }}
               >
-                <div className="flex items-start justify-between">
-                  <Icon className="h-5 w-5 text-accent transition-colors duration-500 group-hover:text-volt" />
+                <div className="flex items-center justify-between">
+                  <span className="grid h-10 w-10 place-items-center rounded-xl border border-accent/20 bg-accent/10">
+                    <Icon className="h-5 w-5 text-accent" />
+                  </span>
                   <ArrowUpRight
-                    className="h-4 w-4 text-muted transition-transform duration-500 group-hover:translate-x-1 group-hover:-translate-y-1 group-hover:text-volt"
-                    strokeWidth={1.8}
+                    className="h-4 w-4 text-muted transition-transform duration-200 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-accent"
+                    strokeWidth={2}
                   />
                 </div>
 
                 <div>
-                  <span className="label-mono text-muted">{channel.label}</span>
-                  <p className="mt-3 break-all font-mono text-sm tracking-wide text-bright">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-muted">{channel.label}</span>
+                  <p className="mt-2 font-mono text-sm tracking-wide text-bright">
                     {channel.value}
                   </p>
                 </div>
-
-                <span
-                  className="accent-gradient absolute inset-x-0 bottom-0 h-px origin-left scale-x-0 transition-transform duration-500 group-hover:scale-x-100"
-                  aria-hidden
-                />
               </motion.a>
             );
           })}
         </div>
 
-        <Reveal delay={0.15} className="mt-8">
-          <div className="hairline flex flex-wrap items-center justify-between gap-4 border-t pt-7">
-            <span className="label-mono text-muted">{PROFILE.location}</span>
-            <span className="label-mono text-muted">{PROFILE.phone}</span>
+        <Reveal delay={0.15} className="mt-10">
+          <div className="flex flex-wrap items-center justify-between gap-4 border-t border-bright/10 pt-7 text-xs text-muted">
+            <span>{PROFILE.location}</span>
+            <span>{PROFILE.phone}</span>
           </div>
         </Reveal>
       </div>
