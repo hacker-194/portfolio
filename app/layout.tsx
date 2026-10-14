@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import { Cormorant, JetBrains_Mono, Montserrat } from "next/font/google";
 import "./globals.css";
 
+import { Analytics } from "@vercel/analytics/next";
 import { Footer } from "@/components/Footer";
 import { Navbar } from "@/components/Navbar";
 import { ScrollSync } from "@/components/ScrollSync";
@@ -124,6 +125,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
         <Navbar />
         <main id="main" tabIndex={-1} className="relative z-10 outline-none">{children}</main>
         <Footer />
+        <Analytics />
       </body>
     </html>
   );
