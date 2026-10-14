@@ -19,10 +19,10 @@ import { EASE_CINEMATIC, viewportOnce } from "@/lib/motion";
  * here, so the section reads as one specialism rather than four interests.
  */
 const FOCUS = [
-  { label: "Machine Learning", note: "Supervised learning, feature engineering, evaluation" },
-  { label: "Deep Learning", note: "PyTorch, training loops, architectures" },
-  { label: "Model Serving", note: "FastAPI, REST endpoints, inference paths" },
-  { label: "LLM & Agentic Systems", note: "Active study: transformers, retrieval, tool use" },
+  { label: "Training models", note: "Getting real signal from messy data" },
+  { label: "Making them work", note: "PyTorch, debugging loss curves, knowing when you're done" },
+  { label: "Shipping them", note: "APIs, endpoints, making sure they don't break in production" },
+  { label: "The new stuff", note: "Transformers, LLMs - learning what's next" },
 ];
 
 export function About() {
@@ -36,56 +36,47 @@ export function About() {
     >
       <div className={SECTION_CONTAINER}>
         <SectionHeading
-          index="02"
-          eyebrow="About"
-          title={["The work I do,", "and how I do it."]}
-          decode={false}
+          eyebrow="Engineering Philosophy"
+          title={["How I approach", "machine learning engineering."]}
+          description="My focus is on models that solve concrete problems, evaluate honestly, and run reliably in production environments."
         />
 
-        <div className="mt-16 grid gap-14 lg:mt-24 lg:grid-cols-12 lg:gap-16">
-          {/* Editorial column */}
+        <div className="mt-14 grid gap-12 lg:mt-18 lg:grid-cols-12 lg:gap-16">
+          {/* Narrative column */}
           <div className="lg:col-span-7">
             <Reveal>
-              <p className="font-editorial text-[clamp(1.9rem,4.4vw,3.4rem)] leading-[1.28] text-bright">
+              <p className="text-xl sm:text-2xl font-semibold leading-snug tracking-tight text-bright">
                 {PROFILE.statement}
               </p>
             </Reveal>
 
             <Reveal delay={0.1}>
-              <p className="mt-8 max-w-2xl text-base leading-relaxed text-muted sm:text-base">
-                It&apos;s mostly unglamorous work: cleaning datasets, exploring
-                them until the signals show up, training and comparing models,
-                then getting the result in front of someone through an
-                interface that works. I came in through data analysis, and I
-                keep a security lens on the modelling, since knowing how systems
-                break is part of knowing how to build them.
+              <p className="mt-6 text-base leading-relaxed text-muted">
+                Most machine learning value is unlocked through disciplined fundamentals: cleaning and validating datasets, engineering features with domain context, establishing reliable baselines, and deploying via well-tested APIs. My background in cybersecurity also instills a strong security and robustness mindset: understanding failure modes makes systems significantly more resilient.
               </p>
             </Reveal>
 
-            <div className="mt-12 grid gap-x-10 gap-y-8 sm:grid-cols-2">
+            <div className="mt-10 grid gap-4 sm:grid-cols-2">
               {FOCUS.map((item, index) => (
-                <Reveal key={item.label} delay={0.06 * index} y={18}>
-                  <div className="hairline border-t pt-5">
-                    <span className="label-mono text-accent">
-                      {String(index + 1).padStart(2, "0")}
-                    </span>
-                    <h3 className="mt-3 font-display text-lg font-semibold text-bright">
+                <Reveal key={item.label} delay={0.05 * index} y={14}>
+                  <div className="rounded-xl border border-bright/10 bg-panel/40 p-5 transition-all duration-300 hover:border-accent/40 hover:bg-panel2">
+                    <h3 className="font-display text-base font-semibold text-bright">
                       {item.label}
                     </h3>
-                    <p className="mt-1.5 text-sm text-muted">{item.note}</p>
+                    <p className="mt-1.5 text-xs leading-relaxed text-muted">{item.note}</p>
                   </div>
                 </Reveal>
               ))}
             </div>
 
             {/* Interests */}
-            <Reveal delay={0.1} className="mt-14">
-              <span className="label-mono text-muted">Interests</span>
-              <ul className="mt-5 flex flex-wrap gap-2.5">
+            <Reveal delay={0.1} className="mt-10">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted">Areas of Interest</span>
+              <ul className="mt-3 flex flex-wrap gap-2">
                 {INTERESTS.map((interest) => (
                   <li
                     key={interest}
-                    className="hairline rounded-full border bg-bright/5 px-3.5 py-2 text-xs text-soft transition-colors duration-300 hover:border-volt/40 hover:text-bright"
+                    className="rounded-full border border-bright/10 bg-panel px-3.5 py-1 text-xs text-soft transition-colors hover:border-accent/30 hover:text-bright"
                   >
                     {interest}
                   </li>
@@ -96,33 +87,29 @@ export function About() {
 
           {/* Credentials column */}
           <div className="lg:col-span-5">
-            <Reveal y={30}>
-              <div className="glass-panel hairline relative overflow-hidden rounded-2xl border p-7 sm:p-9">
-                <div className="relative flex items-start gap-4">
-                  <span className="hairline grid h-11 w-11 shrink-0 place-items-center rounded-full border bg-bright/5">
-                    <GraduationCap className="h-5 w-5 text-volt" strokeWidth={1.6} />
+            <Reveal y={24}>
+              <div className="rounded-2xl border border-bright/10 bg-panel/50 p-6 sm:p-8 backdrop-blur-sm">
+                <div className="flex items-start gap-4">
+                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-accent/25 bg-accent/10">
+                    <GraduationCap className="h-5 w-5 text-accent" strokeWidth={1.8} />
                   </span>
                   <div>
-                    <span className="label-mono text-muted">Education</span>
-                    <h3 className="mt-2 font-display text-xl font-semibold leading-snug text-bright">
-                      <MaskedLines
-                        lines={[EDUCATION.degree]}
-                        stagger={0}
-                        lineClassName="font-display"
-                      />
+                    <span className="text-xs font-semibold uppercase tracking-wider text-muted">Education</span>
+                    <h3 className="mt-1 font-display text-lg font-bold text-bright">
+                      {EDUCATION.degree}
                     </h3>
-                    <p className="mt-2 text-sm leading-relaxed text-muted">
+                    <p className="mt-1 text-xs text-muted">
                       {EDUCATION.school}
                     </p>
-                    <p className="mt-1 text-sm text-soft">{EDUCATION.detail}</p>
+                    <p className="mt-0.5 text-xs text-accent">{EDUCATION.detail}</p>
                   </div>
                 </div>
 
-                <div className="relative mt-8">
-                  <span className="label-mono text-muted">Relevant coursework</span>
-                  <div className="mt-4 flex flex-wrap gap-x-5 gap-y-2.5">
+                <div className="mt-6 border-t border-bright/10 pt-5">
+                  <span className="text-xs font-semibold uppercase tracking-wider text-muted">Relevant Coursework</span>
+                  <div className="mt-3 flex flex-wrap gap-1.5">
                     {EDUCATION.coursework.map((course) => (
-                      <span key={course} className="text-sm text-soft">
+                      <span key={course} className="rounded-md border border-bright/10 bg-ink px-2.5 py-1 text-xs text-soft">
                         {course}
                       </span>
                     ))}
@@ -131,31 +118,23 @@ export function About() {
               </div>
             </Reveal>
 
-            {/* Certifications: deliberately minimal */}
-            <Reveal delay={0.12} y={26} className="mt-8">
-              <div className="hairline border-t pt-7">
-                <span className="label-mono text-muted">Certifications</span>
-                <ul className="mt-5 flex flex-col">
-                  {CERTIFICATIONS.map((cert, index) => (
-                    <motion.li
+            {/* Certifications */}
+            <Reveal delay={0.12} y={20} className="mt-6">
+              <div className="rounded-2xl border border-bright/10 bg-panel/50 p-6 backdrop-blur-sm">
+                <span className="text-xs font-semibold uppercase tracking-wider text-muted">Certifications</span>
+                <ul className="mt-4 flex flex-col divide-y divide-bright/10">
+                  {CERTIFICATIONS.map((cert) => (
+                    <li
                       key={cert.title}
-                      className="group flex items-baseline justify-between gap-6 border-b border-bright/15 py-4 last:border-b-0"
-                      initial={reduce ? false : { opacity: 0, x: -14 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      viewport={viewportOnce}
-                      transition={{
-                        duration: 0.7,
-                        ease: EASE_CINEMATIC,
-                        delay: index * 0.1,
-                      }}
+                      className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0"
                     >
-                      <span className="text-base leading-snug text-bright">
+                      <span className="text-sm font-medium text-bright">
                         {cert.title}
                       </span>
-                      <span className="label-mono shrink-0 text-right text-muted">
+                      <span className="text-xs font-mono text-muted text-right">
                         {cert.issuer}
                       </span>
-                    </motion.li>
+                    </li>
                   ))}
                 </ul>
               </div>

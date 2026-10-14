@@ -1,7 +1,7 @@
 "use client";
 
 import { ArrowUp } from "lucide-react";
-import { scrollToHash } from "@/components/SmoothScroll";
+import { scrollToHash } from "@/components/ScrollSync";
 import { SECTION_CONTAINER } from "@/lib/layout";
 import { ALL_SECTIONS, PROFILE } from "@/lib/site";
 
@@ -16,7 +16,7 @@ export function Footer() {
           className="pointer-events-none mask-fade-b select-none pb-2"
           aria-hidden
         >
-          <span className="block whitespace-nowrap font-display text-[clamp(3.4rem,17vw,16.5rem)] font-bold uppercase leading-[0.85] tracking-tight text-bright/[0.06]">
+          <span className="block whitespace-nowrap font-display text-[clamp(3.4rem,17vw,16.5rem)] font-light uppercase leading-[0.85] tracking-tight text-bright/[0.06]">
             {PROFILE.name}
           </span>
         </div>
@@ -24,7 +24,7 @@ export function Footer() {
         <div className="mt-6 grid gap-10 lg:grid-cols-12">
           <div className="lg:col-span-5">
             <div className="flex items-center gap-3">
-              <span className="grid h-9 w-9 place-items-center rounded-full border border-volt/30">
+              <span className="grid h-9 w-9 place-items-center rounded-[3px] border border-brand/45">
                 <span className="font-display text-xs font-bold text-bright">
                   {PROFILE.initials}
                 </span>
@@ -63,7 +63,7 @@ export function Footer() {
                   <button
                     type="button"
                     onClick={() => scrollToHash(item.href)}
-                    className="group flex items-center gap-2 text-sm text-soft transition-colors hover:text-bright"
+                    className="group flex items-center gap-2 text-sm text-soft transition-colors duration-300 hover:text-bright focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded-[2px]"
                   >
                     <span className="font-mono text-xs text-accent">
                       {item.index}
@@ -83,7 +83,7 @@ export function Footer() {
           <button
             type="button"
             onClick={() => scrollToHash("#home")}
-            className="group inline-flex items-center gap-2.5 rounded-lg border border-bright/15 px-4 py-2.5 transition-colors hover:border-accent hover:text-accent"
+            className="group inline-flex items-center gap-2.5 rounded-[2px] border border-bright/15 px-4 py-2.5 transition-all duration-300 hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <ArrowUp
               className="h-3.5 w-3.5 text-accent transition-transform duration-300 group-hover:-translate-y-0.5"

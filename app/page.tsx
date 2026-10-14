@@ -35,41 +35,38 @@ export default async function Page() {
     <>
       <Hero />
 
-      {/*
-       * Stack band: a line of setting carried across the full width, the
-       * transition out of the hero and into the written sections.
-       *
-       * Items wrap as a list rather than running as one inline line. Adjacent
-       * spans with no whitespace between them offer no line-break opportunity,
-       * so the whole strip becomes a single unbreakable run and drags the
-       * layout viewport wider than the phone it is on.
-       */}
-      <div className="border-y border-bright/10 bg-ink/70 py-6">
+      {/* Technical toolkit strip */}
+      <div className="border-y border-bright/10 bg-ink/50 py-4 backdrop-blur-sm">
         <div className={SECTION_CONTAINER}>
-          <ul className="flex flex-wrap items-center justify-center gap-x-3 gap-y-2 font-mono text-xs uppercase leading-relaxed tracking-[0.2em] text-soft">
-            {STACK.map((item, index) => (
-              <li key={item} className="flex items-center gap-3">
-                {index > 0 ? (
-                  <span className="text-accent/60" aria-hidden>
-                    ·
-                  </span>
-                ) : null}
-                {item}
-              </li>
-            ))}
-          </ul>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
+            <span className="text-xs font-semibold tracking-wider uppercase text-muted">
+              Core Toolkit
+            </span>
+            <ul className="flex flex-wrap items-center gap-2">
+              {STACK.map((item) => (
+                <li
+                  key={item}
+                  className="rounded-full border border-bright/10 bg-panel/80 px-3 py-1 font-mono text-xs text-soft transition-colors hover:border-accent/40 hover:text-bright"
+                >
+                  {item}
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
       </div>
 
-      <Highlights />
-
-      <About />
+      {/* The work comes first: a reader with thirty seconds should meet the
+          projects before anything else. The snapshot, the experience and the
+          live repositories back it up; the biography and study notes follow. */}
       <Projects />
+      <Highlights />
+      <Experience />
       <OpenSource repos={repos} activity={activity} />
+      <About />
+      <Skills />
       <Frontier />
       <Research />
-      <Skills />
-      <Experience />
       <Contact />
     </>
   );

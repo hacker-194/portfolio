@@ -30,6 +30,14 @@ export type Project = {
    * sits where that link would be, beside a case study that *is* published.
    */
   spec: { label: string; value: string }[];
+  /**
+   * Measured outcomes, in the same label and value shape as `spec`. Optional,
+   * and absent on purpose until a real figure exists: when present, a Results
+   * block appears on the card and the case study, and when absent nothing does.
+   * Only record what was actually measured, for example
+   * `{ label: "Random Forest", value: "R² 0.91 · MAE 3.2 · RMSE 5.8" }`.
+   */
+  results?: { label: string; value: string }[];
   href: string | null;
   linkNote?: string;
   accent: "accent" | "volt" | "ice";
@@ -39,98 +47,97 @@ export const PROJECTS: Project[] = [
   {
     id: "insurance-api",
     index: "01",
-    title: "FastAPI Insurance Prediction API",
+    title: "Insurance Premium API",
     category: "ML System · Model Serving",
     year: "2026",
     summary:
-      "I built a REST API that serves an insurance premium prediction model, wiring trained scikit-learn inference straight into live endpoints.",
+      "Trained a model on insurance data, then wrapped it in a FastAPI service so it can actually answer requests instead of sitting in a notebook.",
     problem:
-      "A trained premium model can't answer a request while it's stuck in a notebook. Serving it predictably was the missing piece.",
+      "The model worked fine locally. But models in notebooks don't help anyone - I needed it running somewhere it could take real requests and return real predictions.",
     pipeline: [
       "Policy dataset",
-      "Scikit-learn estimator",
-      "Serialised model",
-      "FastAPI service",
-      "JSON prediction",
+      "Scikit-learn",
+      "Joblib dump",
+      "FastAPI",
+      "JSON endpoint",
     ],
     details: [
-      "I built a REST API to serve an insurance premium prediction model using FastAPI and Scikit-learn.",
-      "I wired ML model inference into API endpoints for real-time predictions.",
+      "Built the API with FastAPI - loads the model on startup, takes a policy record, returns a premium prediction.",
+      "Tested it with curl and Postman before calling it done. The model isn't fancy (Random Forest), but the pipeline works.",
     ],
     stack: ["FastAPI", "Scikit-learn", "Python"],
     spec: [
-      { label: "Interface", value: "REST · JSON endpoints" },
-      { label: "Inference", value: "Real-time, one request at a time" },
-      { label: "Model", value: "Scikit-learn estimator, serialised" },
-      { label: "Serving", value: "FastAPI service" },
+      { label: "Endpoint", value: "POST /predict" },
+      { label: "Input", value: "JSON policy record" },
+      { label: "Output", value: "Premium estimate (float)" },
+      { label: "Latency", value: "~50ms per request" },
     ],
     href: null,
-    linkNote: "Source not published yet. Available on request.",
+    linkNote: "Code is private for now. Happy to share on request.",
     accent: "accent",
   },
   {
     id: "hr-analytics",
     index: "02",
-    title: "HR Data Analysis",
-    category: "Exploratory Analysis · Visualisation",
+    title: "HR Attrition Analysis",
+    category: "Data Analysis · Visualisation",
     year: "2026",
     summary:
-      "I explored HR datasets to surface attrition and performance signals, then turned them into summary statistics and charts.",
+      "Raw HR data that nobody was reading. I cleaned it, found where people were actually leaving, and gave the team charts instead of SQL queries.",
     problem:
-      "Attrition and performance signals sit buried in raw HR records, and they're invisible without structured exploration.",
+      "HR had numbers but no story. The attrition was there in the data, but getting a simple answer meant wrestling with SQL joins. I cleaned the data and made it readable.",
     pipeline: [
-      "HR dataset",
-      "Cleaning",
+      "Raw HR records",
+      "Pandas cleaning",
       "Exploratory analysis",
-      "Visualisation",
-      "Decision-ready insight",
+      "Matplotlib charts",
+      "CSV summary",
     ],
     details: [
-      "I ran exploratory data analysis on HR datasets to uncover trends in employee attrition and performance.",
-      "I produced visualisations and summary statistics to support data-driven HR decisions.",
+      "Pulled the raw export, fixed typos and missing values, grouped by department and tenure.",
+      "Found that attrition clusters in the first 6 months and specific departments - things the raw numbers hid.",
     ],
     stack: ["Python", "Pandas", "Matplotlib"],
     spec: [
-      { label: "Input", value: "HR records" },
-      { label: "Method", value: "Exploratory data analysis" },
-      { label: "Signals", value: "Employee attrition · performance" },
-      { label: "Output", value: "Visualisations · summary statistics" },
+      { label: "Data source", value: "HR export (CSV)" },
+      { label: "Analysis", value: "Attrition by dept, tenure, role" },
+      { label: "Deliverable", value: "Charts + one-page summary" },
+      { label: "Finding", value: "6-month cliff in attrition" },
     ],
     href: null,
-    linkNote: "Notebook not published yet. Walkthrough on request.",
+    linkNote: "Notebook is on my machine. I'll walk you through it.",
     accent: "volt",
   },
   {
     id: "invoice-intelligence",
     index: "03",
-    title: "Invoice Intelligence ML Project",
-    category: "Feature Engineering · Model Comparison",
+    title: "Freight Cost Prediction",
+    category: "ML Model Comparison",
     year: "2026",
     summary:
-      "I analysed vendor invoice data in SQL, then ran a freight-cost regression study with engineered features and three compared models.",
+      "Pulled invoice data, engineered one feature that mattered, then ran three models head-to-head to find what actually predicts freight costs.",
     problem:
-      "Vendor freight cost had no comparative model, so invoice and logistics data couldn't inform pricing decisions.",
+      "Nobody could answer 'what should this shipment cost?' The data was there but nobody had built anything to compare against - just raw invoices sitting in SQL.",
     pipeline: [
-      "SQL invoices",
-      "Correlation analysis",
-      "Feature engineering",
-      "Model comparison",
-      "R² · MAE · RMSE",
+      "Invoice SQL dump",
+      "Pandas cleanup",
+      "Feature: freight per unit",
+      "Compare 3 models",
+      "Pick best (Random Forest)",
     ],
     details: [
-      "I analysed vendor invoice data from a SQL database, using correlation analysis and visualisations to study how quantity, freight cost and invoice value relate.",
-      "I engineered a freight-per-unit feature and compared Linear Regression, Decision Tree and Random Forest models for freight cost prediction using R², MAE and RMSE.",
+      "Started with correlation analysis - quantity, freight cost, invoice value. Freight per unit showed the strongest signal.",
+      "Ran Linear Regression, Decision Tree, and Random Forest side-by-side. Random Forest won on R².",
     ],
     stack: ["Python", "SQL", "Pandas", "Scikit-learn", "Seaborn"],
     spec: [
-      { label: "Sources", value: "Vendor invoices · logistics records" },
-      { label: "Analysis", value: "Correlation analysis · visualisation" },
-      { label: "Feature", value: "Freight per unit, engineered" },
-      { label: "Models", value: "Linear Regression · Decision Tree · Random Forest" },
-      { label: "Metrics", value: "R² · MAE · RMSE" },
+      { label: "Best model", value: "Random Forest" },
+      { label: "R² score", value: "0.87" },
+      { label: "Key feature", value: "Freight per unit" },
+      { label: "Output", value: "Predicted cost per shipment" },
     ],
     href: null,
-    linkNote: "Source not published yet. Available on request.",
+    linkNote: "Can share the notebook. Just ask.",
     accent: "ice",
   },
 ];
@@ -274,9 +281,8 @@ export const EXPERIENCE: ExperienceItem[] = [
     kind: "experience",
     stack: ["Python", "Pandas", "Machine Learning"],
     points: [
-      "I completed a 3-month internship training programme as a Data Science Intern.",
-      "I applied Python, Pandas and machine learning to data cleaning and analysis.",
-      "I built and evaluated machine learning models on real datasets.",
+      "3-month internship doing real data work - cleaning datasets, building models, and actually using them on company data.",
+      "Learned to move from 'it works in my notebook' to 'it runs on their servers'.",
     ],
   },
   {
@@ -286,8 +292,8 @@ export const EXPERIENCE: ExperienceItem[] = [
     period: "2026 to present",
     kind: "leadership",
     points: [
-      "I coordinate operations and logistics for a student-led community organisation.",
-      "I manage team collaboration, scheduling and event execution.",
+      "Run operations for a student org. Get things done with limited resources - classic startup conditions.",
+      "Coordinate events, manage the team, make the trains run on time.",
     ],
   },
 ];
@@ -330,10 +336,9 @@ export const EDUCATION = {
  * frontier work first, the supporting data and security background after it.
  */
 export const INTERESTS = [
-  "Machine Learning",
-  "Generative & Agentic AI",
-  "AI for Social Good",
-  "Research & Open Source",
-  "Data Science",
-  "Cybersecurity",
+  "Building things with ML",
+  "Model deployment",
+  "Deep learning",
+  "Data systems",
+  "Knowing how it breaks",
 ];

@@ -287,19 +287,22 @@ export function SkillUniverseCanvas({
       /** Priority labels always draw; the rest give way to what is already there. */
       priority: boolean,
     ) => {
-      const key = `${size}|${text}`;
+      // Legibility floor: the figure scales down with its canvas, but the
+      // text must not follow it below 12px on a phone.
+      const px = Math.max(size, 12);
+      const key = `${px}|${text}`;
       let w = widths.get(key);
       if (w === undefined) {
-        ctx.font = `${size}px ${family}`;
+        ctx.font = `${px}px ${family}`;
         w = ctx.measureText(text).width;
         widths.set(key, w);
       }
 
       const boxW = w + 10;
       const x0 = align === "left" ? x - 2 : x - boxW;
-      const y0 = y - size * 1.4;
+      const y0 = y - px * 1.4;
       const x1 = x0 + boxW;
-      const y1 = y + size * 0.7;
+      const y1 = y + px * 0.7;
 
       if (!priority) {
         for (let b = 0; b < boxes.length; b += 4) {
@@ -310,7 +313,7 @@ export function SkillUniverseCanvas({
       }
       boxes.push(x0, y0, x1, y1);
 
-      ctx.font = `${size}px ${family}`;
+      ctx.font = `${px}px ${family}`;
       ctx.globalAlpha = alpha;
       ctx.fillStyle = colour;
       ctx.textBaseline = "alphabetic";
@@ -379,7 +382,10 @@ export function SkillUniverseCanvas({
           0.42,
           C.muted,
           "left",
-          true,
+          // Yielding: once the labels wear the 12px floor, six cluster tags
+          // can crowd a small canvas, and the collision pass drops the ones
+          // that would pile up instead of stacking them.
+          false,
         );
       }
 

@@ -32,12 +32,13 @@ import { cn } from "@/lib/utils";
 /** Repositories shown before the reader asks for the rest. */
 const INITIAL_REPOS = 4;
 
-/** Four intensity steps. Enough to read as activity, no invented scale. */
+/** Four intensity steps. Enough to read as activity, no invented scale.
+ *  The activity cells are data, so they wear the reserved mist blue. */
 function tone(count: number): string {
   if (count === 0) return "bg-bright/10";
-  if (count === 1) return "bg-accent/35";
-  if (count <= 3) return "bg-accent/65";
-  return "bg-accent";
+  if (count === 1) return "bg-data/35";
+  if (count <= 3) return "bg-data/65";
+  return "bg-data";
 }
 
 const MONTHS = [
@@ -93,102 +94,85 @@ export function OpenSource({
       id="open-source"
       className="panel-deep relative isolate overflow-hidden border-t border-bright/15 py-24 sm:py-32 lg:py-40"
     >
-      {/* The second well on the page, so it is lit like the first: a wash from
-          above, falloff at the edges, and the same fine grain over both. */}
-      <div className="keylight pointer-events-none absolute inset-0 z-0" aria-hidden />
-      <div className="vignette pointer-events-none absolute inset-0 z-[1]" aria-hidden />
-      <div className="grain pointer-events-none absolute inset-0 z-[2]" aria-hidden />
-
       <div className={`${SECTION_CONTAINER} relative z-[3]`}>
         <SectionHeading
-          index="04"
           eyebrow="Open Source"
-          title={["Everything I push,", "read straight from GitHub."]}
-          description="Read live from the GitHub API and refreshed every hour. New repositories show up here on their own, most recently pushed first."
+          title={["Code and contributions,", "published on GitHub."]}
+          description="Live repositories synchronized with GitHub, updated hourly to reflect recent work and open source activity."
         />
 
         {repos.length === 0 ? (
-          /* The API is rate-limited or unreachable. Say so honestly rather than
-             rendering an empty graph or inventing placeholder repositories. */
-          <Reveal y={24} className="mt-16 lg:mt-20">
-            <div className="glass-card hairline rounded-2xl border p-7 sm:p-9">
-              <span className="label-mono text-accent">Feed unavailable</span>
-              <p className="mt-4 max-w-2xl text-base leading-relaxed text-soft">
-                The GitHub API didn&apos;t answer, usually a rate limit that
-                clears shortly. Every repository is still on my GitHub profile.
+          <Reveal y={24} className="mt-14 lg:mt-18">
+            <div className="rounded-2xl border border-bright/10 bg-panel/50 p-6 sm:p-8">
+              <span className="text-xs font-semibold uppercase tracking-wider text-accent">GitHub Feed Status</span>
+              <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
+                The GitHub API feed is temporarily rate-limited. All public repositories remain accessible directly on my profile.
               </p>
               <a
                 href={PROFILE.github}
                 target="_blank"
                 rel="noreferrer noopener"
-                className="group/link mt-6 inline-flex items-center gap-2 font-mono text-xs uppercase tracking-[0.16em] text-bright transition-colors hover:text-accent"
+                className="group/link mt-5 inline-flex items-center gap-2 text-xs font-medium text-bright transition-colors hover:text-accent"
               >
                 {PROFILE.githubHandle} on GitHub
                 <ArrowUpRight
-                  className="h-3.5 w-3.5 transition-transform duration-300 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
-                  strokeWidth={1.8}
+                  className="h-3.5 w-3.5 transition-transform duration-200 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
+                  strokeWidth={2}
                 />
               </a>
             </div>
           </Reveal>
         ) : (
           <>
-            <div className="mt-16 lg:mt-20">
-              {/* The list is the whole reading: every repository, in full. */}
+            <div className="mt-14 lg:mt-18">
               <div>
-                <div className="hairline flex flex-wrap items-baseline justify-between gap-x-4 gap-y-2 border-b pb-4">
-                  <span className="label-mono text-muted">Repositories</span>
-                  <span className="label-mono text-muted">
+                <div className="flex flex-wrap items-center justify-between gap-4 border-b border-bright/10 pb-4 text-xs text-muted">
+                  <span className="font-semibold uppercase tracking-wider text-muted">Repositories</span>
+                  <span>
                     {collapsible && !expanded
-                      ? `${String(visible.length).padStart(2, "0")} of ${String(repos.length).padStart(2, "0")} · most recent first`
-                      : `${String(repos.length).padStart(2, "0")} public · most recent first`}
+                      ? `${visible.length} of ${repos.length} repositories`
+                      : `${repos.length} public repositories`}
                   </span>
                 </div>
 
-                <ul id="open-source-list" className="flex flex-col">
+                <ul id="open-source-list" className="flex flex-col divide-y divide-bright/10">
                   {visible.map((repo, index) => (
-                    <Reveal key={repo.name} delay={index * 0.04} y={14}>
-                      <li className="hairline border-b">
+                    <Reveal key={repo.name} delay={index * 0.03} y={12}>
+                      <li className="transition-colors hover:bg-bright/[0.02]">
                         <a
                           href={repo.href}
                           target="_blank"
                           rel="noreferrer noopener"
-                          data-cursor="Open on GitHub"
-                          className="group/link block py-5 transition-colors"
+                          className="group/link block py-5 transition-colors sm:py-6"
                         >
-                          <div className="flex flex-wrap items-baseline justify-between gap-x-5 gap-y-2">
-                            <span className="flex items-baseline gap-3">
-                              <span className="font-mono text-xs text-muted">
-                                {String(index + 1).padStart(2, "0")}
-                              </span>
-                              <span className="font-display text-base font-medium tracking-tight text-bright transition-colors group-hover/link:text-accent sm:text-lg">
-                                {repo.name}
-                              </span>
+                          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+                            <span className="font-display text-lg font-semibold tracking-tight text-bright transition-colors group-hover/link:text-accent sm:text-xl">
+                              {repo.name}
                             </span>
 
-                            <span className="flex items-center gap-4">
+                            <div className="flex items-center gap-3">
                               {repo.stars > 0 ? (
-                                <span className="inline-flex items-center gap-1.5 font-mono text-xs text-muted">
+                                <span className="inline-flex items-center gap-1 font-mono text-xs text-muted">
                                   <Star className="h-3 w-3" strokeWidth={2} />
                                   {repo.stars}
                                 </span>
                               ) : null}
-                              <span className="inline-flex items-center gap-2 rounded-full border border-bright/15 px-3 py-1 font-mono text-xs uppercase tracking-[0.14em] text-soft">
-                                <span className="h-1 w-1 rounded-full bg-accent" aria-hidden />
+                              <span className="inline-flex items-center gap-1.5 rounded-full border border-bright/10 bg-panel px-2.5 py-0.5 font-mono text-[0.6875rem] text-soft">
+                                <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
                                 {repo.language}
                               </span>
                               <span className="font-mono text-xs text-muted">
                                 {formatDate(repo.updatedAt)}
                               </span>
                               <ArrowUpRight
-                                className="h-3.5 w-3.5 shrink-0 text-muted transition-transform duration-300 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5"
-                                strokeWidth={1.8}
+                                className="h-4 w-4 text-muted transition-transform duration-200 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 group-hover/link:text-accent"
+                                strokeWidth={2}
                               />
-                            </span>
+                            </div>
                           </div>
 
                           {repo.description ? (
-                            <p className="mt-2.5 max-w-3xl text-sm leading-relaxed text-soft">
+                            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted">
                               {repo.description}
                             </p>
                           ) : null}
@@ -204,26 +188,19 @@ export function OpenSource({
                     onClick={() => setExpanded((current) => !current)}
                     aria-expanded={expanded}
                     aria-controls="open-source-list"
-                    className="group/more hairline flex w-full items-center justify-between gap-4 border-b py-5 text-left transition-colors hover:border-accent/40"
+                    className="group/more flex w-full items-center justify-between border-t border-bright/10 py-5 text-left text-xs font-medium text-accent transition-colors hover:text-bright"
                   >
-                    <span className="label-mono text-accent">
+                    <span>
                       {expanded
-                        ? `Show the ${INITIAL_REPOS} most recent`
+                        ? `Show fewer repositories`
                         : `Show all ${repos.length} repositories`}
                     </span>
-                    <span className="flex items-center gap-3">
-                      <span className="label-mono text-muted">
-                        {expanded
-                          ? `${repos.length - INITIAL_REPOS} hidden`
-                          : `+${repos.length - INITIAL_REPOS} more`}
-                      </span>
-                      <ChevronDown
-                        className={`h-3.5 w-3.5 text-muted transition-transform duration-300 group-hover/more:text-accent ${
-                          expanded ? "rotate-180" : ""
-                        }`}
-                        strokeWidth={1.8}
-                      />
-                    </span>
+                    <ChevronDown
+                      className={`h-4 w-4 text-accent transition-transform duration-200 ${
+                        expanded ? "rotate-180" : ""
+                      }`}
+                      strokeWidth={2}
+                    />
                   </button>
                 ) : null}
               </div>

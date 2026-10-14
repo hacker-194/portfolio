@@ -1,9 +1,9 @@
 "use client";
 
 import { useEffect, useMemo, useRef, useState } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
 import { motion } from "motion/react";
-import { SkillUniverseCanvas } from "@/components/SkillUniverseCanvas";
 import { Reveal } from "@/components/Reveal";
 import { SKILL_GROUPS } from "@/lib/data";
 import { useStillMotion } from "@/lib/hooks";
@@ -33,6 +33,28 @@ import { cn } from "@/lib/utils";
  * reader, so every node is a real button here, in the same five domains the
  * figure draws.
  */
+
+/**
+ * The canvas is the heaviest single component and sits far below the fold, so it
+ * is split out of the main bundle and fetched after hydration. The placeholder
+ * takes the same box as the figure, so nothing shifts when it arrives. The text
+ * panel beside it is the complete reading and does not wait for the canvas.
+ */
+const SkillUniverseCanvas = dynamic(
+  () =>
+    import("@/components/SkillUniverseCanvas").then(
+      (mod) => mod.SkillUniverseCanvas,
+    ),
+  {
+    ssr: false,
+    loading: () => (
+      <div
+        className="relative block aspect-[4/3] h-auto w-full sm:aspect-[16/11]"
+        aria-hidden
+      />
+    ),
+  },
+);
 
 /** "1 entry" reads better than "1 entries", and the count is on screen often. */
 function plural(count: number, one: string, many: string): string {
@@ -65,7 +87,7 @@ export function SkillUniverse() {
   return (
     <div className="mt-16 grid gap-10 lg:mt-20 lg:grid-cols-12 lg:gap-10">
       <Reveal y={30} className="lg:col-span-7 lg:self-start">
-        <figure className="glass-panel relative overflow-hidden rounded-2xl border">
+        <figure className="glass-panel relative overflow-hidden rounded-[3px] border">
           <div className="keylight pointer-events-none absolute inset-0" aria-hidden />
 
           <SkillUniverseCanvas
@@ -150,11 +172,11 @@ function SkillDetail({ evidence, reduce, onSelect, onClear }: DetailProps) {
       initial={reduce ? false : { opacity: 0, y: 12 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.45, ease: EASE_CINEMATIC }}
-      className="glass-panel flex flex-col gap-6 rounded-2xl border p-6 outline-none sm:p-7"
+      className="glass-panel flex flex-col gap-6 rounded-[3px] border p-6 outline-none sm:p-7"
     >
       <div className="flex flex-col gap-2.5">
         <span className="label-mono text-accent">{group.title}</span>
-        <h3 className="font-display text-3xl font-semibold tracking-tight text-bright sm:text-4xl">
+        <h3 className="font-display text-3xl font-normal tracking-tight text-bright sm:text-4xl">
           {node.label}
         </h3>
         <p className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
@@ -317,7 +339,7 @@ function SkillIndex({ reduce, active, onOpen, onSelect }: IndexProps) {
         those entries is listed the moment you select the node.
       </p>
 
-      <div className="shadow-lux flex flex-col gap-px overflow-hidden rounded-2xl border border-bright/15 bg-bright/5">
+      <div className="flex flex-col gap-px overflow-hidden rounded-[3px] border border-bright/15 bg-bright/5">
         {SKILL_GROUPS.map((group, index) => {
           const isActive = active === group.id;
           // The same five domains, in the same order the figure draws them.

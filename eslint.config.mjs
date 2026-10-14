@@ -36,6 +36,9 @@ const RETIRED = [
   "kept as an archive",
   "fine-tuning landscape",
   "Built with Next.js",
+  "This isn't shipped production work",
+  "Decision-ready",
+  "Read live from the GitHub API and refreshed",
 
   /*
    * Stock vocabulary. None of these say anything a plainer word would not, and
@@ -72,6 +75,23 @@ const RETIRED = [
   "myriad",
   "plethora",
   "curated",
+  "showcas",
+  "journey",
+  "realm",
+  "utiliz",
+  "moreover",
+  "furthermore",
+  "crucial",
+  "vibrant",
+  "stunning",
+  "innovative",
+  "powerful",
+  "deliverable",
+  "fast-paced",
+  "at the end of the day",
+  "raised the bar",
+  "needle-moving",
+  "state of the art",
 ];
 
 /** Written as an escape so this file can be read without being a false positive. */

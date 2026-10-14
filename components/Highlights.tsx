@@ -35,55 +35,47 @@ const FACTS = [
     note: `${EXPERIENCE[0].org} · ${EXPERIENCE[0].period.split("·")[0].trim()}`,
   },
   {
-    label: "Availability",
-    value: "Open to AI/ML roles",
-    note: "Engineering & research collaboration",
+    label: "Status",
+    value: "Looking for work",
+    note: "ML roles with real data",
   },
 ];
 
 export function Highlights() {
   return (
     <section
+      id="highlights"
       aria-label="Profile at a glance"
-      className="relative overflow-hidden border-b border-bright/15 py-16 sm:py-20"
+      className="relative overflow-hidden border-t border-bright/10 py-16 sm:py-20"
     >
       <div className={SECTION_CONTAINER}>
         <Reveal y={20}>
-          <div className="glass-card hairline relative overflow-hidden rounded-2xl border p-7 sm:p-9">
-            <span
-              className="accent-rule pointer-events-none absolute inset-x-0 top-0 h-px"
-              aria-hidden
-            />
-
-            <div className="relative flex flex-wrap items-baseline justify-between gap-3">
-              <span className="label-mono text-volt">
-                Profile · at a glance
+          <div className="rounded-2xl border border-bright/10 bg-panel/40 p-6 backdrop-blur-sm sm:p-8">
+            <div className="flex flex-wrap items-center justify-between gap-3 border-b border-bright/10 pb-5">
+              <span className="text-xs font-semibold uppercase tracking-wider text-accent">
+                Profile Overview
               </span>
-              <span className="label-mono text-muted">
-                {PROFILE.location}
+              <span className="text-xs text-muted">
+                {PROFILE.location} · {PROFILE.timezone}
               </span>
             </div>
 
-            <dl className="relative mt-9 grid gap-x-10 gap-y-9 sm:grid-cols-2 lg:grid-cols-4">
+            <dl className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
               {FACTS.map((fact, index) => (
-                <Reveal key={fact.label} delay={0.06 * index} y={16}>
-                  <div className="hairline border-t pt-4">
-                    <dt className="flex items-baseline gap-3">
-                      <span className="font-mono text-xs tracking-[0.2em] text-accent">
-                        {String(index + 1).padStart(2, "0")}
-                      </span>
-                      <span className="label-mono text-muted">
-                        {fact.label}
-                      </span>
-                    </dt>
-                    <dd className="mt-3 font-display text-base font-semibold leading-snug text-bright sm:text-lg">
-                      {fact.value}
-                    </dd>
-                    <dd className="mt-1.5 text-sm leading-relaxed text-muted">
-                      {fact.note}
-                    </dd>
-                  </div>
-                </Reveal>
+                <div
+                  key={fact.label}
+                  className="rounded-xl border border-bright/10 bg-ink/60 p-5 transition-all duration-300 hover:border-accent/30 hover:bg-panel2"
+                >
+                  <dt className="text-xs font-medium uppercase tracking-wider text-muted">
+                    {fact.label}
+                  </dt>
+                  <dd className="mt-2 font-display text-lg font-bold tracking-tight text-bright">
+                    {fact.value}
+                  </dd>
+                  <dd className="mt-1 text-xs leading-relaxed text-muted">
+                    {fact.note}
+                  </dd>
+                </div>
               ))}
             </dl>
           </div>

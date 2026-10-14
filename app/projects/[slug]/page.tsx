@@ -3,8 +3,10 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Clock } from "lucide-react";
 import { ProjectVisual } from "@/components/ProjectVisual";
+import { FactList } from "@/components/FactList";
 import { StudyBlock } from "@/components/StudyBlock";
 import { PROJECTS } from "@/lib/data";
+import { PROFILE } from "@/lib/site";
 import { SECTION_CONTAINER } from "@/lib/layout";
 import { ACCENT_CLASS, CHIP, VISUAL } from "@/lib/visuals";
 import { cn } from "@/lib/utils";
@@ -29,7 +31,21 @@ export async function generateMetadata({
   return {
     title: project.title,
     description: project.summary,
-    openGraph: { title: project.title, description: project.summary },
+    alternates: { canonical: `/projects/${project.id}` },
+    // Next replaces `openGraph` wholesale rather than merging it with the
+    // layout's, so the fields the card needs are restated here.
+    openGraph: {
+      type: "article",
+      url: `/projects/${project.id}`,
+      title: project.title,
+      description: project.summary,
+      siteName: PROFILE.name,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: project.title,
+      description: project.summary,
+    },
   };
 }
 
@@ -77,7 +93,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
           <span className="label-mono text-muted">{project.year}</span>
         </div>
 
-        <h1 className="display-tight mt-8 max-w-4xl text-[clamp(2rem,5vw,4rem)] font-medium text-bright">
+        <h1 className="display-tight mt-8 max-w-4xl text-[clamp(2rem,5vw,4rem)] font-light text-bright">
           {project.title}
         </h1>
 
@@ -122,7 +138,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
               <ol className="flex flex-wrap items-center gap-x-2.5 gap-y-2 font-mono text-xs uppercase tracking-[0.1em] text-soft">
                 {project.pipeline.map((stage, index) => (
                   <li key={stage} className="flex items-center gap-2.5">
-                    <span className="rounded-lg border border-bright/15 bg-bright/5 px-2.5 py-1.5">
+                    <span className="rounded-[2px] border border-bright/15 bg-bright/5 px-2.5 py-1.5">
                       {stage}
                     </span>
                     {index < project.pipeline.length - 1 ? (
@@ -138,22 +154,14 @@ export default async function CaseStudyPage({ params }: PageProps) {
             </StudyBlock>
 
             <StudyBlock label="Specification">
-              <dl className="flex flex-col">
-                {project.spec.map((item) => (
-                  <div
-                    key={item.label}
-                    className="flex flex-wrap items-baseline gap-x-6 gap-y-1 border-b border-bright/10 py-3 first:pt-0 last:border-b-0 last:pb-0"
-                  >
-                    <dt className="label-mono w-28 shrink-0 text-muted">
-                      {item.label}
-                    </dt>
-                    <dd className="text-sm leading-snug text-bright">
-                      {item.value}
-                    </dd>
-                  </div>
-                ))}
-              </dl>
+              <FactList items={project.spec} />
             </StudyBlock>
+
+            {project.results?.length ? (
+              <StudyBlock label="Results">
+                <FactList items={project.results} />
+              </StudyBlock>
+            ) : null}
 
             <StudyBlock label="Stack">
               <ul className="flex flex-wrap gap-2">
@@ -193,7 +201,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
               />
             </a>
           ) : (
-            <div className="inline-flex items-center gap-3 rounded-lg border border-dashed border-bright/15 px-3.5 py-2">
+            <div className="inline-flex items-center gap-3 rounded-[2px] border border-dashed border-bright/15 px-3.5 py-2">
               <Clock className="h-3.5 w-3.5 shrink-0 text-muted" strokeWidth={1.8} />
               <span className="font-mono text-xs leading-tight tracking-wide text-muted">
                 {project.linkNote}

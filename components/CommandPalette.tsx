@@ -10,8 +10,8 @@ import {
 import { createPortal } from "react-dom";
 import { AnimatePresence, motion } from "motion/react";
 import { Search } from "lucide-react";
-import { scrollToHash } from "@/components/SmoothScroll";
-import { useScrollLock } from "@/lib/load";
+import { scrollToHash } from "@/components/ScrollSync";
+import { useScrollLock } from "@/lib/scroll-lock";
 import { useStillMotion } from "@/lib/hooks";
 import { PROJECTS } from "@/lib/data";
 import { ALL_SECTIONS, PROFILE } from "@/lib/site";
@@ -289,8 +289,7 @@ export function CommandPalette() {
         }}
         aria-label={`Open the command palette, shortcut ${combo}`}
         aria-expanded={open}
-        data-cursor="Search"
-        className="hidden h-9 items-center gap-2 rounded-lg border border-bright/15 px-3 text-muted transition-colors duration-300 hover:border-accent/60 hover:text-bright lg:flex"
+        className="hidden h-9 items-center gap-2 rounded-[2px] border border-bright/15 px-3 text-muted transition-colors duration-300 hover:border-accent/60 hover:text-bright lg:flex"
       >
         <Search className="h-3.5 w-3.5" strokeWidth={1.8} />
         <span className="font-mono text-xs tracking-[0.14em]">{combo}</span>
@@ -318,7 +317,7 @@ export function CommandPalette() {
                     role="dialog"
                     aria-modal="true"
                     aria-label="Command palette"
-                    className="shadow-lux absolute left-1/2 top-[14vh] w-[min(94vw,36rem)] -translate-x-1/2 overflow-hidden rounded-2xl border border-bright/12 bg-panel"
+                    className="shadow-lift absolute left-1/2 top-[14vh] w-[min(94vw,36rem)] -translate-x-1/2 overflow-hidden rounded-[3px] border border-bright/12 bg-panel"
                   >
                     <div className="flex items-center gap-3 border-b border-bright/15 px-4 py-3.5">
                       <Search
@@ -388,7 +387,7 @@ export function CommandPalette() {
                                   run(command);
                                 }}
                                 className={cn(
-                                  "flex items-baseline gap-3 rounded-lg px-3 py-2.5 transition-colors duration-150",
+                                  "flex items-baseline gap-3 rounded-[2px] px-3 py-2.5 transition-colors duration-150",
                                   active
                                     ? "bg-accent text-void"
                                     : "text-soft hover:bg-bright/5",

@@ -108,7 +108,7 @@ export function PipelineDiagram({ className }: { className?: string }) {
           <li
             key={stage.id}
             data-pipeline-stage
-            className="group relative flex items-center gap-5 rounded-lg py-3 pl-0 pr-4 transition-colors duration-300 hover:bg-bright/5"
+            className="group relative flex items-center gap-5 rounded-[2px] py-3 pl-0 pr-4 transition-colors duration-300 hover:bg-bright/5"
           >
             {/* Node dot */}
             <span className="relative z-10 grid h-11 w-11 shrink-0 place-items-center">
