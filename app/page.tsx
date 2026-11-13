@@ -6,6 +6,7 @@ import { Hero } from "@/components/Hero";
 import { Highlights } from "@/components/Highlights";
 import { OpenSource } from "@/components/OpenSource";
 import { Projects } from "@/components/Projects";
+import { References } from "@/components/References";
 import { Research } from "@/components/Research";
 import { Skills } from "@/components/Skills";
 import { SECTION_CONTAINER } from "@/lib/layout";
@@ -27,8 +28,6 @@ const STACK = [
 ];
 
 export default async function Page() {
-  // Cached and revalidated on the server; see `lib/github.ts`. Returns an empty
-  // list rather than throwing, so the section owns its own empty state.
   const [repos, activity] = await Promise.all([getRepos(), getActivity()]);
 
   return (
@@ -56,15 +55,13 @@ export default async function Page() {
         </div>
       </div>
 
-      {/* The work comes first: a reader with thirty seconds should meet the
-          projects before anything else. The snapshot, the experience and the
-          live repositories back it up; the biography and study notes follow. */}
       <Projects />
       <Highlights />
       <Experience />
       <OpenSource repos={repos} activity={activity} />
       <About />
       <Skills />
+      <References />
       <Frontier />
       <Research />
       <Contact />

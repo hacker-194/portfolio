@@ -40,12 +40,29 @@ export function ProjectCard({
     );
   });
 
+  // Extract measurable outcomes for quick scanning
+  const outcomes = project.results?.map((r) => `${r.label}: ${r.value}`) ?? [];
+
   return (
     <article
       id={project.id}
       ref={root}
       className="group relative rounded-2xl border border-bright/10 bg-panel/40 p-6 backdrop-blur-sm transition-all duration-300 hover:border-bright/20 sm:p-8 lg:p-10"
     >
+      {/* Outcomes bar - quick scan */}
+      {outcomes.length > 0 && (
+        <div className="mb-6 flex flex-wrap gap-2">
+          {outcomes.map((outcome, i) => (
+            <span
+              key={i}
+              className="rounded bg-volt/10 px-2.5 py-1 font-mono text-xs text-volt border border-volt/20"
+            >
+              {outcome}
+            </span>
+          ))}
+        </div>
+      )}
+
       <div className="relative grid items-start gap-8 lg:grid-cols-12 lg:gap-12">
         {/* Schematic visual column */}
         <div className={cn("lg:col-span-6", reversed && "lg:order-2")}>
