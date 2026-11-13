@@ -101,7 +101,7 @@ export const PROJECTS: Project[] = [
     spec: [
       { label: "Data source", value: "HR export (CSV)" },
       { label: "Analysis", value: "Attrition by dept, tenure, role" },
-      { label: "Deliverable", value: "Charts + one-page summary" },
+      { label: "Output", value: "Charts + one-page summary" },
       { label: "Finding", value: "6-month cliff in attrition" },
     ],
     href: null,

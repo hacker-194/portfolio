@@ -17,7 +17,7 @@ export function Projects() {
         <SectionHeading
           eyebrow="Featured Work"
           title={["Production machine learning,", "engineered end to end."]}
-          description="Selected engineering projects showcasing model training, dataset engineering, and live API deployment."
+          description="Selected engineering projects demonstrating model training, dataset engineering, and live API deployment."
         />
 
         <WorkIndex />

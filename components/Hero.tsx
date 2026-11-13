@@ -2,12 +2,17 @@
 
 import { motion } from "motion/react";
 import { useStillMotion } from "@/lib/hooks";
-import { ArrowDown, ArrowRight } from "lucide-react";
-import { MagneticButton } from "@/components/MagneticButton";
+import { ArrowDown, ArrowRight, Check } from "lucide-react";
 import { scrollToHash } from "@/components/ScrollSync";
 import { CORE_NODES } from "@/lib/core-nodes";
 import { PROFILE } from "@/lib/site";
 import { EASE_CINEMATIC } from "@/lib/motion";
+
+const TRUST_BADGES = [
+  { label: "3 ML systems in production", icon: Check },
+  { label: "Cloud Nepal Web internship", icon: Check },
+  { label: "BSc CS (expected 2026)", icon: Check },
+];
 
 export function Hero() {
   const reduce = useStillMotion();
@@ -16,7 +21,7 @@ export function Hero() {
     initial: reduce ? false : { opacity: 0, y: 16 },
     animate: { opacity: 1, y: 0 },
     transition: {
-      duration: reduce ? 0 : 0.6,
+      duration: reduce ? 0 : 0.5,
       ease: EASE_CINEMATIC,
       delay: reduce ? 0 : delay,
     },
@@ -39,57 +44,66 @@ export function Hero() {
 
           {/* Headline */}
           <motion.h1
-            {...rise(0.12)}
+            {...rise(0.1)}
             className="mt-6 text-[clamp(2.5rem,6.5vw,5.5rem)] font-bold leading-[1.08] tracking-tight text-bright"
           >
             I turn machine learning into dependable software.
           </motion.h1>
 
+          {/* Trust Badges */}
+          <div className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4 text-sm text-muted">
+            {TRUST_BADGES.map((badge, i) => (
+              <div key={badge.label} className="flex items-center gap-1.5">
+                <badge.icon className="h-4 w-4 text-accent" strokeWidth={2.5} aria-hidden />
+                <span>{badge.label}</span>
+              </div>
+            ))}
+          </div>
+
           {/* Statement */}
-          <motion.p
-            {...rise(0.2)}
-            className="mt-6 max-w-2xl text-base leading-relaxed text-muted sm:text-lg sm:leading-relaxed"
-          >
+          <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted sm:text-lg sm:leading-relaxed">
             I&apos;m <span className="font-semibold text-bright">{PROFILE.name}</span>, a Machine Learning Engineer based in {PROFILE.location}. I work across the full lifecycle: training PyTorch models, structuring data pipelines, and serving low-latency APIs.
-          </motion.p>
+          </p>
 
           {/* CTAs */}
           <motion.div
-            {...rise(0.28)}
+            {...rise(0.2)}
             className="mt-9 flex flex-wrap items-center gap-3.5 sm:gap-4"
           >
-            <MagneticButton
-              variant="primary"
+            <button
               onClick={() => scrollToHash("#projects")}
-              icon={<ArrowRight className="h-4 w-4" strokeWidth={2.2} />}
+              className="group inline-flex items-center gap-2 rounded-[3px] border border-accent/30 bg-accent/10 px-5 py-2.5 font-medium text-sm text-accent transition-colors hover:bg-accent/20 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-void"
             >
               View Featured Work
-            </MagneticButton>
-            <MagneticButton
-              variant="secondary"
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.2} />
+            </button>
+            <a
               href={PROFILE.resume}
-              external
-              ariaLabel="Open curriculum vitae (PDF)"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="inline-flex items-center gap-2 rounded-[3px] border border-bright/15 bg-panel/50 px-5 py-2.5 font-medium text-sm text-bright transition-colors hover:border-accent/40 hover:bg-panel"
             >
-              Curriculum Vitae ↗
-            </MagneticButton>
-            <MagneticButton
-              variant="secondary"
+              Curriculum Vitae
+              <ArrowRight className="h-4 w-4" strokeWidth={2.2} />
+            </a>
+            <a
               href={PROFILE.github}
-              external
-              ariaLabel="Open GitHub profile"
+              target="_blank"
+              rel="noreferrer noopener"
+              className="inline-flex items-center gap-2 rounded-[3px] border border-bright/15 bg-panel/50 px-5 py-2.5 font-medium text-sm text-bright transition-colors hover:border-accent/40 hover:bg-panel"
             >
-              GitHub ↗
-            </MagneticButton>
+              GitHub
+              <ArrowRight className="h-4 w-4" strokeWidth={2.2} />
+            </a>
           </motion.div>
 
           {/* Capabilities Grid */}
-          <motion.div {...rise(0.36)} className="mt-14 sm:mt-16">
+          <div className="mt-14 sm:mt-16">
             <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
               {CORE_NODES.map((node) => (
                 <div
                   key={node.id}
-                  className="rounded-xl border border-bright/10 bg-panel/50 p-4 backdrop-blur-sm transition-all duration-300 hover:border-accent/40 hover:bg-panel2"
+                  className="rounded-xl border border-bright/10 bg-panel/40 p-4 transition-all duration-300 hover:border-accent/40 hover:bg-panel2"
                 >
                   <div className="flex items-center justify-between gap-2">
                     <span className="font-display text-sm font-semibold tracking-tight text-bright">
@@ -112,15 +126,12 @@ export function Hero() {
                 </div>
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
       </div>
 
       {/* Meta bar */}
-      <motion.div
-        className="relative z-10 mx-auto w-full max-w-[1600px] px-5 pb-8 sm:px-8 sm:pb-10 lg:px-12"
-        {...rise(0.4)}
-      >
+      <div className="relative z-10 mx-auto w-full max-w-[1600px] px-5 pb-8 sm:px-8 sm:pb-10 lg:px-12">
         <div className="flex flex-wrap items-center justify-between gap-4 border-t border-bright/10 pt-5">
           <button
             type="button"
@@ -139,7 +150,7 @@ export function Hero() {
             <span className="hidden sm:inline">{PROFILE.discipline}</span>
           </div>
         </div>
-      </motion.div>
+      </div>
     </section>
   );
 }
