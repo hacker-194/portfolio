@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Khagendra Luitel: AI / ML Engineer Portfolio
 
 An editorial portfolio for an AI/ML engineer: warm paper, near-black ink, and
@@ -297,4 +298,5 @@ MIT. See `LICENSE`.
 
 - The rendered copy scores REVIEW rather than PASS on an external AI-detection
   panel. Over half the rendered text is data that cannot carry a contraction:
-  repository names, language labels, dates, skill and course titles.
+  repository names, language labels, dates, skill and course titles
+
