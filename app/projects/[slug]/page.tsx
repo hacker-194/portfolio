@@ -6,10 +6,24 @@ import { ProjectVisual } from "@/components/ProjectVisual";
 import { FactList } from "@/components/FactList";
 import { StudyBlock } from "@/components/StudyBlock";
 import { PROJECTS } from "@/lib/data";
-import { PROFILE } from "@/lib/site";
+import { PROFILE, SITE_URL } from "@/lib/site";
 import { SECTION_CONTAINER } from "@/lib/layout";
 import { ACCENT_CLASS, CHIP, VISUAL } from "@/lib/visuals";
 import { cn } from "@/lib/utils";
+
+function projectSchema(project: typeof PROJECTS[0], url: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "CreativeWork",
+    name: project.title,
+    description: project.summary,
+    url,
+    author: { "@type": "Person", name: PROFILE.name },
+    datePublished: project.year,
+    keywords: project.stack.join(", "),
+    about: project.category,
+  };
+}
 
 type PageProps = { params: Promise<{ slug: string }> };
 
@@ -62,8 +76,15 @@ export default async function CaseStudyPage({ params }: PageProps) {
   const project = PROJECTS.find((entry) => entry.id === slug);
   if (!project) notFound();
 
+  const schema = projectSchema(project, `${SITE_URL}/projects/${project.id}`);
+
   return (
-    <section className="relative overflow-hidden py-24 sm:py-28 lg:py-32">
+    <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
+      <section className="relative overflow-hidden py-24 sm:py-28 lg:py-32">
       <div className={SECTION_CONTAINER}>
         <Link
           href="/#projects"
@@ -211,5 +232,6 @@ export default async function CaseStudyPage({ params }: PageProps) {
         </div>
       </div>
     </section>
+    </>
   );
 }
