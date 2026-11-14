@@ -63,32 +63,55 @@ export type ScrollState = {
 };
 
 /**
- * Tracks the scroll offset plus direction. Both values are written inside the
- * scroll-driven animation frame (never synchronously in an effect), so the
- * component only re-renders when something actually changed.
- *
- * Below this much movement, a single frame is the page sitting still.
+ * Tracks scroll position (y) with a tiny settle threshold.
+ * Re-renders on every meaningful scroll frame for smooth progress bars.
  */
-const SETTLE_PX = 6;
-
-export function useScrollState(directionThreshold = 560): ScrollState {
-  const [state, setState] = useState<ScrollState>({
-    y: 0,
-    scrollingDown: false,
-  });
+export function useScrollProgress(settlePx = 6): number {
+  const [y, setY] = useState(0);
 
   useEffect(() => {
     let frame = 0;
     let last = window.scrollY;
-    // Set while a deliberate jump travels. Held in the instance rather than the
-    // module, so it cannot outlive the hook.
+
+    const read = () => {
+      frame = 0;
+      const y = window.scrollY;
+      const delta = y - last;
+      if (Math.abs(delta) >= settlePx) {
+        last = y;
+        setY(y);
+      }
+    };
+
+    const onScroll = () => {
+      if (frame) return;
+      frame = window.requestAnimationFrame(read);
+    };
+
+    read();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", onScroll);
+      if (frame) window.cancelAnimationFrame(frame);
+    };
+  }, [settlePx]);
+
+  return y;
+}
+
+/**
+ * Tracks scroll direction (down/up) with a threshold to avoid noise.
+ * Only re-renders on direction change, not every frame.
+ */
+export function useScrollDirection(directionThreshold = 560): boolean {
+  const [scrollingDown, setScrollingDown] = useState(false);
+
+  useEffect(() => {
+    let frame = 0;
+    let last = window.scrollY;
     let held = false;
     let holdTimer = 0;
 
-    // Exposed so a deliberate jump can stop its own travel from reading as the
-    // reader scrolling down. Returns the release, which the jump calls when it
-    // lands: the frame that lands it reads the direction from the landed
-    // position, so the last few pixels of the flight cannot hide the bar.
     holdScroll = (maxMs: number) => {
       held = true;
       window.clearTimeout(holdTimer);
@@ -99,9 +122,6 @@ export function useScrollState(directionThreshold = 560): ScrollState {
         last = window.scrollY;
       };
 
-      // A jump the reader interrupts by taking over the scroll never reports
-      // that it landed, and a jump started while Lenis is locked never runs at
-      // all. The bar must not stay stuck in place waiting for either.
       holdTimer = window.setTimeout(release, maxMs);
 
       if (frame) {
@@ -110,7 +130,6 @@ export function useScrollState(directionThreshold = 560): ScrollState {
       }
       const y = window.scrollY;
       last = y;
-      setState((previous) => (previous.y === y ? previous : { ...previous, y }));
 
       return release;
     };
@@ -119,20 +138,14 @@ export function useScrollState(directionThreshold = 560): ScrollState {
       frame = 0;
       const y = window.scrollY;
       const delta = y - last;
-      const settled = Math.abs(delta) < SETTLE_PX;
 
-      if (!settled) last = y;
+      if (Math.abs(delta) < 6) return;
 
-      setState((previous) => {
-        const scrollingDown = settled
-          ? previous.scrollingDown
-          : held
-            ? false
-            : delta > 0 && y > directionThreshold;
-        return previous.y === y && previous.scrollingDown === scrollingDown
-          ? previous
-          : { y, scrollingDown };
-      });
+      last = y;
+
+      setScrollingDown((prev) =>
+        held ? prev : delta > 0 && y > directionThreshold
+      );
     };
 
     const onScroll = () => {
@@ -150,7 +163,17 @@ export function useScrollState(directionThreshold = 560): ScrollState {
     };
   }, [directionThreshold]);
 
-  return state;
+  return scrollingDown;
+}
+
+/**
+ * Combined hook for components that need both progress and direction.
+ * Avoids duplicate listeners by using both granular hooks.
+ */
+export function useScrollState(directionThreshold = 560): ScrollState {
+  const y = useScrollProgress();
+  const scrollingDown = useScrollDirection(directionThreshold);
+  return { y, scrollingDown };
 }
 
 /**

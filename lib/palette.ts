@@ -30,7 +30,7 @@ export const PALETTE = {
   accent: "#873f36",
   data: "#426d69",
   volt: "#71685d",
-  ice: "#ded8cd",
+  ice: "#ded8cd", // decorative only, never for text (insufficient contrast)
   muted: "#68635b",
   soft: "#4c4740",
   bright: "#211e1a",

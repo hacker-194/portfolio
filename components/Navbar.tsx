@@ -3,18 +3,24 @@
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "motion/react";
 import { Menu, X } from "lucide-react";
-import { CommandPalette } from "@/components/CommandPalette";
+import dynamic from "next/dynamic";
 import { scrollToHash } from "@/components/ScrollSync";
 import { useScrollLock } from "@/lib/scroll-lock";
-import { useScrollState, useStillMotion } from "@/lib/hooks";
+import { useScrollProgress, useScrollDirection, useStillMotion } from "@/lib/hooks";
 import { ALL_SECTIONS, NAV_ITEMS, PROFILE } from "@/lib/site";
 import { EASE_CINEMATIC } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 const MOBILE_LINKS = ALL_SECTIONS;
 
+const CommandPalette = dynamic(
+  () => import("@/components/CommandPalette").then((mod) => mod.CommandPalette),
+  { ssr: false },
+);
+
 export function Navbar() {
-  const { y: scrollY, scrollingDown } = useScrollState();
+  const scrollY = useScrollProgress();
+  const scrollingDown = useScrollDirection();
   // Hydration-safe: stays false on the server AND on the first client render.
   const reduce = useStillMotion();
   const [menuOpen, setMenuOpen] = useState(false);
@@ -108,9 +114,12 @@ export function Navbar() {
           )}
         >
           {/* Brand */}
-          <button
-            type="button"
-            onClick={() => go("#home")}
+          <a
+            href="#home"
+            onClick={(e) => {
+              e.preventDefault();
+              go("#home");
+            }}
             aria-label={`${PROFILE.name}, home`}
             className="group flex items-center gap-3.5"
           >
@@ -127,17 +136,20 @@ export function Navbar() {
                 ML Systems
               </span>
             </span>
-          </button>
+          </a>
 
           {/* Desktop nav */}
           <nav className="hidden items-center gap-1.5 rounded-full border border-bright/10 bg-ink/70 px-2 py-1 backdrop-blur-md lg:flex" aria-label="Primary">
             {NAV_ITEMS.map((item) => {
               const isActive = active === item.href;
               return (
-                <button
+                <a
                   key={item.href}
-                  type="button"
-                  onClick={() => go(item.href)}
+                  href={item.href}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    go(item.href);
+                  }}
                   className={cn(
                     "relative rounded-full px-4 py-1.5 text-xs font-medium transition-all duration-200",
                     isActive
@@ -153,7 +165,7 @@ export function Navbar() {
                       transition={{ duration: 0.25, ease: EASE_CINEMATIC }}
                     />
                   ) : null}
-                </button>
+                </a>
               );
             })}
           </nav>
@@ -220,10 +232,13 @@ export function Navbar() {
             <div className="relative flex h-full flex-col overflow-y-auto px-6 pb-10 pt-24">
               <nav className="flex flex-col" aria-label="Mobile">
                 {MOBILE_LINKS.map((item, index) => (
-                  <motion.button
+                  <motion.a
                     key={item.href}
-                    type="button"
-                    onClick={() => go(item.href)}
+                    href={item.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      go(item.href);
+                    }}
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{
@@ -246,7 +261,7 @@ export function Navbar() {
                         {item.label}
                       </span>
                     </span>
-                  </motion.button>
+                  </motion.a>
                 ))}
               </nav>
 

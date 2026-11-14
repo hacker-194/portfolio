@@ -25,6 +25,18 @@ function projectSchema(project: typeof PROJECTS[0], url: string) {
   };
 }
 
+function breadcrumbSchema(project: typeof PROJECTS[0], url: string) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Home", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "Projects", item: `${SITE_URL}/#projects` },
+      { "@type": "ListItem", position: 3, name: project.title, item: url },
+    ],
+  };
+}
+
 type PageProps = { params: Promise<{ slug: string }> };
 
 export async function generateStaticParams() {
@@ -66,12 +78,17 @@ export default async function CaseStudyPage({ params }: PageProps) {
   if (!project) notFound();
 
   const schema = projectSchema(project, `${SITE_URL}/projects/${project.id}`);
+  const breadcrumbs = breadcrumbSchema(project, `${SITE_URL}/projects/${project.id}`);
 
   return (
     <>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbs) }}
       />
       <section className="relative overflow-hidden py-24 sm:py-28 lg:py-32">
         <div className={SECTION_CONTAINER}>

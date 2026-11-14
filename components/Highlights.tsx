@@ -61,7 +61,7 @@ export function Highlights() {
             </div>
 
             <dl className="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
-              {FACTS.map((fact, index) => (
+              {FACTS.map((fact) => (
                 <div
                   key={fact.label}
                   className="rounded-xl border border-bright/10 bg-ink/60 p-5 transition-all duration-300 hover:border-accent/30 hover:bg-panel2"

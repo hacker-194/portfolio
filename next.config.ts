@@ -1,12 +1,16 @@
 import type { NextConfig } from "next";
 
+// Bundle analyzer - only enable when ANALYZE=true
+const withBundleAnalyzer = (() => {
+  if (process.env.ANALYZE !== "true") return (config: NextConfig) => config;
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
+  return require("@next/bundle-analyzer")({ enabled: true });
+})();
+
 /**
- * Response headers for every route. None of these can break the page: the site
- * ships no third-party scripts, and the one embed (the Tally contact form) is an
- * iframe *into* this site, which `frame-ancestors`-style rules do not touch.
- * A full Content-Security-Policy is left out on purpose, because the inline
- * JSON-LD and the framework's own bootstrap scripts would need a per-request
- * nonce, which would turn every page dynamic.
+ * Response headers for every route.
+ * Content-Security-Policy with nonces is handled in middleware.ts to generate
+ * a fresh nonce per request for inline JSON-LD scripts and Next.js bootstrap.
  */
 const SECURITY_HEADERS = [
   { key: "X-Content-Type-Options", value: "nosniff" },
@@ -32,4 +36,4 @@ const nextConfig: NextConfig = {
   },
 };
 
-export default nextConfig;
+export default withBundleAnalyzer(nextConfig);

@@ -14,13 +14,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     {
       url: SITE_URL,
       lastModified,
-      changeFrequency: "monthly",
+      changeFrequency: "yearly",
       priority: 1,
     },
     ...PROJECTS.map((project) => ({
       url: `${SITE_URL}/projects/${project.id}`,
       lastModified,
-      changeFrequency: "monthly" as const,
+      changeFrequency: "yearly" as const,
       priority: 0.7,
     })),
   ];

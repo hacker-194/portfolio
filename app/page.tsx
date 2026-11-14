@@ -4,13 +4,13 @@ import { Experience } from "@/components/Experience";
 import { Frontier } from "@/components/Frontier";
 import { Hero } from "@/components/Hero";
 import { Highlights } from "@/components/Highlights";
-import { OpenSource } from "@/components/OpenSource";
 import { Projects } from "@/components/Projects";
 import { References } from "@/components/References";
 import { Research } from "@/components/Research";
 import { Skills } from "@/components/Skills";
 import { SECTION_CONTAINER } from "@/lib/layout";
 import { getRepos, getActivity } from "@/lib/github";
+import OpenSource from "./OpenSourceWrapper";
 
 const STACK = [
   "Python",

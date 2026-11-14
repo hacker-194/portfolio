@@ -61,6 +61,13 @@ export const viewport: Viewport = {
   colorScheme: "light",
 };
 
+// Preload critical fonts for faster FCP/LCP
+export const fontPreloads = [
+  { href: "https://fonts.gstatic.com/s/cormorant/v20/VdGPAYmumtR1gysyAfTD.woff2", weight: "700" },
+  { href: "https://fonts.gstatic.com/s/montserrat/v26/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2", weight: "400" },
+  { href: "https://fonts.gstatic.com/s/montserrat/v26/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2", weight: "500" },
+] as const;
+
 const PERSON_SCHEMA = {
   "@context": "https://schema.org",
   "@type": "Person",
@@ -105,6 +112,29 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${cormorant.variable} ${montserrat.variable} ${jetbrains.variable}`}
     >
+      <head>
+        <link
+          rel="preload"
+          href="https://fonts.gstatic.com/s/cormorant/v20/VdGPAYmumtR1gysyAfTD.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="https://fonts.gstatic.com/s/montserrat/v26/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+        <link
+          rel="preload"
+          href="https://fonts.gstatic.com/s/montserrat/v26/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
+      </head>
       <body className="relative min-h-screen bg-void font-sans text-bright antialiased">
         <script
           type="application/ld+json"

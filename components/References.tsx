@@ -31,26 +31,24 @@ export function References() {
           description="Colleagues and supervisors who have worked directly with me on ML engineering projects."
         />
 
-        <div className="mt-10 grid gap-6 md:grid-cols-2">
-          {REFERENCES.map((ref, index) => (
-            <Reveal key={ref.name} delay={index * 0.08} y={16}>
-              <blockquote className="rounded-xl border border-bright/10 bg-panel/40 p-6 transition-colors hover:border-accent/30">
-                <p className="text-base leading-relaxed text-muted">&ldquo;{ref.quote}&rdquo;</p>
-                <footer className="mt-5 flex items-start gap-4">
-                  <div className="flex-shrink-0 h-10 w-10 rounded-full bg-accent/10 flex items-center justify-center">
-                    <span className="font-bold text-accent text-sm">
-                      {ref.name.trim().split(" ")[0][0]}
-                    </span>
-                  </div>
-                  <div className="min-w-0">
-                    <p className="font-medium text-bright truncate">{ref.name}</p>
-                    <p className="text-xs text-muted">{ref.role}, {ref.org}</p>
-                  </div>
-                </footer>
-              </blockquote>
-            </Reveal>
+        <Reveal y={16} className="mt-10 grid gap-6 md:grid-cols-2">
+          {REFERENCES.map((ref) => (
+            <blockquote key={ref.name} className="rounded-xl border border-bright/10 bg-panel/40 p-6 transition-colors hover:border-accent/30">
+              <p className="text-base leading-relaxed text-muted">&ldquo;{ref.quote}&rdquo;</p>
+              <footer className="mt-5 flex items-start gap-4">
+                <div className="flex-shrink-0 h-10 w-10 rounded-full bg-accent/10 flex items-center justify-center">
+                  <span className="font-bold text-accent text-sm">
+                    {ref.name.trim().split(" ")[0][0]}
+                  </span>
+                </div>
+                <div className="min-w-0">
+                  <p className="font-medium text-bright truncate">{ref.name}</p>
+                  <p className="text-xs text-muted">{ref.role}, {ref.org}</p>
+                </div>
+              </footer>
+            </blockquote>
           ))}
-        </div>
+        </Reveal>
 
         <p className="mt-8 text-center text-xs text-muted">
           References available upon request. Contact: {PROFILE.email}

@@ -1,15 +1,11 @@
 "use client";
 
-import { motion } from "motion/react";
-import { useStillMotion } from "@/lib/hooks";
 import { GraduationCap } from "lucide-react";
-import { MaskedLines } from "@/components/MaskedLines";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading } from "@/components/SectionHeading";
 import { CERTIFICATIONS, EDUCATION, INTERESTS } from "@/lib/data";
 import { SECTION_CONTAINER } from "@/lib/layout";
 import { PROFILE } from "@/lib/site";
-import { EASE_CINEMATIC, viewportOnce } from "@/lib/motion";
 
 /**
  * What this page is hired for, in the order it can prove it: modelling, then
@@ -26,8 +22,6 @@ const FOCUS = [
 ];
 
 export function About() {
-  // Hydration-safe: stays false on the server AND on the first client render.
-  const reduce = useStillMotion();
 
   return (
     <section
@@ -43,34 +37,28 @@ export function About() {
 
         <div className="mt-14 grid gap-12 lg:mt-18 lg:grid-cols-12 lg:gap-16">
           {/* Narrative column */}
-          <div className="lg:col-span-7">
-            <Reveal>
-              <p className="text-xl sm:text-2xl font-semibold leading-snug tracking-tight text-bright">
-                {PROFILE.statement}
-              </p>
-            </Reveal>
+          <Reveal className="lg:col-span-7">
+            <p className="text-xl sm:text-2xl font-semibold leading-snug tracking-tight text-bright">
+              {PROFILE.statement}
+            </p>
 
-            <Reveal delay={0.1}>
-              <p className="mt-6 text-base leading-relaxed text-muted">
-                Most machine learning value is unlocked through disciplined fundamentals: cleaning and validating datasets, engineering features with domain context, establishing reliable baselines, and deploying via well-tested APIs. My background in cybersecurity also instills a strong security and robustness mindset: understanding failure modes makes systems significantly more resilient.
-              </p>
-            </Reveal>
+            <p className="mt-6 text-base leading-relaxed text-muted">
+              Most machine learning value is unlocked through disciplined fundamentals: cleaning and validating datasets, engineering features with domain context, establishing reliable baselines, and deploying via well-tested APIs. My background in cybersecurity also instills a strong security and robustness mindset: understanding failure modes makes systems significantly more resilient.
+            </p>
 
             <div className="mt-10 grid gap-4 sm:grid-cols-2">
-              {FOCUS.map((item, index) => (
-                <Reveal key={item.label} delay={0.05 * index} y={14}>
-                  <div className="rounded-xl border border-bright/10 bg-panel/40 p-5 transition-all duration-300 hover:border-accent/40 hover:bg-panel2">
-                    <h3 className="font-display text-base font-semibold text-bright">
-                      {item.label}
-                    </h3>
-                    <p className="mt-1.5 text-xs leading-relaxed text-muted">{item.note}</p>
-                  </div>
-                </Reveal>
+              {FOCUS.map((item) => (
+                <div key={item.label} className="rounded-xl border border-bright/10 bg-panel/40 p-5 transition-all duration-300 hover:border-accent/40 hover:bg-panel2">
+                  <h3 className="font-display text-base font-semibold text-bright">
+                    {item.label}
+                  </h3>
+                  <p className="mt-1.5 text-xs leading-relaxed text-muted">{item.note}</p>
+                </div>
               ))}
             </div>
 
             {/* Interests */}
-            <Reveal delay={0.1} className="mt-10">
+            <div className="mt-10">
               <span className="text-xs font-semibold uppercase tracking-wider text-muted">Areas of Interest</span>
               <ul className="mt-3 flex flex-wrap gap-2">
                 {INTERESTS.map((interest) => (
@@ -82,64 +70,60 @@ export function About() {
                   </li>
                 ))}
               </ul>
-            </Reveal>
-          </div>
+            </div>
+          </Reveal>
 
           {/* Credentials column */}
-          <div className="lg:col-span-5">
-            <Reveal y={24}>
-              <div className="rounded-2xl border border-bright/10 bg-panel/50 p-6 sm:p-8 backdrop-blur-sm">
-                <div className="flex items-start gap-4">
-                  <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-accent/25 bg-accent/10">
-                    <GraduationCap className="h-5 w-5 text-accent" strokeWidth={1.8} />
-                  </span>
-                  <div>
-                    <span className="text-xs font-semibold uppercase tracking-wider text-muted">Education</span>
-                    <h3 className="mt-1 font-display text-lg font-bold text-bright">
-                      {EDUCATION.degree}
-                    </h3>
-                    <p className="mt-1 text-xs text-muted">
-                      {EDUCATION.school}
-                    </p>
-                    <p className="mt-0.5 text-xs text-accent">{EDUCATION.detail}</p>
-                  </div>
-                </div>
-
-                <div className="mt-6 border-t border-bright/10 pt-5">
-                  <span className="text-xs font-semibold uppercase tracking-wider text-muted">Relevant Coursework</span>
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    {EDUCATION.coursework.map((course) => (
-                      <span key={course} className="rounded-md border border-bright/10 bg-ink px-2.5 py-1 text-xs text-soft">
-                        {course}
-                      </span>
-                    ))}
-                  </div>
+          <Reveal y={24} className="lg:col-span-5 flex flex-col gap-6">
+            <div className="rounded-2xl border border-bright/10 bg-panel/50 p-6 sm:p-8 backdrop-blur-sm">
+              <div className="flex items-start gap-4">
+                <span className="grid h-10 w-10 shrink-0 place-items-center rounded-xl border border-accent/25 bg-accent/10">
+                  <GraduationCap className="h-5 w-5 text-accent" strokeWidth={1.8} />
+                </span>
+                <div>
+                  <span className="text-xs font-semibold uppercase tracking-wider text-muted">Education</span>
+                  <h3 className="mt-1 font-display text-lg font-bold text-bright">
+                    {EDUCATION.degree}
+                  </h3>
+                  <p className="mt-1 text-xs text-muted">
+                    {EDUCATION.school}
+                  </p>
+                  <p className="mt-0.5 text-xs text-accent">{EDUCATION.detail}</p>
                 </div>
               </div>
-            </Reveal>
+
+              <div className="mt-6 border-t border-bright/10 pt-5">
+                <span className="text-xs font-semibold uppercase tracking-wider text-muted">Relevant Coursework</span>
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  {EDUCATION.coursework.map((course) => (
+                    <span key={course} className="rounded-md border border-bright/10 bg-ink px-2.5 py-1 text-xs text-soft">
+                      {course}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            </div>
 
             {/* Certifications */}
-            <Reveal delay={0.12} y={20} className="mt-6">
-              <div className="rounded-2xl border border-bright/10 bg-panel/50 p-6 backdrop-blur-sm">
-                <span className="text-xs font-semibold uppercase tracking-wider text-muted">Certifications</span>
-                <ul className="mt-4 flex flex-col divide-y divide-bright/10">
-                  {CERTIFICATIONS.map((cert) => (
-                    <li
-                      key={cert.title}
-                      className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0"
-                    >
-                      <span className="text-sm font-medium text-bright">
-                        {cert.title}
-                      </span>
-                      <span className="text-xs font-mono text-muted text-right">
-                        {cert.issuer}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </Reveal>
-          </div>
+            <div className="rounded-2xl border border-bright/10 bg-panel/50 p-6 backdrop-blur-sm">
+              <span className="text-xs font-semibold uppercase tracking-wider text-muted">Certifications</span>
+              <ul className="mt-4 flex flex-col divide-y divide-bright/10">
+                {CERTIFICATIONS.map((cert) => (
+                  <li
+                    key={cert.title}
+                    className="flex items-center justify-between gap-4 py-3 first:pt-0 last:pb-0"
+                  >
+                    <span className="text-sm font-medium text-bright">
+                      {cert.title}
+                    </span>
+                    <span className="text-xs font-mono text-muted text-right">
+                      {cert.issuer}
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </Reveal>
         </div>
       </div>
     </section>

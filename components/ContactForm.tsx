@@ -5,6 +5,7 @@ import { motion } from "motion/react";
 import { Send, Check, AlertCircle } from "lucide-react";
 import { useStillMotion } from "@/lib/hooks";
 import { EASE_CINEMATIC, viewportOnce } from "@/lib/motion";
+import { TALLY_FORM_ID } from "@/lib/site";
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
@@ -35,8 +36,7 @@ export function ContactForm() {
     setStatus("submitting");
 
     try {
-      // Replace with your Formspree/EmailJS endpoint
-      const response = await fetch("https://formspree.io/f/your-form-id", {
+      const response = await fetch(`https://api.tally.so/forms/${TALLY_FORM_ID}/submissions`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(formData),
@@ -65,6 +65,8 @@ export function ContactForm() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.4, ease: EASE_CINEMATIC }}
         className="mx-auto mt-14 w-full max-w-2xl text-center"
+        role="status"
+        aria-live="polite"
       >
         <div className="rounded-2xl border border-volt/30 bg-volt/10 p-8">
           <Check className="mx-auto h-12 w-12 text-volt" strokeWidth={1.5} aria-hidden />
@@ -180,6 +182,7 @@ export function ContactForm() {
           <button
             type="submit"
             disabled={status === "submitting"}
+            aria-busy={status === "submitting"}
             className="mt-6 w-full rounded-[3px] border border-accent/30 bg-accent/10 px-5 py-2.5 font-medium text-sm text-accent transition-colors hover:bg-accent/20 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-void disabled:opacity-50 disabled:cursor-not-allowed"
           >
             {status === "submitting" ? (
@@ -188,6 +191,7 @@ export function ContactForm() {
                   <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="3" fill="none" />
                   <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z" />
                 </svg>
+                <span className="sr-only">Sending message, please wait</span>
                 Sending...
               </>
             ) : (
@@ -199,7 +203,7 @@ export function ContactForm() {
           </button>
 
           {status === "error" && (
-            <p className="mt-4 text-center text-sm text-destructive" role="alert">
+            <p className="mt-4 text-center text-sm text-destructive" role="alert" aria-live="assertive">
               Failed to send. Please email directly at anjalluitel3@gmail.com
             </p>
           )}

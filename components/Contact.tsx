@@ -3,13 +3,13 @@
 import { motion } from "motion/react";
 import { ArrowUpRight, Check, Copy, Mail } from "lucide-react";
 import { GithubMark, LinkedinMark } from "@/components/BrandIcons";
-import { ContactForm } from "@/components/ContactForm";
 import { MagneticButton } from "@/components/MagneticButton";
 import { Reveal } from "@/components/Reveal";
 import { useCopyToClipboard, useStillMotion } from "@/lib/hooks";
 import { SECTION_CONTAINER } from "@/lib/layout";
 import { PROFILE } from "@/lib/site";
 import { EASE_CINEMATIC, viewportOnce } from "@/lib/motion";
+import ContactForm from "@/app/ContactFormWrapper";
 
 type Channel = {
   label: string;
@@ -55,62 +55,54 @@ export function Contact() {
           sheet rather than becoming a plate, because the embedded form is
           served by a third party and cannot be trusted to set dark type. */}
       <div className={SECTION_CONTAINER}>
-        <div className="flex flex-col items-center text-center">
-          <Reveal>
-            <span className="inline-flex items-center gap-2 rounded-full border border-accent/25 bg-accent/10 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-accent">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" aria-hidden />
-              Get in Touch
-            </span>
-          </Reveal>
+        <Reveal className="flex flex-col items-center text-center">
+          <span className="inline-flex items-center gap-2 rounded-full border border-accent/25 bg-accent/10 px-3.5 py-1 text-xs font-semibold uppercase tracking-wider text-accent">
+            <span className="h-1.5 w-1.5 rounded-full bg-accent animate-pulse" aria-hidden />
+            Get in Touch
+          </span>
 
           <h2 className="mt-6 text-[clamp(2.25rem,5vw,4rem)] font-bold tracking-tight text-bright">
             Let&apos;s build something <span className="text-accent">exceptional.</span>
           </h2>
 
-          <Reveal delay={0.15}>
-            <p className="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
-              {PROFILE.availability}. If you have an engineering problem, an ML project, or a research direction to explore, I&apos;d love to connect.
-            </p>
-          </Reveal>
+          <p className="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
+            {PROFILE.availability}. If you have an engineering problem, an ML project, or a research direction to explore, I&apos;d love to connect.
+          </p>
 
-          <Reveal delay={0.25} className="mt-9">
-            <div className="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
-              <MagneticButton
-                variant="primary"
-                href={`mailto:${PROFILE.email}`}
-                icon={<ArrowUpRight className="h-4 w-4" strokeWidth={2.2} />}
-              >
-                Send Email
-              </MagneticButton>
-              <MagneticButton
-                variant="secondary"
-                onClick={() => copy(PROFILE.email)}
-                icon={
-                  copied ? (
-                    <Check className="h-4 w-4 text-accent" strokeWidth={2.2} />
-                  ) : (
-                    <Copy className="h-4 w-4" strokeWidth={1.9} />
-                  )
-                }
-              >
-                {copied ? "Copied to clipboard" : "Copy email address"}
-              </MagneticButton>
-              <MagneticButton
-                variant="secondary"
-                href={PROFILE.resume}
-                external
-                ariaLabel="Open curriculum vitae (PDF)"
-                icon={<ArrowUpRight className="h-4 w-4" strokeWidth={2} />}
-              >
-                Curriculum Vitae
-              </MagneticButton>
-            </div>
-          </Reveal>
+          <div className="mt-9 flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+            <MagneticButton
+              variant="primary"
+              href={`mailto:${PROFILE.email}`}
+              icon={<ArrowUpRight className="h-4 w-4" strokeWidth={2.2} />}
+            >
+              Send Email
+            </MagneticButton>
+            <MagneticButton
+              variant="secondary"
+              onClick={() => copy(PROFILE.email)}
+              icon={
+                copied ? (
+                  <Check className="h-4 w-4 text-accent" strokeWidth={2.2} />
+                ) : (
+                  <Copy className="h-4 w-4" strokeWidth={1.9} />
+                )
+              }
+            >
+              {copied ? "Copied to clipboard" : "Copy email address"}
+            </MagneticButton>
+            <MagneticButton
+              variant="secondary"
+              href={PROFILE.resume}
+              external
+              ariaLabel="Open curriculum vitae (PDF)"
+              icon={<ArrowUpRight className="h-4 w-4" strokeWidth={2} />}
+            >
+              Curriculum Vitae
+            </MagneticButton>
+          </div>
 
-          <Reveal delay={0.35}>
-            <ContactForm />
-          </Reveal>
-        </div>
+          <div className="mt-10"><ContactForm /></div>
+        </Reveal>
 
         {/* Channels */}
         <div className="mt-16 grid overflow-hidden rounded-2xl border border-bright/10 bg-panel/50 backdrop-blur-sm sm:grid-cols-3 divide-y sm:divide-y-0 sm:divide-x divide-bright/10">
@@ -157,12 +149,10 @@ export function Contact() {
           })}
         </div>
 
-        <Reveal delay={0.15} className="mt-10">
-          <div className="flex flex-wrap items-center justify-between gap-4 border-t border-bright/10 pt-7 text-xs text-muted">
-            <span>{PROFILE.location}</span>
-            <span>{PROFILE.phone}</span>
-          </div>
-        </Reveal>
+        <div className="mt-10 flex flex-wrap items-center justify-between gap-4 border-t border-bright/10 pt-7 text-xs text-muted">
+          <span>{PROFILE.location}</span>
+          <span>{PROFILE.phone}</span>
+        </div>
       </div>
     </section>
   );

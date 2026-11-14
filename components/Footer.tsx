@@ -60,16 +60,19 @@ export function Footer() {
             <ul className="mt-5 grid w-fit max-w-full grid-cols-2 gap-x-10 gap-y-3">
               {ALL_SECTIONS.map((item) => (
                 <li key={item.href}>
-                  <button
-                    type="button"
-                    onClick={() => scrollToHash(item.href)}
+                  <a
+                    href={item.href}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      scrollToHash(item.href);
+                    }}
                     className="group flex items-center gap-2 text-sm text-soft transition-colors duration-300 hover:text-bright focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 rounded-[2px]"
                   >
                     <span className="font-mono text-xs text-accent">
                       {item.index}
                     </span>
                     {item.label}
-                  </button>
+                  </a>
                 </li>
               ))}
             </ul>
@@ -80,9 +83,12 @@ export function Footer() {
         {/* The back-to-top control sits at the left, matching the brand and the
             headings above it, rather than floating at the opposite margin. */}
         <div className="hairline mt-12 flex flex-wrap items-center justify-between gap-5 border-t pt-7">
-          <button
-            type="button"
-            onClick={() => scrollToHash("#home")}
+          <a
+            href="#home"
+            onClick={(e) => {
+              e.preventDefault();
+              scrollToHash("#home");
+            }}
             className="group inline-flex items-center gap-2.5 rounded-[2px] border border-bright/15 px-4 py-2.5 transition-all duration-300 hover:border-accent hover:text-accent focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-accent"
           >
             <ArrowUp
@@ -92,7 +98,7 @@ export function Footer() {
             <span className="label-mono text-muted transition-colors group-hover:text-bright">
               Back to top
             </span>
-          </button>
+          </a>
 
           {/* The location is already stated in the hero, the profile plaque
               and the contact section; the copyright line is not the fourth

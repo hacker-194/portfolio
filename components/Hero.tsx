@@ -52,7 +52,7 @@ export function Hero() {
 
           {/* Trust Badges */}
           <div className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4 text-sm text-muted">
-            {TRUST_BADGES.map((badge, i) => (
+            {TRUST_BADGES.map((badge) => (
               <div key={badge.label} className="flex items-center gap-1.5">
                 <badge.icon className="h-4 w-4 text-accent" strokeWidth={2.5} aria-hidden />
                 <span>{badge.label}</span>

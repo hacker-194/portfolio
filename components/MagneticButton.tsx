@@ -43,6 +43,7 @@ export function MagneticButton({
   ariaLabel,
   disabled = false,
 }: MagneticButtonProps) {
+  const label = ariaLabel ?? (typeof children === "string" ? children : "");
   const ref = useRef<HTMLElement | null>(null);
   const finePointer = useFinePointer();
   // Hydration-safe: stays false on the server AND on the first client render.
@@ -98,7 +99,7 @@ export function MagneticButton({
       <motion.a
         {...shared}
         href={href}
-        aria-label={ariaLabel}
+        aria-label={label}
         {...(external ? { target: "_blank", rel: "noreferrer noopener" } : {})}
       >
         {content}
@@ -111,7 +112,7 @@ export function MagneticButton({
       {...shared}
       type="button"
       onClick={onClick}
-      aria-label={ariaLabel}
+      aria-label={label}
       disabled={disabled}
     >
       {content}

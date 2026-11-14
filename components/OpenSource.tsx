@@ -135,52 +135,52 @@ export function OpenSource({
                   </span>
                 </div>
 
-                <ul id="open-source-list" className="flex flex-col divide-y divide-bright/10">
-                  {visible.map((repo, index) => (
-                    <Reveal key={repo.name} delay={index * 0.03} y={12}>
-                      <li className="transition-colors hover:bg-bright/[0.02]">
-                        <a
-                          href={repo.href}
-                          target="_blank"
-                          rel="noreferrer noopener"
-                          className="group/link block py-5 transition-colors sm:py-6"
-                        >
-                          <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-                            <span className="font-display text-lg font-semibold tracking-tight text-bright transition-colors group-hover/link:text-accent sm:text-xl">
-                              {repo.name}
+                <Reveal y={12} className="flex flex-col divide-y divide-bright/10">
+                  <div id="open-source-list" className="flex flex-col divide-y divide-bright/10">
+                    {visible.map((repo) => (
+                      <li key={repo.name} className="transition-colors hover:bg-bright/[0.02]">
+                      <a
+                        href={repo.href}
+                        target="_blank"
+                        rel="noreferrer noopener"
+                        className="group/link block py-5 transition-colors sm:py-6"
+                      >
+                        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
+                          <span className="font-display text-lg font-semibold tracking-tight text-bright transition-colors group-hover/link:text-accent sm:text-xl">
+                            {repo.name}
+                          </span>
+
+                          <div className="flex items-center gap-3">
+                            {repo.stars > 0 ? (
+                              <span className="inline-flex items-center gap-1 font-mono text-xs text-muted">
+                                <Star className="h-3 w-3" strokeWidth={2} />
+                                {repo.stars}
+                              </span>
+                            ) : null}
+                            <span className="inline-flex items-center gap-1.5 rounded-full border border-bright/10 bg-panel px-2.5 py-0.5 font-mono text-[0.6875rem] text-soft">
+                              <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
+                              {repo.language}
                             </span>
-
-                            <div className="flex items-center gap-3">
-                              {repo.stars > 0 ? (
-                                <span className="inline-flex items-center gap-1 font-mono text-xs text-muted">
-                                  <Star className="h-3 w-3" strokeWidth={2} />
-                                  {repo.stars}
-                                </span>
-                              ) : null}
-                              <span className="inline-flex items-center gap-1.5 rounded-full border border-bright/10 bg-panel px-2.5 py-0.5 font-mono text-[0.6875rem] text-soft">
-                                <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
-                                {repo.language}
-                              </span>
-                              <span className="font-mono text-xs text-muted">
-                                {formatDate(repo.updatedAt)}
-                              </span>
-                              <ArrowUpRight
-                                className="h-4 w-4 text-muted transition-transform duration-200 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 group-hover/link:text-accent"
-                                strokeWidth={2}
-                              />
-                            </div>
+                            <span className="font-mono text-xs text-muted">
+                              {formatDate(repo.updatedAt)}
+                            </span>
+                            <ArrowUpRight
+                              className="h-4 w-4 text-muted transition-transform duration-200 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5 group-hover/link:text-accent"
+                              strokeWidth={2}
+                            />
                           </div>
+                        </div>
 
-                          {repo.description ? (
-                            <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted">
-                              {repo.description}
-                            </p>
-                          ) : null}
-                        </a>
-                      </li>
-                    </Reveal>
+                        {repo.description ? (
+                          <p className="mt-2 max-w-3xl text-sm leading-relaxed text-muted">
+                            {repo.description}
+                          </p>
+                        ) : null}
+                      </a>
+                    </li>
                   ))}
-                </ul>
+                  </div>
+                </Reveal>
 
                 {collapsible ? (
                   <button
