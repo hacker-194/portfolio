@@ -38,7 +38,7 @@ export function About() {
         <div className="mt-14 grid gap-12 lg:mt-18 lg:grid-cols-12 lg:gap-16">
           {/* Narrative column */}
           <Reveal className="lg:col-span-7">
-            <p className="text-xl sm:text-2xl font-semibold leading-snug tracking-tight text-bright">
+            <p className="text-xl sm:text-2xl font-semibold leading-snug tracking-tight text-bright" aria-label="Profile statement">
               {PROFILE.statement}
             </p>
 

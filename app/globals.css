@@ -2,10 +2,11 @@
 
 /* ------------------------------------------------------------------
    DESIGN TOKENS
-   Paper, ink and one oxblood. The page is a warm off-white sheet, the type is
-   near-black ink set in a high-contrast display serif (Cormorant) with a
-   geometric sans for running text (Montserrat) and a mono for figures, indices
-   and labels (JetBrains Mono). The figures are drawn in the same ink.
+   Paper, ink and one oxblood. The page is a warm off-white sheet in light mode
+   and a dark ground in dark mode. The type is near-black ink set in a high-
+   contrast display serif (Cormorant) with a geometric sans for running text
+   (Montserrat) and a mono for figures, indices and labels (JetBrains Mono). The
+   figures are drawn in the same ink.
 
    Oxblood is rationed: it is the only saturated hue on the page, spent on
    interactive accents, rules and the mark, and never on a large fill. One
@@ -23,8 +24,9 @@
    site re-themes from this one block; nothing else needed its class names
    edited to pick up the palette.
 ------------------------------------------------------------------ */
-@theme {
-  /* Warm paper, charcoal ink, and one restrained oxblood accent. */
+
+/* Light mode tokens */
+:root {
   --color-void: #f4f1eb;
   --color-ink: #ebe7df;
   --color-panel: #fffdf9;
@@ -62,13 +64,35 @@
   --animate-flicker: flicker 6s ease-in-out infinite;
 }
 
-/*
- * Semantic aliases.
- *
- * The design brief specifies these names. They resolve to the token scale above
- * rather than repeating hex values, so there is still exactly one place to
- * change a colour.
- */
+/* Dark mode: inverted palette for readability on dark ground */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --color-void: #1a1a1a;
+    --color-ink: #2d2d2d;
+    --color-panel: #252525;
+    --color-panel2: #2d2d2d;
+    --color-panel3: #353535;
+    --color-edge: #4a4a4a;
+
+    --color-indigo: #f0e8e0;
+    --color-accent: #d3a094;
+    --color-volt: #b8aa98;
+    --color-ice: #f4f1eb;
+
+    --color-data: #a3c9c6;
+
+    --color-brand: #a8a098;
+    --color-brand-deep: #f4f1eb;
+
+    --color-muted: #a0a0a0;
+    --color-soft: #c0c0c0;
+    --color-bright: #f4f1eb;
+
+    --shadow-lift: 0 16px 32px -22px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255, 255, 255, 0.04);
+  }
+}
+
+/* Semantic aliases */
 :root {
   --bg-primary: var(--color-void);
   --bg-secondary: var(--color-ink);
@@ -81,16 +105,14 @@
   --glass-border: color-mix(in srgb, var(--color-bright) 14%, transparent);
 }
 
-/*
- * The deep panels.
- *
- * The hero and the open-source section are printed on ink plates: a near-black
- * ground cut out of the sheet, with the accent lifted a step and both the
- * drawing inks and the ambient greys inverted so they still read against it.
- * The scope re-declares the same token names it inherits, so
- * `text-bright`, `bg-void`, `border-*` and the rest flip for the whole subtree
- * without any component knowing.
- */
+/* The deep panels.
+   The hero and the open-source section are printed on ink plates: a near-black
+   ground cut out of the sheet, with the accent lifted a step and both the
+   drawing inks and the ambient greys inverted so they still read against it.
+   The scope re-declares the same token names it inherits, so
+   `text-bright`, `bg-void`, `border-*` and the rest flip for the whole subtree
+   without any component knowing.
+*/
 .panel-deep {
   --color-void: #211f1c;
   --color-ink: #292622;
@@ -115,6 +137,8 @@
   background-color: var(--color-void);
   color: var(--color-bright);
 }
+
+/* KEYFRAMES */
 
 @keyframes flicker {
   0%,
@@ -156,6 +180,7 @@
 /* ------------------------------------------------------------------
    BASE
 ------------------------------------------------------------------ */
+
 @layer base {
   html {
     -webkit-text-size-adjust: 100%;
@@ -218,6 +243,7 @@
 /* ------------------------------------------------------------------
    SCROLLBAR
 ------------------------------------------------------------------ */
+
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -271,7 +297,6 @@
 }
 
 /*   * The accent, as one committed ink.
-   *
    * Editorial rules are not gradiented and neither is this: a single committed
    * ink does the same jobs (buttons, timeline rules, hover underlines) without
    * the sheen.
@@ -285,13 +310,11 @@
   color: var(--color-accent);
 }
 
-/*
- * Card surface: a sheet of card stock laid on the page.
- *
- * Deliberately not glass: no backdrop blur, no translucent wash and no neon
- * border. A real surface is opaque, so what lifts it is a brighter sheet edge
- * along the top, a faint tone falling to the bottom and a shadow in ink.
- */
+/* Card surface: a sheet of card stock laid on the page.
+   Deliberately not glass: no backdrop blur, no translucent wash and no neon
+   border. A real surface is opaque, so what lifts it is a brighter sheet edge
+   along the top, a faint tone falling to the bottom and a shadow in ink.
+*/
 .glass-panel,
 .glass-card {
   position: relative;
@@ -337,10 +360,9 @@
    TYPOGRAPHY HELPERS
 ------------------------------------------------------------------ */
 
-/*
- * Small label. Set in the mono, tracked wide: on an engineered page the
- * technical face on a label is information, not costume.
- */
+/* Small label. Set in the mono, tracked wide: on an engineered page the
+   technical face on a label is information, not costume.
+*/
 .label-mono {
   font-family: var(--font-mono);
   /* 13px: the floor for anything a reader has to read. Tracking is eased from
@@ -366,6 +388,7 @@
 /* ------------------------------------------------------------------
    MOTION SAFETY
 ------------------------------------------------------------------ */
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,

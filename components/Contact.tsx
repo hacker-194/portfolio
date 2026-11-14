@@ -65,7 +65,7 @@ export function Contact() {
             Let&apos;s build something <span className="text-accent">exceptional.</span>
           </h2>
 
-          <p className="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
+          <p className="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg" aria-label="Contact availability">
             {PROFILE.availability}. If you have an engineering problem, an ML project, or a research direction to explore, I&apos;d love to connect.
           </p>
 

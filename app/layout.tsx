@@ -58,14 +58,14 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: PALETTE.void,
-  colorScheme: "light",
+  colorScheme: "light" as const,
 };
 
 // Preload critical fonts for faster FCP/LCP
 export const fontPreloads = [
-  { href: "https://fonts.gstatic.com/s/cormorant/v20/VdGPAYmumtR1gysyAfTD.woff2", weight: "700" },
-  { href: "https://fonts.gstatic.com/s/montserrat/v26/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2", weight: "400" },
-  { href: "https://fonts.gstatic.com/s/montserrat/v26/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2", weight: "500" },
+  { href: "https://fonts.gstatic.com/s/cormorant/v20/VdGPAYmumtR1gysyAfTD.woff2", as: "font" },
+  { href: "https://fonts.gstatic.com/s/montserrat/v26/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2", as: "font" },
+  { href: "https://fonts.gstatic.com/s/montserrat/v26/JTUSjIg1_i6t8kCHKm459Wlhyw.woff2", as: "font" },
 ] as const;
 
 const PERSON_SCHEMA = {
@@ -113,6 +113,14 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${cormorant.variable} ${montserrat.variable} ${jetbrains.variable}`}
     >
       <head>
+        <link
+          rel="preconnect"
+          href="https://fonts.googleapis.com"
+        />
+        <link
+          rel="preconnect"
+          href="https://fonts.gstatic.com"
+        />
         <link
           rel="preload"
           href="https://fonts.gstatic.com/s/cormorant/v20/VdGPAYmumtR1gysyAfTD.woff2"

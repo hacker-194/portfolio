@@ -22,7 +22,7 @@ const CSP_HEADER = [
   "frame-ancestors 'none'",
 ].join("; ");
 
-export function middleware(_request: NextRequest) {
+export function middleware(request: NextRequest) {
   const response = NextResponse.next();
   response.headers.set("Content-Security-Policy", CSP_HEADER);
   return response;
