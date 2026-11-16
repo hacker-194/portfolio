@@ -28,7 +28,7 @@ export const PALETTE = {
   edge: "#d5cec2",
   indigo: "#292521",
   accent: "#873f36",
-  data: "#426d69",
+  data: "#3f6a66",
   volt: "#71685d",
   ice: "#ded8cd",
   muted: "#68635b",

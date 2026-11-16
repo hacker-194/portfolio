@@ -24,7 +24,7 @@ export const NAV_ITEMS: NavItem[] = [
   { label: "Experience", href: "#experience", index: "03" },
   { label: "Open Source", href: "#open-source", index: "04" },
   { label: "About", href: "#about", index: "05" },
-  { label: "Contact", href: "#contact", index: "09" },
+  { label: "Contact", href: "#contact", index: "08" },
 ];
 
 /**
@@ -39,9 +39,8 @@ export const ALL_SECTIONS: NavItem[] = [
   { label: "Open Source", href: "#open-source", index: "04" },
   { label: "About", href: "#about", index: "05" },
   { label: "Skills", href: "#skills", index: "06" },
-  { label: "Frontier", href: "#frontier", index: "07" },
-  { label: "Research", href: "#research", index: "08" },
-  { label: "Contact", href: "#contact", index: "09" },
+  { label: "Study", href: "#research", index: "07" },
+  { label: "Contact", href: "#contact", index: "08" },
 ];
 
 /**
@@ -72,18 +71,13 @@ export const PROFILE = {
   name: "Khagendra Luitel",
   initials: "KL",
   role: "Machine Learning Engineer",
-  discipline: "Deep Learning · System Architecture · PyTorch",
-  tagline: "Building ML systems that scale into production",
+  discipline: "PyTorch · Scikit-learn · FastAPI",
+  tagline: "Machine learning engineer",
   location: "Sunsari, Nepal",
   timezone: "NPT (UTC+5:45)",
-  availability: "Available for ML engineering roles & research",
-  headline: [
-    "Building machine learning systems",
-    "that scale from raw data",
-    "to production APIs.",
-  ],
+  availability: "Open to ML engineering roles",
   statement:
-    "I build machine learning systems designed for production. I work across the full pipeline: engineering dataset features, training and benchmarking model architectures, and deploying reliable inference services with PyTorch and FastAPI.",
+    "I train machine learning models and serve them through APIs. Most of the work is Python: cleaning the data, comparing models, and getting an endpoint to answer before anything depends on it.",
   email: "anjalluitel3@gmail.com",
   phone: "+977-9827060306",
   phoneHref: "tel:+9779827060306",

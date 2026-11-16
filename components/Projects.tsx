@@ -15,9 +15,9 @@ export function Projects() {
     >
       <div className={SECTION_CONTAINER}>
         <SectionHeading
-          eyebrow="Featured Work"
-          title={["Production machine learning,", "engineered end to end."]}
-          description="Selected engineering projects demonstrating model training, dataset engineering, and live API deployment."
+          eyebrow="Work"
+          title={["Selected projects."]}
+          description="Each one goes from raw data to something that runs."
         />
 
         <WorkIndex />
@@ -35,7 +35,7 @@ export function Projects() {
         <Reveal className="mt-12">
           <div className="flex flex-wrap items-center justify-between gap-4 border-t border-bright/10 pt-8 text-sm text-muted">
             <p>
-              Two projects are private client/coursework implementations. Walkthroughs and code samples are available on request.
+              None of these have a public repository yet. Ask and I will walk you through the code.
             </p>
             <span className="font-mono text-xs text-soft">
               {String(PROJECTS.length).padStart(2, "0")} Case Studies

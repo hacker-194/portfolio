@@ -1,20 +1,26 @@
 "use client";
 
-import { ArrowUpRight } from "lucide-react";
+import { motion } from "motion/react";
+import { ArrowUpRight, Boxes } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading } from "@/components/SectionHeading";
-import { LEARNING } from "@/lib/data";
+import { FRONTIER_PILLARS, LEARNING } from "@/lib/data";
 import { SECTION_CONTAINER } from "@/lib/layout";
+import { useStillMotion } from "@/lib/hooks";
+import { EASE_CINEMATIC, viewportOnce } from "@/lib/motion";
 
 /**
- * Research / Learning.
+ * Study.
  *
- * An archive of public work being studied right now. The publications listed are
- * other people's, so it makes no claim of authorship. It used to open with a
- * card for one piece of original research; that is gone, and nothing has been
- * written to fill the space.
+ * One section for the ongoing learning, because three separate sections used to
+ * say the same thing: the reading list, the direction pillars and a generic
+ * pipeline diagram. The citations here are other people's work, so the section
+ * claims no authorship, and nothing in it is presented as shipped.
  */
 export function Research() {
+  // Hydration-safe: stays false on the server AND on the first client render.
+  const reduce = useStillMotion();
+
   return (
     <section
       id="research"
@@ -22,15 +28,17 @@ export function Research() {
     >
       <div className={SECTION_CONTAINER}>
         <SectionHeading
-          eyebrow="Research & Literature"
-          title={["Foundational papers", "and ongoing study."]}
-          description="Key machine learning literature and deep-dive technical material I analyze to inform architectural design decisions."
+          eyebrow="Studying"
+          title={["What I am learning."]}
+          description="Papers, tools and ideas I am working through. None of it is shipped work yet."
         />
 
-        {/* Learning archive */}
+        {/* Reading list */}
         <div className="mt-14 lg:mt-18">
           <div className="flex items-center justify-between border-b border-bright/10 pb-4 text-xs text-muted">
-            <span className="font-semibold uppercase tracking-wider text-muted">Selected Literature</span>
+            <span className="font-semibold uppercase tracking-wider text-muted">
+              Reading list
+            </span>
             <span className="font-mono">{LEARNING.length} Publications</span>
           </div>
 
@@ -58,7 +66,7 @@ export function Research() {
                       )}
                     </h3>
                     {item.source ? (
-                      <p className="mt-1 text-xs text-muted">{item.source}</p>
+                      <p className="mt-1 text-sm text-muted">{item.source}</p>
                     ) : null}
                   </div>
 
@@ -69,7 +77,7 @@ export function Research() {
                   </div>
 
                   <div className="md:col-span-3">
-                    <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/25 bg-accent/10 px-3 py-0.5 font-mono text-[0.6875rem] text-accent">
+                    <span className="inline-flex items-center gap-1.5 rounded-full border border-accent/25 bg-accent/10 px-3 py-0.5 font-mono text-[0.8125rem] text-accent">
                       <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
                       {item.status}
                     </span>
@@ -88,6 +96,42 @@ export function Research() {
               </Reveal>
             ))}
           </ul>
+        </div>
+
+        {/* Directions */}
+        <div className="mt-14 border-t border-bright/10 pt-6">
+          <span className="text-xs font-semibold uppercase tracking-wider text-muted">
+            Directions I am following
+          </span>
+
+          <div className="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+            {FRONTIER_PILLARS.map((pillar, index) => (
+              <motion.div
+                key={pillar.label}
+                className="group relative rounded-xl border border-bright/10 bg-panel/40 p-6 backdrop-blur-sm transition-all duration-300 hover:border-accent/40 hover:bg-panel2"
+                initial={reduce ? false : { opacity: 0, y: 14 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={viewportOnce}
+                transition={{
+                  duration: 0.5,
+                  ease: EASE_CINEMATIC,
+                  delay: (index % 3) * 0.05,
+                }}
+              >
+                <div className="flex items-center gap-3">
+                  <span className="grid h-8 w-8 place-items-center rounded-lg border border-accent/25 bg-accent/10">
+                    <Boxes className="h-4 w-4 text-accent" strokeWidth={1.8} />
+                  </span>
+                  <h3 className="font-display text-base font-semibold text-bright">
+                    {pillar.label}
+                  </h3>
+                </div>
+                <p className="mt-3 text-sm leading-relaxed text-muted">
+                  {pillar.note}
+                </p>
+              </motion.div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

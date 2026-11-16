@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" width="64" height="64">
-  <rect width="64" height="64" rx="12" fill="#7980ff" />
+  <rect width="64" height="64" rx="12" fill="#873f36" />
   <rect
     x="1.5"
     y="1.5"
@@ -7,7 +7,7 @@
     height="61"
     rx="11"
     fill="none"
-    stroke="#f8fafc"
+    stroke="#f4f1eb"
     stroke-opacity="0.25"
   />
   <text
@@ -18,7 +18,7 @@
     font-size="26"
     font-weight="700"
     letter-spacing="-0.5"
-    fill="#090d16"
+    fill="#f4f1eb"
   >
     KL
   </text>

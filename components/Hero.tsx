@@ -2,17 +2,11 @@
 
 import { motion } from "motion/react";
 import { useStillMotion } from "@/lib/hooks";
-import { ArrowDown, ArrowRight, Check } from "lucide-react";
+import { ArrowDown, ArrowRight } from "lucide-react";
 import { scrollToHash } from "@/components/ScrollSync";
 import { CORE_NODES } from "@/lib/core-nodes";
 import { PROFILE } from "@/lib/site";
 import { EASE_CINEMATIC } from "@/lib/motion";
-
-const TRUST_BADGES = [
-  { label: "3 ML systems in production", icon: Check },
-  { label: "Cloud Nepal Web internship", icon: Check },
-  { label: "BSc CS (expected 2026)", icon: Check },
-];
 
 export function Hero() {
   const reduce = useStillMotion();
@@ -47,22 +41,12 @@ export function Hero() {
             {...rise(0.1)}
             className="mt-6 text-[clamp(2.5rem,6.5vw,5.5rem)] font-bold leading-[1.08] tracking-tight text-bright"
           >
-            I turn machine learning into dependable software.
+            I build machine learning that leaves the notebook.
           </motion.h1>
-
-          {/* Trust Badges */}
-          <div className="mt-8 flex flex-wrap items-center gap-3 sm:gap-4 text-sm text-muted">
-            {TRUST_BADGES.map((badge, i) => (
-              <div key={badge.label} className="flex items-center gap-1.5">
-                <badge.icon className="h-4 w-4 text-accent" strokeWidth={2.5} aria-hidden />
-                <span>{badge.label}</span>
-              </div>
-            ))}
-          </div>
 
           {/* Statement */}
           <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted sm:text-lg sm:leading-relaxed">
-            I&apos;m <span className="font-semibold text-bright">{PROFILE.name}</span>, a Machine Learning Engineer based in {PROFILE.location}. I work across the full lifecycle: training PyTorch models, structuring data pipelines, and serving low-latency APIs.
+            I&apos;m <span className="font-semibold text-bright">{PROFILE.name}</span>, a machine learning engineer in {PROFILE.location}. I clean the data, train the model, then keep the endpoint running.
           </p>
 
           {/* CTAs */}
@@ -74,7 +58,7 @@ export function Hero() {
               onClick={() => scrollToHash("#projects")}
               className="group inline-flex items-center gap-2 rounded-[3px] border border-accent/30 bg-accent/10 px-5 py-2.5 font-medium text-sm text-accent transition-colors hover:bg-accent/20 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-void"
             >
-              View Featured Work
+              See the work
               <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.2} />
             </button>
             <a
@@ -110,14 +94,14 @@ export function Hero() {
                       {node.label}
                     </span>
                   </div>
-                  <p className="mt-2 text-xs leading-relaxed text-muted line-clamp-2">
+                  <p className="mt-2 text-sm leading-relaxed text-muted line-clamp-2">
                     {node.blurb}
                   </p>
                   <div className="mt-3 flex flex-wrap gap-1.5">
                     {node.keywords.slice(0, 2).map((word) => (
                       <span
                         key={word}
-                        className="rounded border border-bright/10 bg-bright/5 px-2 py-0.5 font-mono text-[0.6875rem] text-soft"
+                        className="rounded border border-bright/10 bg-bright/5 px-2 py-0.5 font-mono text-[0.8125rem] text-soft"
                       >
                         {word}
                       </span>
@@ -141,7 +125,7 @@ export function Hero() {
             <span className="grid h-6 w-6 place-items-center rounded-full border border-bright/15 transition-colors group-hover:border-accent/60">
               <ArrowDown className="h-3 w-3 text-accent transition-transform group-hover:translate-y-0.5" strokeWidth={2} />
             </span>
-            <span>Explore technical work</span>
+            <span>Go to the work</span>
           </button>
 
           <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-muted">

@@ -97,16 +97,16 @@ export function OpenSource({
       <div className={`${SECTION_CONTAINER} relative z-[3]`}>
         <SectionHeading
           eyebrow="Open Source"
-          title={["Code and contributions,", "published on GitHub."]}
-          description="Live repositories synchronized with GitHub, updated hourly to reflect recent work and open source activity."
+          title={["My repositories."]}
+          description="Read from the GitHub API and cached for an hour."
         />
 
         {repos.length === 0 ? (
           <Reveal y={24} className="mt-14 lg:mt-18">
             <div className="rounded-2xl border border-bright/10 bg-panel/50 p-6 sm:p-8">
-              <span className="text-xs font-semibold uppercase tracking-wider text-accent">GitHub Feed Status</span>
+              <span className="text-xs font-semibold uppercase tracking-wider text-accent">GitHub feed</span>
               <p className="mt-3 max-w-2xl text-sm leading-relaxed text-muted">
-                The GitHub API feed is temporarily rate-limited. All public repositories remain accessible directly on my profile.
+                GitHub is rate-limiting the feed right now. The repositories are still on my profile.
               </p>
               <a
                 href={PROFILE.github}
@@ -157,7 +157,7 @@ export function OpenSource({
                                   {repo.stars}
                                 </span>
                               ) : null}
-                              <span className="inline-flex items-center gap-1.5 rounded-full border border-bright/10 bg-panel px-2.5 py-0.5 font-mono text-[0.6875rem] text-soft">
+                              <span className="inline-flex items-center gap-1.5 rounded-full border border-bright/10 bg-panel px-2.5 py-0.5 font-mono text-[0.8125rem] text-soft">
                                 <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
                                 {repo.language}
                               </span>

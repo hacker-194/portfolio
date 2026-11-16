@@ -5,7 +5,6 @@ import gsap from "gsap";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, Clock } from "lucide-react";
 import { ProjectVisual } from "@/components/ProjectVisual";
-import { Reveal } from "@/components/Reveal";
 import { FactList } from "@/components/FactList";
 import { StudyBlock } from "@/components/StudyBlock";
 import { useGsapScope } from "@/lib/gsap";

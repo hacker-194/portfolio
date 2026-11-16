@@ -10,9 +10,9 @@ export function Skills() {
     >
       <div className={SECTION_CONTAINER}>
         <SectionHeading
-          eyebrow="Technical Stack"
-          title={["Core competencies,", "tooling, and frameworks."]}
-          description="Verified capabilities organized by engineering domain. ★ = active study."
+          eyebrow="Stack"
+          title={["What I work with."]}
+          description="Grouped by domain. A star means I am still learning it."
         />
 
         <div className="mt-10 grid gap-6 md:grid-cols-2 lg:grid-cols-3">
@@ -26,12 +26,12 @@ export function Skills() {
                   {group.title}
                 </h3>
                 {group.learning && (
-                  <span className="rounded-full bg-volt/10 px-2 py-0.5 font-mono text-[0.625rem] text-volt">
+                  <span className="rounded-full bg-volt/10 px-2 py-0.5 font-mono text-[0.8125rem] text-volt">
                     ★ Active study
                   </span>
                 )}
               </div>
-              <p className="mt-1.5 text-xs text-muted">{group.caption}</p>
+              <p className="mt-1.5 text-sm text-muted">{group.caption}</p>
               <ul className="mt-4 flex flex-wrap gap-2">
                 {group.skills.map((skill) => (
                   <li

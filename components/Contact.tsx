@@ -64,12 +64,12 @@ export function Contact() {
           </Reveal>
 
           <h2 className="mt-6 text-[clamp(2.25rem,5vw,4rem)] font-bold tracking-tight text-bright">
-            Let&apos;s build something <span className="text-accent">exceptional.</span>
+            Tell me what you are <span className="text-accent">working on.</span>
           </h2>
 
           <Reveal delay={0.15}>
             <p className="mt-5 max-w-xl text-base leading-relaxed text-muted sm:text-lg">
-              {PROFILE.availability}. If you have an engineering problem, an ML project, or a research direction to explore, I&apos;d love to connect.
+              {PROFILE.availability}. If you have a project or a question about a model, email me.
             </p>
           </Reveal>
 

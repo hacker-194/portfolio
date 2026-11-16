@@ -110,14 +110,14 @@ export function ContactForm() {
               value={formData.name}
               onChange={(e) => handleChange("name", e.target.value)}
               className={`mt-1.5 w-full rounded-[2px] border px-3 py-2.5 bg-panel text-bright placeholder:text-muted/50 transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-void ${
-                errors.name ? "border-destructive" : "border-bright/10 hover:border-accent/30"
+                errors.name ? "border-accent" : "border-bright/10 hover:border-accent/30"
               }`}
               aria-invalid={errors.name ? "true" : "false"}
               aria-describedby={errors.name ? "name-error" : undefined}
               disabled={status === "submitting"}
             />
             {errors.name && (
-              <p id="name-error" className="mt-1.5 flex items-center gap-1.5 text-xs text-destructive" role="alert">
+              <p id="name-error" className="mt-1.5 flex items-center gap-1.5 text-sm text-accent" role="alert">
                 <AlertCircle className="h-3 w-3" strokeWidth={2} />
                 {errors.name}
               </p>
@@ -137,14 +137,14 @@ export function ContactForm() {
               value={formData.email}
               onChange={(e) => handleChange("email", e.target.value)}
               className={`mt-1.5 w-full rounded-[2px] border px-3 py-2.5 bg-panel text-bright placeholder:text-muted/50 transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-void ${
-                errors.email ? "border-destructive" : "border-bright/10 hover:border-accent/30"
+                errors.email ? "border-accent" : "border-bright/10 hover:border-accent/30"
               }`}
               aria-invalid={errors.email ? "true" : "false"}
               aria-describedby={errors.email ? "email-error" : undefined}
               disabled={status === "submitting"}
             />
             {errors.email && (
-              <p id="email-error" className="mt-1.5 flex items-center gap-1.5 text-xs text-destructive" role="alert">
+              <p id="email-error" className="mt-1.5 flex items-center gap-1.5 text-sm text-accent" role="alert">
                 <AlertCircle className="h-3 w-3" strokeWidth={2} />
                 {errors.email}
               </p>
@@ -163,14 +163,14 @@ export function ContactForm() {
               value={formData.message}
               onChange={(e) => handleChange("message", e.target.value)}
               className={`mt-1.5 w-full rounded-[2px] border px-3 py-2.5 bg-panel text-bright placeholder:text-muted/50 resize-y min-h-[120px] transition-colors focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-void ${
-                errors.message ? "border-destructive" : "border-bright/10 hover:border-accent/30"
+                errors.message ? "border-accent" : "border-bright/10 hover:border-accent/30"
               }`}
               aria-invalid={errors.message ? "true" : "false"}
               aria-describedby={errors.message ? "message-error" : undefined}
               disabled={status === "submitting"}
             />
             {errors.message && (
-              <p id="message-error" className="mt-1.5 flex items-center gap-1.5 text-xs text-destructive" role="alert">
+              <p id="message-error" className="mt-1.5 flex items-center gap-1.5 text-sm text-accent" role="alert">
                 <AlertCircle className="h-3 w-3" strokeWidth={2} />
                 {errors.message}
               </p>
@@ -199,7 +199,7 @@ export function ContactForm() {
           </button>
 
           {status === "error" && (
-            <p className="mt-4 text-center text-sm text-destructive" role="alert">
+            <p className="mt-4 text-center text-sm text-accent" role="alert">
               Failed to send. Please email directly at anjalluitel3@gmail.com
             </p>
           )}

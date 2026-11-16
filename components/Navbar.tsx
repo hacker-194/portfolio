@@ -123,7 +123,7 @@ export function Navbar() {
               <span className="font-display text-sm font-semibold tracking-tight text-bright">
                 {PROFILE.name}
               </span>
-              <span className="hidden rounded-full border border-bright/10 bg-bright/5 px-2 py-0.5 font-mono text-[0.6875rem] text-muted sm:inline">
+              <span className="hidden rounded-full border border-bright/10 bg-bright/5 px-2 py-0.5 font-mono text-[0.8125rem] text-muted sm:inline">
                 ML Systems
               </span>
             </span>
@@ -162,7 +162,7 @@ export function Navbar() {
           <div className="flex items-center gap-3">
             <span className="hidden items-center gap-2 rounded-full border border-bright/10 bg-bright/5 px-3 py-1 text-xs text-muted xl:inline-flex">
               <span className="h-1.5 w-1.5 rounded-full bg-data animate-pulse" aria-hidden />
-              Available for Q1/Q2
+              {PROFILE.availability}
             </span>
             <CommandPalette />
 

@@ -86,14 +86,13 @@ components/
   Hero                   hero copy + the capability row and its panels
   SkillUniverse / SkillUniverseCanvas   the capability graph: canvas figure + the text panel
   OpenSource             live repositories, read straight from GitHub
-  PipelineDiagram        the intelligence pipeline rail (Frontier)
   About / Projects / ProjectCard / ProjectVisual (drawn project schematics)
   CommandPalette          ⌘K / "/" jump list over sections, projects, links
   WorkIndex               the index table that opens the Selected work section
   FactList                label and value rows, shared by the spec and the results
   ContactForm             the Tally embed, framed in this site's typography
   StudyBlock              labelled case-study block, shared by card and page
-  Frontier / Research / Skills / Experience / Contact / Footer
+  Research (study: reading list + directions) / Skills / Experience / Contact / Footer
   Highlights / BrandIcons
   Reveal / MaskedLines / SectionHeading / MagneticButton
   ScrollSync             ScrollTrigger bootstrap + the anchor-jump helper

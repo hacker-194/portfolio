@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "dev": "next dev",
-    "build": "npm run lint && next build",
+    "build": "npm run lint && npm run check && next build",
     "start": "next start",
     "lint": "eslint",
     "check": "node --experimental-strip-types scripts/check-skill-universe.ts && node --experimental-strip-types scripts/check-palette.ts",

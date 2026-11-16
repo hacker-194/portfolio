@@ -230,7 +230,7 @@ export const SKILL_GROUPS: SkillGroup[] = [
   {
     id: "ml",
     title: "ML / Deep Learning",
-    caption: "Core modelling toolkit",
+    caption: "Main modelling tools",
     skills: ["PyTorch", "Scikit-learn", "XGBoost", "NumPy", "Pandas"],
   },
   {
@@ -250,13 +250,13 @@ export const SKILL_GROUPS: SkillGroup[] = [
   {
     id: "backend",
     title: "Backend",
-    caption: "Serving models as products",
+    caption: "Getting models out of notebooks",
     skills: ["Python", "FastAPI", "PostgreSQL", "SQL", "REST APIs"],
   },
   {
     id: "tools",
     title: "Tools / Infrastructure",
-    caption: "Day-to-day engineering",
+    caption: "Everyday tools",
     skills: ["Git", "GitHub", "Linux", "n8n"],
   },
 ];

@@ -423,7 +423,7 @@ function SkillIndex({ reduce, active, onOpen, onSelect }: IndexProps) {
         })}
       </div>
 
-      <p className="max-w-lg font-mono text-xs leading-relaxed tracking-[0.06em] text-muted">
+      <p className="max-w-lg font-mono text-sm leading-relaxed tracking-[0.06em] text-muted">
         GenAI, Agentic AI and RAG are marked as learning, because that&apos;s where
         they are today.
       </p>

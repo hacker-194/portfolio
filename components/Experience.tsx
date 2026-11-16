@@ -85,9 +85,9 @@ export function Experience() {
     >
       <div className={SECTION_CONTAINER}>
         <SectionHeading
-          eyebrow="Career & Education"
-          title={["Experience, leadership,", "and academic foundation."]}
-          description="Internship experience, organizational leadership, and formal Computer Science coursework."
+          eyebrow="Work & study"
+          title={["Where I have worked,", "and what I studied."]}
+          description="An internship, a student org, and a Computer Science degree in progress."
         />
 
         <div ref={root} className="relative mt-14 lg:mt-18">

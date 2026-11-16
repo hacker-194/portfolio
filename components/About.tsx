@@ -1,15 +1,11 @@
 "use client";
 
-import { motion } from "motion/react";
-import { useStillMotion } from "@/lib/hooks";
 import { GraduationCap } from "lucide-react";
-import { MaskedLines } from "@/components/MaskedLines";
 import { Reveal } from "@/components/Reveal";
 import { SectionHeading } from "@/components/SectionHeading";
 import { CERTIFICATIONS, EDUCATION, INTERESTS } from "@/lib/data";
 import { SECTION_CONTAINER } from "@/lib/layout";
 import { PROFILE } from "@/lib/site";
-import { EASE_CINEMATIC, viewportOnce } from "@/lib/motion";
 
 /**
  * What this page is hired for, in the order it can prove it: modelling, then
@@ -26,9 +22,6 @@ const FOCUS = [
 ];
 
 export function About() {
-  // Hydration-safe: stays false on the server AND on the first client render.
-  const reduce = useStillMotion();
-
   return (
     <section
       id="about"
@@ -36,9 +29,9 @@ export function About() {
     >
       <div className={SECTION_CONTAINER}>
         <SectionHeading
-          eyebrow="Engineering Philosophy"
-          title={["How I approach", "machine learning engineering."]}
-          description="My focus is on models that solve concrete problems, evaluate honestly, and run reliably in production environments."
+          eyebrow="About"
+          title={["How I work."]}
+          description="I care about the model being right, and about it still working after it ships."
         />
 
         <div className="mt-14 grid gap-12 lg:mt-18 lg:grid-cols-12 lg:gap-16">
@@ -52,7 +45,7 @@ export function About() {
 
             <Reveal delay={0.1}>
               <p className="mt-6 text-base leading-relaxed text-muted">
-                Most machine learning value is unlocked through disciplined fundamentals: cleaning and validating datasets, engineering features with domain context, establishing reliable baselines, and deploying via well-tested APIs. My background in cybersecurity also instills a strong security and robustness mindset: understanding failure modes makes systems significantly more resilient.
+                Most of the job is not the model. It is checking the data, keeping a baseline to compare against, and testing the endpoint before anyone else uses it. My cybersecurity coursework taught me to look for how a system fails first, which turns out to be the useful way to read a model too.
               </p>
             </Reveal>
 
@@ -63,7 +56,7 @@ export function About() {
                     <h3 className="font-display text-base font-semibold text-bright">
                       {item.label}
                     </h3>
-                    <p className="mt-1.5 text-xs leading-relaxed text-muted">{item.note}</p>
+                    <p className="mt-1.5 text-sm leading-relaxed text-muted">{item.note}</p>
                   </div>
                 </Reveal>
               ))}
@@ -98,10 +91,10 @@ export function About() {
                     <h3 className="mt-1 font-display text-lg font-bold text-bright">
                       {EDUCATION.degree}
                     </h3>
-                    <p className="mt-1 text-xs text-muted">
+                    <p className="mt-1 text-sm text-muted">
                       {EDUCATION.school}
                     </p>
-                    <p className="mt-0.5 text-xs text-accent">{EDUCATION.detail}</p>
+                    <p className="mt-0.5 text-sm text-accent">{EDUCATION.detail}</p>
                   </div>
                 </div>
 

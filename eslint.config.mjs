@@ -39,6 +39,17 @@ const RETIRED = [
   "This isn't shipped production work",
   "Decision-ready",
   "Read live from the GitHub API and refreshed",
+  "build something exceptional",
+  "professional endorsements",
+  "core competencies",
+  "engineered end to end",
+  "across the full lifecycle",
+  "value is unlocked",
+  "exceptional ability",
+  "live repositories",
+  "architectural design decisions",
+  "engineering philosophy",
+  "deep-dive",
 
   /*
    * Stock vocabulary. None of these say anything a plainer word would not, and
