@@ -2,52 +2,30 @@
 
 /* ------------------------------------------------------------------
    DESIGN TOKENS
-   Paper, ink and one oxblood. The page is a warm off-white sheet, the type is
-   near-black ink set in a high-contrast display serif (Cormorant) with a
-   geometric sans for running text (Montserrat) and a mono for figures, indices
-   and labels (JetBrains Mono). The figures are drawn in the same ink.
-
-   Oxblood is rationed: it is the only saturated hue on the page, spent on
-   interactive accents, rules and the mark, and never on a large fill. One
-   muted blue-green is held in reserve for measured data: the activity graph and the
-   metric bars, nowhere else. Everything else is paper tones and warm greys.
-   No neon, no purple, no gradient text and no coloured glow: what reads as
-   cheap generated design is a dark ground lit by halos, so there are none.
-
-   Two grounds. The sheet is the page, and the hero and the open-source well
-   are ink plates cut out of it (`.panel-deep` scopes the tokens back to ink).
-   Everything drawn in code resolves `lib/palette.ts` instead, and that is the
-   sheet's ink, so the figures are only ever printed on paper.
-
-   The token *names* are unchanged from the systems this replaced, so the whole
-   site re-themes from this one block; nothing else needed its class names
-   edited to pick up the palette.
+   Warm paper, charcoal type and a single muted slate accent.
 ------------------------------------------------------------------ */
 @theme {
-  /* Warm paper, charcoal ink, and one restrained oxblood accent. */
-  --color-void: #f4f1eb;
-  --color-ink: #ebe7df;
-  --color-panel: #fffdf9;
-  --color-panel2: #f8f5ef;
-  --color-panel3: #e7e1d7;
-  --color-edge: #d5cec2;
+  --color-void: #f6f5f1;
+  --color-ink: #eeede8;
+  --color-panel: #fffefa;
+  --color-panel2: #f1f0eb;
+  --color-panel3: #e7e6df;
+  --color-edge: #d7d8d2;
 
-  --color-indigo: #292521;
-  --color-accent: #873f36;
-  --color-volt: #71685d;
-  --color-ice: #ded8cd;
-
-  /* Quiet blue-green reserved for measured data. */
-  --color-data: #3f6a66;
+  --color-indigo: #262621;
+  --color-accent: #344a57;
+  --color-volt: #625f58;
+  --color-ice: #d9d5cb;
+  --color-data: #344a57;
 
   /* Ambient neutrals for structural framing and subtle borders. */
-  --color-brand: #756e65;
-  --color-brand-deep: #514b44;
+  --color-brand: #716e67;
+  --color-brand-deep: #514f49;
 
   /* Text hierarchy: charcoal primary, balanced secondary, legible tertiary. */
-  --color-muted: #68635b;
-  --color-soft: #4c4740;
-  --color-bright: #211e1a;
+  --color-muted: #62625e;
+  --color-soft: #45443e;
+  --color-bright: #211f1a;
 
   --font-display: var(--font-cormorant), Georgia, serif;
   --font-sans: var(--font-montserrat), ui-sans-serif, system-ui, sans-serif;
@@ -79,41 +57,6 @@
   --text-secondary: var(--color-soft);
   --glass-bg: var(--color-panel);
   --glass-border: color-mix(in srgb, var(--color-bright) 14%, transparent);
-}
-
-/*
- * The deep panels.
- *
- * The hero and the open-source section are printed on ink plates: a near-black
- * ground cut out of the sheet, with the accent lifted a step and both the
- * drawing inks and the ambient greys inverted so they still read against it.
- * The scope re-declares the same token names it inherits, so
- * `text-bright`, `bg-void`, `border-*` and the rest flip for the whole subtree
- * without any component knowing.
- */
-.panel-deep {
-  --color-void: #211f1c;
-  --color-ink: #292622;
-  --color-panel: #312d28;
-  --color-panel2: #39342f;
-  --color-panel3: #423c36;
-  --color-edge: #514a42;
-  --color-indigo: #211f1c;
-  --color-accent: #d3a094;
-  --color-volt: #b8aa98;
-  --color-ice: #ded8cd;
-  --color-data: #9dbdb5;
-  --color-brand: #b8aa98;
-  --color-brand-deep: #ded8cd;
-  --color-muted: #bdb5aa;
-  --color-soft: #ded8cd;
-  --color-bright: #f4f1eb;
-  --glass-bg: var(--color-panel);
-}
-
-.panel-deep {
-  background-color: var(--color-void);
-  color: var(--color-bright);
 }
 
 @keyframes flicker {

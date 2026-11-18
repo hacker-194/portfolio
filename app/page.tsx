@@ -2,7 +2,6 @@ import { About } from "@/components/About";
 import { Contact } from "@/components/Contact";
 import { Experience } from "@/components/Experience";
 import { Hero } from "@/components/Hero";
-import { Highlights } from "@/components/Highlights";
 import { OpenSource } from "@/components/OpenSource";
 import { Projects } from "@/components/Projects";
 import { Research } from "@/components/Research";
@@ -33,17 +32,15 @@ export default async function Page() {
       <Hero />
 
       {/* Technical toolkit strip */}
-      <div className="border-y border-bright/10 bg-ink/50 py-4 backdrop-blur-sm">
+      <div className="border-b border-bright/10 py-4">
         <div className={SECTION_CONTAINER}>
-          <div className="flex flex-wrap items-center gap-x-5 gap-y-3">
-            <span className="text-xs font-semibold tracking-wider uppercase text-muted">
-              Core Toolkit
-            </span>
-            <ul className="flex flex-wrap items-center gap-2">
+          <div className="flex flex-wrap items-center gap-x-6 gap-y-3">
+            <span className="label-mono text-muted">Toolkit</span>
+            <ul className="flex flex-wrap items-center gap-x-3 gap-y-2 text-sm text-soft">
               {STACK.map((item) => (
                 <li
                   key={item}
-                  className="rounded-full border border-bright/10 bg-panel/80 px-3 py-1 font-mono text-xs text-soft transition-colors hover:border-accent/40 hover:text-bright"
+                  className="after:ml-3 after:text-edge after:content-['/'] last:after:content-none"
                 >
                   {item}
                 </li>
@@ -54,7 +51,6 @@ export default async function Page() {
       </div>
 
       <Projects />
-      <Highlights />
       <Experience />
       <OpenSource repos={repos} activity={activity} />
       <About />

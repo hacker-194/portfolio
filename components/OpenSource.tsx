@@ -92,7 +92,7 @@ export function OpenSource({
   return (
     <section
       id="open-source"
-      className="panel-deep relative isolate overflow-hidden border-t border-bright/15 py-24 sm:py-32 lg:py-40"
+      className="relative isolate overflow-hidden border-t border-bright/15 py-24 sm:py-32 lg:py-40"
     >
       <div className={`${SECTION_CONTAINER} relative z-[3]`}>
         <SectionHeading

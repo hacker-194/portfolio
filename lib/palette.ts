@@ -7,33 +7,27 @@
  * resolves its colour from this module rather than from a literal buried in a
  * component.
  *
- * `PALETTE` is the sheet: warm paper, charcoal ink, and oxblood for interactive
- * accents. `data` is a reserved blue-green used only on measured numbers
- * (activity, metrics). `bright` is the darkest value, because on paper primary text is
- * ink; `volt` and `ice` are the drawing inks, and they are darker still than
- * the type rather than lighter, since the paper is the light source. Nothing
- * is drawn inside the deep panels (the hero and open-source plates), so the
- * inverted rendition of these roles exists only as CSS, in the `.panel-deep`
- * scope.
+ * `PALETTE` is the sheet: warm paper, charcoal ink, and one muted slate accent.
+ * The remaining colors are quiet neutrals used for diagrams and secondary data.
  *
  * If a colour changes in `globals.css`, change it here too.
  */
 
 export const PALETTE = {
-  void: "#f4f1eb",
-  ink: "#ebe7df",
-  panel: "#fffdf9",
-  panel2: "#f8f5ef",
-  panel3: "#e7e1d7",
-  edge: "#d5cec2",
-  indigo: "#292521",
-  accent: "#873f36",
-  data: "#3f6a66",
-  volt: "#71685d",
-  ice: "#ded8cd",
-  muted: "#68635b",
-  soft: "#4c4740",
-  bright: "#211e1a",
+  void: "#f6f5f1",
+  ink: "#eeede8",
+  panel: "#fffefa",
+  panel2: "#f1f0eb",
+  panel3: "#e7e6df",
+  edge: "#d7d8d2",
+  indigo: "#262621",
+  accent: "#344a57",
+  data: "#344a57",
+  volt: "#625f58",
+  ice: "#d9d5cb",
+  muted: "#62625e",
+  soft: "#45443e",
+  bright: "#211f1a",
 } as const;
 
 export type PaletteColor = keyof typeof PALETTE;
@@ -52,7 +46,7 @@ function buildChannelMap(source: Record<string, string>) {
 const CHANNELS = buildChannelMap(PALETTE);
 
 /**
- * `"#873f36"` → `"135, 63, 54"`.
+ * `"#344a57"` → `"52, 74, 87"`.
  *
  * Deriving the channels keeps alpha variants from drifting away from the hex
  * value they are supposed to match.

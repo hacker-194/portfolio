@@ -87,11 +87,8 @@ export function Navbar() {
         transition={{ duration: 0.7, ease: EASE_CINEMATIC, delay: reduce ? 0 : 0.15 }}
         className={cn(
           "fixed inset-x-0 top-0 z-[80] transition-colors duration-500",
-          // Once the reader leaves the top, the bar becomes a sheet of frosted
-          // glass over the page it is floating on: the one place on this site
-          // where backdrop blur earns its keep, because content passes under it.
           condensed &&
-            "border-b border-bright/10 bg-void/60 shadow-lift backdrop-blur-xl",
+            "border-b border-bright/10 bg-void",
         )}
       >
         {/* Reading progress hairline */}
@@ -114,7 +111,7 @@ export function Navbar() {
             aria-label={`${PROFILE.name}, home`}
             className="group flex items-center gap-3.5"
           >
-            <span className="relative grid h-8 w-8 place-items-center rounded-lg border border-accent/30 bg-accent/10 transition-colors duration-300 group-hover:border-accent/60 group-hover:bg-accent/20">
+            <span className="relative grid h-8 w-8 place-items-center border border-edge transition-colors duration-300 group-hover:border-accent">
               <span className="font-mono text-xs font-semibold tracking-tight text-accent">
                 {PROFILE.initials}
               </span>
@@ -123,14 +120,11 @@ export function Navbar() {
               <span className="font-display text-sm font-semibold tracking-tight text-bright">
                 {PROFILE.name}
               </span>
-              <span className="hidden rounded-full border border-bright/10 bg-bright/5 px-2 py-0.5 font-mono text-[0.8125rem] text-muted sm:inline">
-                ML Systems
-              </span>
             </span>
           </button>
 
           {/* Desktop nav */}
-          <nav className="hidden items-center gap-1.5 rounded-full border border-bright/10 bg-ink/70 px-2 py-1 backdrop-blur-md lg:flex" aria-label="Primary">
+          <nav className="hidden items-center gap-6 lg:flex" aria-label="Primary">
             {NAV_ITEMS.map((item) => {
               const isActive = active === item.href;
               return (
@@ -139,20 +133,14 @@ export function Navbar() {
                   type="button"
                   onClick={() => go(item.href)}
                   className={cn(
-                    "relative rounded-full px-4 py-1.5 text-xs font-medium transition-all duration-200",
+                    "relative py-2 text-sm font-medium transition-colors duration-200",
                     isActive
-                      ? "bg-accent/15 text-bright"
+                      ? "text-accent"
                       : "text-muted hover:text-bright",
                   )}
                 >
                   {item.label}
-                  {isActive ? (
-                    <motion.span
-                      layoutId="nav-pill"
-                      className="absolute inset-0 rounded-full border border-accent/30 bg-accent/10 -z-10"
-                      transition={{ duration: 0.25, ease: EASE_CINEMATIC }}
-                    />
-                  ) : null}
+                  {isActive ? <span className="absolute inset-x-0 bottom-0 h-px bg-accent" /> : null}
                 </button>
               );
             })}
@@ -160,8 +148,8 @@ export function Navbar() {
 
           {/* Actions */}
           <div className="flex items-center gap-3">
-            <span className="hidden items-center gap-2 rounded-full border border-bright/10 bg-bright/5 px-3 py-1 text-xs text-muted xl:inline-flex">
-              <span className="h-1.5 w-1.5 rounded-full bg-data animate-pulse" aria-hidden />
+            <span className="hidden items-center gap-2 text-sm text-muted xl:inline-flex">
+              <span className="h-1.5 w-1.5 bg-accent" aria-hidden />
               {PROFILE.availability}
             </span>
             <CommandPalette />
@@ -212,10 +200,7 @@ export function Navbar() {
             exit={{ opacity: 0 }}
             transition={{ duration: 0.35, ease: EASE_CINEMATIC }}
           >
-            {/* An opaque ground and a wash of light from above, rather than a
-                blurred sheet: the menu should read as a deeper room, not as
-                frosted glass over the page behind it. */}
-            <div className="absolute inset-0 bg-void bg-[radial-gradient(120%_60%_at_50%_-10%,color-mix(in_srgb,var(--color-accent)_7%,transparent),transparent_72%)]" />
+            <div className="absolute inset-0 bg-void" />
 
             <div className="relative flex h-full flex-col overflow-y-auto px-6 pb-10 pt-24">
               <nav className="flex flex-col" aria-label="Mobile">

@@ -46,7 +46,7 @@ export function ProjectCard({
     <article
       id={project.id}
       ref={root}
-      className="group relative rounded-2xl border border-bright/10 bg-panel/40 p-6 backdrop-blur-sm transition-all duration-300 hover:border-bright/20 sm:p-8 lg:p-10"
+      className="group relative border-y border-edge py-8 sm:py-10 lg:py-12"
     >
       {/* Outcomes bar - quick scan */}
       {outcomes.length > 0 && (
@@ -67,7 +67,7 @@ export function ProjectCard({
         <div className={cn("lg:col-span-6", reversed && "lg:order-2")}>
           <div
             ref={visual}
-            className="overflow-hidden rounded-xl border border-bright/10 bg-ink/80 p-3 sm:p-5 shadow-2xl transition-transform duration-500 group-hover:-translate-y-1"
+            className="overflow-hidden border border-edge bg-panel p-2 sm:p-3"
           >
             <ProjectVisual variant={VISUAL[project.id] ?? "api"} />
           </div>
@@ -86,7 +86,7 @@ export function ProjectCard({
         <div className={cn("lg:col-span-6 flex flex-col justify-between", reversed && "lg:order-1")}>
           <div>
             <div className="flex flex-wrap items-center gap-3">
-              <span className="rounded-full border border-accent/25 bg-accent/10 px-3 py-0.5 text-xs font-semibold uppercase tracking-wider text-accent">
+              <span className="text-xs font-semibold uppercase tracking-wider text-accent">
                 {project.category}
               </span>
               <span className="text-xs font-mono text-muted">{project.year}</span>

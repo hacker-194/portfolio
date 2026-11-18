@@ -28,11 +28,6 @@ const tokenBlock = css.slice(
   css.indexOf("@theme {"),
   css.indexOf("\n}", css.indexOf("@theme {")),
 );
-const deepBlock = css.slice(
-  css.indexOf(".panel-deep {"),
-  css.indexOf("\n}", css.indexOf(".panel-deep {")),
-);
-
 const tokens = new Map<string, string>();
 for (const [, name, hex] of tokenBlock.matchAll(
   /--color-([a-z0-9-]+):\s*(#[0-9a-fA-F]{6})/g,
@@ -54,14 +49,7 @@ for (const [name, hex] of Object.entries(PALETTE)) {
   if (!tokens.has(name)) issues.push(`lib/palette.ts ${name} (${hex}) has no --color-${name} token`);
 }
 
-// 2. The deep rendition exists for the roles that carry the wells.
-for (const name of ["void", "accent", "bright", "data"]) {
-  if (!new RegExp(`--color-${name}:`).test(deepBlock)) {
-    issues.push(`.panel-deep does not re-declare --color-${name}`);
-  }
-}
-
-// 3. No colour literal outside the token blocks. Alpha variants come from
+// 2. No colour literal outside the token block. Alpha variants come from
 //    `color-mix()` over the token, never from the channels written out again.
 //    Only the neutrals are exempt: white hairlines, black shadows and the #000
 //    used as the opaque stop of the mask gradients, none of which are palette
@@ -69,7 +57,6 @@ for (const name of ["void", "accent", "bright", "data"]) {
 // Comments are blanked rather than deleted so the line numbers stay true.
 const body = css
   .replace(tokenBlock, "")
-  .replace(deepBlock, "")
   .replace(/\/\*[\s\S]*?\*\//g, (match) => match.replace(/[^\n]/g, " "));
 
 const NEUTRAL = /^(?:rgba?\(\s*(?:0|255),\s*(?:0|255),\s*(?:0|255)|#[0-9a-fA-F]{3}$)/i;
@@ -80,7 +67,7 @@ for (const [index, line] of body.split("\n").entries()) {
   }
 }
 
-// 4. The two components that need a gradient or a shadow inline still resolve
+// 3. Components that need color values inline still resolve
 //    their colour from a token, and the metadata colour from the palette.
 for (const file of ["components/Navbar.tsx", "components/MagneticButton.tsx", "components/Hero.tsx"]) {
   for (const literal of read(file).match(/rgba?\(\s*\d+[^)]*\)|#[0-9a-fA-F]{6}\b/g) ?? []) {
@@ -91,7 +78,7 @@ if (/#[0-9a-fA-F]{3,8}/.test(read("app/layout.tsx"))) {
   issues.push("app/layout.tsx: hardcoded hex (import PALETTE instead)");
 }
 
-// 5. A static SVG cannot reference a token, so it is held to the palette
+// 4. A static SVG cannot reference a token, so it is held to the palette
 //    instead: every hex in the favicon has to be a value the palette defines.
 const paletteHexes = new Set(Object.values(PALETTE).map((hex) => hex.toLowerCase()));
 for (const hex of read("app/icon.svg").match(/#[0-9a-fA-F]{6}/g) ?? []) {
@@ -100,17 +87,11 @@ for (const hex of read("app/icon.svg").match(/#[0-9a-fA-F]{6}/g) ?? []) {
   }
 }
 
-// 6. Contrast, in both scopes. A palette re-theme is mostly a block of hex
+// 5. Contrast. A palette re-theme is mostly a block of hex
 //    values, which is exactly the kind of change that can leave a label
 //    unreadable without anything failing: the build is green, the page is
 //    wrong. These are the roles that carry text, against the grounds they can
-//    land on: the sheet, the recessed paper band, and the ink plates.
-const deepTokens = new Map<string, string>();
-for (const [, name, hex] of deepBlock.matchAll(
-  /--color-([a-z0-9-]+):\s*(#[0-9a-fA-F]{6})/g,
-)) {
-  deepTokens.set(name, hex.toLowerCase());
-}
+//    land on: the sheet and the recessed paper band.
 
 function luminance(hex: string): number {
   const value = Number.parseInt(hex.slice(1), 16);
@@ -143,53 +124,37 @@ const MINIMUM: Record<string, number> = {
 const GROUNDS = ["void", "panel3"];
 
 let worst = { ratio: Number.POSITIVE_INFINITY, label: "none" };
-for (const [scope, scopeTokens] of [
-  ["", tokens],
-  [".panel-deep ", deepTokens],
-] as const) {
-  for (const [name, minimum] of Object.entries(MINIMUM)) {
-    const ink = scopeTokens.get(name);
-    if (!ink) continue;
-    for (const ground of GROUNDS) {
-      const paper = scopeTokens.get(ground);
-      if (!paper) continue;
-      const ratio = contrast(ink, paper);
-      if (ratio < worst.ratio) {
-        worst = { ratio, label: `${scope}--color-${name} on --color-${ground}` };
-      }
-      if (ratio < minimum) {
-        issues.push(
-          `${scope}--color-${name} on --color-${ground} is ${ratio.toFixed(2)}:1, below ${minimum}:1`,
-        );
-      }
+for (const [name, minimum] of Object.entries(MINIMUM)) {
+  const ink = tokens.get(name);
+  if (!ink) continue;
+  for (const ground of GROUNDS) {
+    const paper = tokens.get(ground);
+    if (!paper) continue;
+    const ratio = contrast(ink, paper);
+    if (ratio < worst.ratio) {
+      worst = { ratio, label: `--color-${name} on --color-${ground}` };
+    }
+    if (ratio < minimum) {
+      issues.push(
+        `--color-${name} on --color-${ground} is ${ratio.toFixed(2)}:1, below ${minimum}:1`,
+      );
     }
   }
 }
 
-// 7. Two committed hues, not a handful of pastels. The design that this theme
-//    replaced failed exactly here: a dark ground plus several near-pastel
-//    accents, which is what generated design looks like. Chroma stands in for
-//    saturation (the spread between the channels), so paper tones and greys sit
-//    near zero and only the two committed colours can clear the floor.
+// 6. Keep the palette restrained: paper, neutrals and one accent.
 const CHROMA_FLOOR = 48;
-for (const [scope, scopeTokens] of [
-  ["", tokens],
-  [".panel-deep ", deepTokens],
-] as const) {
-  const saturated = [...tokens.keys()]
-    .map((name) => {
-      const hex = scopeTokens.get(name) ?? tokens.get(name) ?? "";
-      const value = Number.parseInt(hex.slice(1), 16);
-      const channels = [(value >> 16) & 255, (value >> 8) & 255, value & 255];
-      return { name, chroma: Math.max(...channels) - Math.min(...channels) };
-    })
-    .filter((entry) => entry.chroma > CHROMA_FLOOR)
-    .map((entry) => entry.name);
-  if (saturated.length > 2) {
-    issues.push(
-      `${scope}has ${saturated.length} saturated colours (${saturated.join(", ")}); the design commits to two, accent and data`,
-    );
-  }
+const saturated = [...tokens.entries()]
+  .map(([name, hex]) => {
+    const value = Number.parseInt(hex.slice(1), 16);
+    const channels = [(value >> 16) & 255, (value >> 8) & 255, value & 255];
+    return { name, chroma: Math.max(...channels) - Math.min(...channels) };
+  })
+  .filter((entry) => entry.chroma > CHROMA_FLOOR);
+if (saturated.length > 1) {
+  issues.push(
+    `has ${saturated.length} saturated colours (${saturated.map((entry) => entry.name).join(", ")}); the design commits to one accent`,
+  );
 }
 
 console.log(

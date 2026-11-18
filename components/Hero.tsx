@@ -22,116 +22,94 @@ export function Hero() {
   });
 
   return (
-    <section
-      id="home"
-      className="panel-deep relative isolate flex min-h-[100svh] w-full flex-col justify-between overflow-hidden"
-    >
-      <div className="relative z-10 mx-auto flex w-full max-w-[1600px] flex-1 flex-col justify-center px-5 pb-16 pt-32 sm:px-8 sm:pt-36 lg:px-12">
-        <div className="max-w-4xl">
-          {/* Status Badge */}
-          <motion.div {...rise(0.05)}>
-            <div className="inline-flex items-center gap-2.5 rounded-full border border-accent/30 bg-accent/10 px-3.5 py-1.5 text-xs font-medium text-accent">
-              <span className="h-1.5 w-1.5 rounded-full bg-accent" aria-hidden />
-              <span>{PROFILE.availability}</span>
-            </div>
+    <section id="home" className="relative flex min-h-[88svh] flex-col justify-between border-b border-bright/10">
+      <div className="mx-auto grid w-full max-w-[1440px] flex-1 items-center gap-12 px-5 pb-16 pt-32 sm:px-8 sm:pt-36 lg:grid-cols-12 lg:gap-16 lg:px-12">
+        <div className="lg:col-span-7">
+          <motion.div {...rise(0.05)} className="flex flex-wrap items-center gap-x-4 gap-y-2">
+            <span className="label-mono text-muted">{PROFILE.role}</span>
+            <span className="h-px w-8 bg-edge" aria-hidden />
+            <span className="text-sm text-accent">{PROFILE.availability}</span>
           </motion.div>
 
-          {/* Headline */}
           <motion.h1
             {...rise(0.1)}
-            className="mt-6 text-[clamp(2.5rem,6.5vw,5.5rem)] font-bold leading-[1.08] tracking-tight text-bright"
+            className="mt-7 max-w-4xl font-display text-[clamp(3.2rem,7vw,6.5rem)] font-medium leading-[0.94] tracking-[-0.045em] text-bright"
           >
-            I build machine learning that leaves the notebook.
+            I train models, then build the systems around them.
           </motion.h1>
 
-          {/* Statement */}
-          <p className="mt-6 max-w-2xl text-base leading-relaxed text-muted sm:text-lg sm:leading-relaxed">
-            I&apos;m <span className="font-semibold text-bright">{PROFILE.name}</span>, a machine learning engineer in {PROFILE.location}. I clean the data, train the model, then keep the endpoint running.
-          </p>
-
-          {/* CTAs */}
-          <motion.div
-            {...rise(0.2)}
-            className="mt-9 flex flex-wrap items-center gap-3.5 sm:gap-4"
+          <motion.p
+            {...rise(0.15)}
+            className="mt-7 max-w-xl text-base leading-7 text-muted sm:text-lg sm:leading-8"
           >
+            I&apos;m <span className="font-medium text-bright">{PROFILE.name}</span>, based in {PROFILE.location}. My work spans data preparation, model evaluation and API deployment.
+          </motion.p>
+
+          <motion.div {...rise(0.2)} className="mt-9 flex flex-wrap items-center gap-x-6 gap-y-4">
             <button
               onClick={() => scrollToHash("#projects")}
-              className="group inline-flex items-center gap-2 rounded-[3px] border border-accent/30 bg-accent/10 px-5 py-2.5 font-medium text-sm text-accent transition-colors hover:bg-accent/20 focus:outline-none focus:ring-2 focus:ring-accent focus:ring-offset-2 focus:ring-offset-void"
+              className="group inline-flex items-center gap-2 bg-accent px-5 py-3 text-sm font-medium text-white transition-colors hover:bg-bright focus-visible:outline-offset-4"
             >
-              See the work
-              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2.2} />
+              View selected work
+              <ArrowRight className="h-4 w-4 transition-transform group-hover:translate-x-0.5" strokeWidth={2} />
             </button>
             <a
               href={PROFILE.resume}
               target="_blank"
               rel="noreferrer noopener"
-              className="inline-flex items-center gap-2 rounded-[3px] border border-bright/15 bg-panel/50 px-5 py-2.5 font-medium text-sm text-bright transition-colors hover:border-accent/40 hover:bg-panel"
+              className="inline-flex items-center gap-2 border-b border-edge py-2 text-sm font-medium text-bright transition-colors hover:border-accent hover:text-accent"
             >
               Curriculum Vitae
-              <ArrowRight className="h-4 w-4" strokeWidth={2.2} />
+              <ArrowRight className="h-4 w-4" strokeWidth={1.8} />
             </a>
             <a
               href={PROFILE.github}
               target="_blank"
               rel="noreferrer noopener"
-              className="inline-flex items-center gap-2 rounded-[3px] border border-bright/15 bg-panel/50 px-5 py-2.5 font-medium text-sm text-bright transition-colors hover:border-accent/40 hover:bg-panel"
+              className="inline-flex items-center gap-2 border-b border-edge py-2 text-sm font-medium text-bright transition-colors hover:border-accent hover:text-accent"
             >
               GitHub
-              <ArrowRight className="h-4 w-4" strokeWidth={2.2} />
+              <ArrowRight className="h-4 w-4" strokeWidth={1.8} />
             </a>
           </motion.div>
+        </div>
 
-          {/* Capabilities Grid */}
-          <div className="mt-14 sm:mt-16">
-            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-              {CORE_NODES.map((node) => (
-                <div
-                  key={node.id}
-                  className="rounded-xl border border-bright/10 bg-panel/40 p-4 transition-all duration-300 hover:border-accent/40 hover:bg-panel2"
-                >
-                  <div className="flex items-center justify-between gap-2">
-                    <span className="font-display text-sm font-semibold tracking-tight text-bright">
-                      {node.label}
-                    </span>
-                  </div>
-                  <p className="mt-2 text-sm leading-relaxed text-muted line-clamp-2">
-                    {node.blurb}
-                  </p>
-                  <div className="mt-3 flex flex-wrap gap-1.5">
-                    {node.keywords.slice(0, 2).map((word) => (
-                      <span
-                        key={word}
-                        className="rounded border border-bright/10 bg-bright/5 px-2 py-0.5 font-mono text-[0.8125rem] text-soft"
-                      >
-                        {word}
-                      </span>
-                    ))}
-                  </div>
-                </div>
-              ))}
-            </div>
+        <div className="lg:col-span-5 lg:pt-24">
+          <div className="mb-5 flex items-center justify-between border-b border-edge pb-3">
+            <span className="label-mono text-muted">Areas of focus</span>
+            <span className="font-mono text-xs text-muted">01 / 04</span>
           </div>
+          <ul className="grid gap-x-8 sm:grid-cols-2 lg:grid-cols-1">
+            {CORE_NODES.map((node, index) => (
+              <li key={node.id} className="border-b border-edge py-4">
+                <div className="flex items-baseline justify-between gap-4">
+                  <h2 className="font-display text-xl font-medium text-bright">
+                    <span className="mr-3 font-mono text-xs text-muted">{String(index + 1).padStart(2, "0")}</span>
+                    {node.label}
+                  </h2>
+                  <span className="shrink-0 text-xs text-muted">{node.status}</span>
+                </div>
+                <p className="mt-2 pl-8 text-sm leading-relaxed text-muted">{node.blurb}</p>
+              </li>
+            ))}
+          </ul>
         </div>
       </div>
 
-      {/* Meta bar */}
-      <div className="relative z-10 mx-auto w-full max-w-[1600px] px-5 pb-8 sm:px-8 sm:pb-10 lg:px-12">
-        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-bright/10 pt-5">
+      <div className="mx-auto w-full max-w-[1440px] px-5 pb-7 sm:px-8 lg:px-12">
+        <div className="flex flex-wrap items-center justify-between gap-4 border-t border-edge pt-4">
           <button
             type="button"
             onClick={() => scrollToHash("#projects")}
-            className="group flex items-center gap-2.5 text-xs text-muted transition-colors hover:text-bright"
+            className="group flex items-center gap-2.5 text-sm text-muted transition-colors hover:text-bright"
           >
-            <span className="grid h-6 w-6 place-items-center rounded-full border border-bright/15 transition-colors group-hover:border-accent/60">
-              <ArrowDown className="h-3 w-3 text-accent transition-transform group-hover:translate-y-0.5" strokeWidth={2} />
-            </span>
-            <span>Go to the work</span>
+            <ArrowDown className="h-4 w-4 text-accent transition-transform group-hover:translate-y-0.5" strokeWidth={1.8} />
+            <span>Scroll to selected work</span>
           </button>
 
-          <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-xs text-muted">
-            <span>{PROFILE.timezone}</span>
-            <span className="hidden sm:inline">·</span>
-            <span className="hidden sm:inline">{PROFILE.discipline}</span>
+          <div className="flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-muted">
+            <span>{PROFILE.location}</span>
+            <span className="hidden sm:inline">{PROFILE.timezone}</span>
           </div>
         </div>
       </div>
